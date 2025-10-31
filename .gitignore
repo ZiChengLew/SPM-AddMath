@@ -22,3 +22,5 @@ pnpm-debug.log*
 # Large binaries
 Textbook/*.pdf
 *.pdf
+Textbook/
+*.pdf
