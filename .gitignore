@@ -18,6 +18,7 @@ pnpm-debug.log*
 .idea
 *.swp
 .DS_Store
+.env.local
 
 # Large binaries
 Textbook/*.pdf

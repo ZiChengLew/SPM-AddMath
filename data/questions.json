@@ -9,7 +9,30 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q01.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S01.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S01.png",
+    "ocr_text": "1. Garis y = 16x - 5 adalah tangen kepada curve y = h(x) pada titik (-2, -37). Diberi bahawa fungsi kecenderungan ialah px^2 + 4 dengan keadaan p adalah pemalar. The line y = 16x - 5 is a tangent to the curve y = h(x) at point (-2, -37). Given that the gradient function is px^2 + 4 where p is a constant. Cari, Find,\na) nilai, the value of p,\nb) h(x).",
+    "chapters": [
+      {
+        "chapter": "Form 5 Chapter 2: Differentiation",
+        "subtopics": [
+          "2.1 Limit and its Relation to Differentiation",
+          "2.2 The First Derivative",
+          "2.4 Application of Differentiation"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves determining the gradient function and finding the value of a constant related to differentiation, which aligns with the concepts of derivatives."
+      },
+      {
+        "chapter": "Form 4 Chapter 1: Functions",
+        "subtopics": [
+          "1.1 Functions",
+          "1.2 Composite Functions"
+        ],
+        "confidence": 0.7,
+        "rationale": "The function h(x) is required, indicating a need to understand function definitions and potentially composite functions."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.557Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q02",
@@ -21,7 +44,26 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q02.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S02.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S02.png",
+    "ocr_text": "2.  \n\na)  (i)  Bukitkan bahawa  \\( \\frac{n!}{n} = (n-1)! \\)  \n\nProve that  \\( \\frac{n!}{n} = (n-1)! \\)  \n\n  (ii)  Seterusnya, cari bilangan cara untuk 6 orang duduk di meja bulat dalam satu jamuan makan malam.  \n\nHence, find the number of ways for 6 members to sit at a round table during a dinner banquet.  \n\n[2 markah / marks]  \n\n\nb)  Rajah 2 menunjukkan salah satu pasukan dalam pertandigan sukan perahu layar.  \nPerahu lapang dayung akan dikendalikan oleh krew yang dipilih daripada 6 lelaki berumur di bawah 30 tahun dan 5 lelaki berumur di atas 30 tahun. Seorang akan mengemudi dan 8 orang akan mendayung.  \n\nDiagram 2 shows one of the teams in an eight-oar rowing competition. The eight-oar boat will be operated by a crew selected from 6 men under 30 years old and 5 men over 30 years old. One will act as the coxswain, and 8 will row.  \n\nCari bilangan cara untuk memilih krew jika sekurang-kurangnya 3 krew berumur atas 30 tahun diperlukan dalam acara ini.  \n\nFind the number of ways to select the crew if at least 3 players over 30 years old are required for this event.  \n\n[2 markah / marks]  \n\n\nc)  Cari bilangan cara untuk menyusun 9 krew jika,  \n\nFind the number of ways to arrange 9 crews if,  \n\n(i) tiada syarat dikenakan,  \n\nno restrictions,  \n\n(ii) 3 krew boleh mengemudi tetapi tidak boleh mendayung dan selebihnya tidak boleh mengemudi dan hanya boleh mendayung.  \n\n3 crews can act as coxswains but cannot row, while the others cannot act as coxswains and can only row. Out of those who can row, 2 crews are only able to row on the right side.  \n\n[3 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Form 5 Chapter 4: Permutation and Combination",
+        "subtopics": [
+          "4.1 Permutation",
+          "4.2 Combination"
+        ],
+        "confidence": 0.95,
+        "rationale": "The questions involve proving identities and calculating combinations and arrangements, which are core concepts in permutations and combinations."
+      },
+      {
+        "chapter": "Form 4 Chapter 5: Progressions",
+        "subtopics": [],
+        "confidence": 0.8,
+        "rationale": "The second question about ways to select crew members based on conditions may relate to combinations, but the core focus is on selecting participants which also connects with progressions."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q03",
@@ -33,7 +75,23 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q03.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S03.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S03.png",
+    "ocr_text": "3. Dalam satu tinjauan, didapati 35% murid dari SMK Harmoni tidak mempunyai kalkulator saintifik. Satu sampel yang terdiri daripada 3 orang murid dipilih secara rawak dari sekolah tersebut.\nIn a survey, found that 35% of students from SMK Harmoni does not have scientific calculator. A sample of 3 pupils is randomly selected from the school.\n\na) Lengkapkan jadual taburan kebarangkalian binomial bagi bilangan murid yang tidak mempunyai kalkulator saintifik.\nComplete a binomial probability distribution table for the number of pupils who does not have scientific calculator. [3 markah / marks]\n\nb) Daripada jadual, cari kebarangkalian\nFrom the table, find the probability that\n\ni) selebih-lebihnya 2 orang murid tidak mempunyai kalkulator saintifik.\nat most 2 pupils does not have scientific calculator.\n\nii) jika semua murid mempunyai kalkulator saintifik.\nif all the pupils have scientific calculator.",
+    "chapters": [
+      {
+        "chapter": "Form 5 Chapter 5: Probability Distribution",
+        "subtopics": [],
+        "confidence": 0.9,
+        "rationale": "The question involves constructing and analyzing a binomial probability distribution, which is a key topic in probability distributions."
+      },
+      {
+        "chapter": "Form 5 Chapter 4: Permutation and Combination",
+        "subtopics": [],
+        "confidence": 0.6,
+        "rationale": "While the main focus is on probability distribution, understanding combinations may be relevant for calculating probabilities in this context."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q04",
@@ -45,7 +103,27 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q04.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S04.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S04.png",
+    "ocr_text": "Suatu graf garis lurus diperoleh dengan memplot log₁₀ y melawan log₁₀ x. Diberi bahawa pintasan-X dan pintasan-Y masing-masing ialah 2 dan 1. Ungkapkan y dalam sebutan x.\nA straight line graph obtained by plotting log₁₀ y against log₁₀ x. Given that the X-intercept and Y-intercept are 2 and 1 respectively.\nExpress y in terms of x.",
+    "chapters": [
+      {
+        "chapter": "Chapter 4: Indices, Surds and Logarithms",
+        "subtopics": [
+          "4.3 Laws of Logarithms"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves plotting logarithmic values and interpreting intercepts, which directly relates to the laws of logarithms."
+      },
+      {
+        "chapter": "Chapter 6: Linear Law",
+        "subtopics": [
+          "6.1 Linear and Non-Linear Relations"
+        ],
+        "confidence": 0.8,
+        "rationale": "It also involves understanding the relationship between logarithmic values in a linear context, as a straight line graph suggests a linear relationship."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q05",
@@ -57,7 +135,19 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q05.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S05.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S05.png",
+    "ocr_text": "Diberi bahawa log_a b = √5, cari nilai bagi 1/log_ab b - 1/log_ab a. \nGiven that log_a b = √5, find the value of 1/log_ab b - 1/log_ab a.",
+    "chapters": [
+      {
+        "chapter": "Chapter 4: Indices, Surds and Logarithms",
+        "subtopics": [
+          "4.3 Laws of Logarithms"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves the application of logarithmic properties to find a value given specific relationships involving logarithms. It directly relates to the laws of logarithms."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q06",
@@ -69,7 +159,27 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q06.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S06.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S06.png",
+    "ocr_text": "6. (a) Rajah 6 menunjukkan sebuah bulatan unit yang dilukis pada sath Cartes. \nDiagram 6 shows a unit circle drawn on a Cartesian plane.  \nP(-h, k)  \nTunjukkan bahawa sin²β + cos²β = 1. \nShow that sin²β + cos²β = 1. [2 markah / marks]  \n(b) Seterusnya, tentukan dengan pengiraan sama ada persamaan trigonometri \n sin²x / 1 + cos x = 2 mempunyai penyelesaian atau tidak bagi domain 0 ≤ x ≤ 2π. \nHence, determine through calculation whether the trigonometric equation \n sin²x / 1 + cos x = 2 has solutions within the domain 0 ≤ x ≤ 2π. [3 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Chapter 6: Trigonometric Functions",
+        "subtopics": [
+          "6.1 Positive Angles and Negative Angles",
+          "6.2 Trigonometric Ratios of Any Angle",
+          "6.6 Application of Trigonometric Functions"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question deals with showing a fundamental trigonometric identity (\u000bsin²β + cos²β = 1) in part (a) and solving a trigonometric equation in part (b), both of which fall under Trigonometric Functions."
+      },
+      {
+        "chapter": "Chapter 5: Probability Distribution",
+        "subtopics": [],
+        "confidence": 0.1,
+        "rationale": "While not primarily related, part (b) mentions a condition involving equations that could mildly relate to distribution in a broader sense. However, this is tangential and not a primary focus."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q07",
@@ -81,7 +191,29 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q07.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S07.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S07.png",
+    "ocr_text": "7. Diberi persamaan kuadratik 3x²-4x+c=0, tidak mempunyai punca nyata dan c ialah integer positif.  \nGiven a quadratic equation 3x²-4x+c=0, has no real roots and c is a positive integer.  \n(a) C₁ dan C₂ merupakan dua nilai terkelib c, nyatakan nilai C₁ dan C₂ yang mungkin.  \nC₁ and C₂ are the two smallest values of c, state the possible values of C₁ dan C₂.  \n[2 markah / marks]  \n(b) Seterusnya, jika c ialah beza antara C₁ dan C₂ di (a), tentukan jenis punca bagi persamaan kuadratik 3x²-4x+c=0.  \nHence, if c is the difference between C₁ and C₂ in (a), determine the type of root of the quadratic equation 3x²-4x+c=0.  \n[2 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Form 2 Chapter 2: Quadratic Functions",
+        "subtopics": [
+          "2.1 Quadratic Equations and Inequalities",
+          "2.2 Types of Roots of Quadratic Equations"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question deals with a quadratic equation, specifically analyzing its roots based on the value of 'c'."
+      },
+      {
+        "chapter": "Form 4 Chapter 2: Quadratic Functions",
+        "subtopics": [
+          "2.1 Quadratic Equations and Inequalities",
+          "2.2 Types of Roots of Quadratic Equations"
+        ],
+        "confidence": 0.9,
+        "rationale": "As a continuation of the previous chapter, this question focuses on the properties of quadratic equations and their roots."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q08",
@@ -93,7 +225,27 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q08.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S08.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S08.png",
+    "ocr_text": "8. Rajah 8 menunjukkan Cecilia mengkayak di sebuah sungai. Titik P merupakan kedudukan awal Cecilia, titik A adalah jeti dan titik C ialah rumah rehat.\nDiagram 8 shows Cecilia kayaking in a lake. Point P represents Cecilia's initial position, point A is the jetty and point C is the rest house.\n\nDiberi PA dan AC adalah berserenjang.\nGiven that PA and AC are perpendicular.\n\n(a) Pada suatu hari tertentu, Cecilia ingin tiba di titik C dalam masa yang tersingkat.\nOn a given day, Cecilia wants to reach point C in the shortest time possible. She needs to kayak from point P to point B, then walk from point B to point C. Cecilia can kayak at a speed of 2 km/h and walk at 4 km/h.\n\nTunjukkan bahawa masa, T dalam jam, yang diambil oleh Cecilia ialah\nShow that the time, T in hour, taken by Cecilia is\n\nT = 2 √{25 + x² + 6 - x} / 4\n\n[2 markah / marks]\n\n(b) Dengan menggunakan kaedah lakaran tangen, buktikan bahawa masa yang diambil oleh Cecilia ialah masa yang paling singkat.\nUsing the tangent sketch method, prove that the time taken by Cecilia is the shortest time.\n\nJawapan / Answer:\n\nb)\n\nx\n\ndT/dx\n\nTanda bagi dT/dx\nSign for dT/dx\n\nLakaran tangen\nSketch of the tangent\n\nLakaran graf\nSketch of the graph",
+    "chapters": [
+      {
+        "chapter": "Chapter 2: Differentiation",
+        "subtopics": [
+          "2.4 Application of Differentiation"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves using calculus (specifically differentiation) to minimize the time taken by Cecilia, indicating an application of differentiation in real-world scenarios."
+      },
+      {
+        "chapter": "Chapter 6: Linear Programming",
+        "subtopics": [
+          "7.1 Linear Programming Model"
+        ],
+        "confidence": 0.7,
+        "rationale": "The context of optimizing time could be linked to linear programming concepts, although it primarily focuses on differentiation."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q09",
@@ -105,7 +257,19 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q09.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S09.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S09.png",
+    "ocr_text": "9. Selesaikan sistem persamaan serentak berikut dengan menggunakan kaedah penggantian dan/atau penghapusan.\nSolve the following simultaneous equations by using the method of substitution and/or elimination.\n\n4x−3y+2z=−5 , 5x−y+5z=7 , −4y+3z+6x=9\n\n[5 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Chapter 3: Systems of Equations",
+        "subtopics": [
+          "3.1 Systems of Linear Equations in Three Variables"
+        ],
+        "confidence": 0.95,
+        "rationale": "The question explicitly states to solve simultaneous equations, specifically mentioning methods such as substitution and elimination relevant to systems of equations involving multiple variables."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q10",
@@ -117,7 +281,33 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q10.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S10.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S10.png",
+    "ocr_text": "10. Penyelesaian secara lukisan berskala tidak diterima.\nSolutions by scale drawing are not accepted.\n\nRajah 10 menunjukkan dua garis selari AC dan ED.\nDiagram 10 shows two parallel lines AC and ED.\n\nRajah 10 / Diagram 10\n\nTitik P (x, y) bergerak dengan jaraknya sentiasa sama dari titik E dan D.\nPoint P (x, y) moves such that it is always equidistant from points E and D.\n\n(a) Cari persamaan lokus bagi titik bergerak P.\nFind the equation of the locus of the moving point P.\n[2 markah / marks]\n\n(b) Cari persamaan garis AC.\nFind the equation of the line AC.\n[2 markah / marks]\n\n(c) Seterusnya, cari koordinat B.\nHence, find the coordinates of B.\n[2 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Form 4 Chapter 7: Coordinate Geometry",
+        "subtopics": [
+          "7.4 Equations of Loci"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves finding the equation of a locus, which falls under Coordinate Geometry, specifically the section on equations of loci."
+      },
+      {
+        "chapter": "Form 4 Chapter 7: Coordinate Geometry",
+        "subtopics": [
+          "7.2 Parallel Lines and Perpendicular Lines"
+        ],
+        "confidence": 0.8,
+        "rationale": "The problem describes parallel lines AC and ED, which relates to understanding properties of parallel lines in Coordinate Geometry."
+      },
+      {
+        "chapter": "Form 4 Chapter 3: Systems of Equations",
+        "subtopics": [],
+        "confidence": 0.7,
+        "rationale": "Finding equations for lines and determining coordinates of points often requires solving systems of equations."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q11",
@@ -129,7 +319,26 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q11.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S11.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S11.png",
+    "ocr_text": "11. Sebuah Taman Jubilee Emas yang berbentuk bulat telah dijadikan tapak untuk konsert amal. Kawasan yang berlorek telah di tetapkan sebagai pentas utama konsert itu seperti dalam Rajah 11.\nA circular Golden Jubilee Park has been used as a site for a charity concert. The shaded area has been designated as the main stage of the concert as shown in Diagram 11.\n\nTaman Jubilee Emas membentuk bulatan KATBL, berpusat O dan berjejari 6 m. KOL ialah lengkok bulatan yang berpusat T. Diberi AB selari dengan KL dan AB = 6 m.\nA circular Golden Jubilee Park KATBL, centered at O and radius 6 m and KOL is an arc of a circle centered at T. Given AB parallel to KL and AB = 6 m.\n\n(a) Cari sudut ∠AOB.\n   Find angle ∠AOB.\n\n(b) Hitung luas, dalam m², kawasan di belakang pentas.\n   Calculate the area, in m², behind the stage.",
+    "chapters": [
+      {
+        "chapter": "Chapter 1: Circular Measure",
+        "subtopics": [
+          "1.1 Radian",
+          "1.2 Arc Length of a Circle"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question involves calculating an angle and area related to a circular figure, which directly relates to concepts in circular measure."
+      },
+      {
+        "chapter": "Chapter 6: Trigonometric Functions",
+        "subtopics": [],
+        "confidence": 0.7,
+        "rationale": "Calculating angles in a circular context often involves trigonometric principles, thus minimal relevance."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q12",
@@ -141,7 +350,27 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q12.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S12.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S12.png",
+    "ocr_text": "12. Diberi bahawa f(x) = p-3x dan gf(x) = x .\nGiven that f(x) = p-3x and gf(x) = x.\na) Cari nilai p, jika g(2) = 5.\nFind the value of p, if g(2) = 5.\n\nb) Lakarkan graf y = f(x) untuk 0 ≤ x ≤ 6. Seterusnya, dengan menggunakan ujian garis mengufuk, berikan justifikasi bahawa fungsi songsang bagi f(x) adalah wujud.\nSketch the graph of y = f(x) for 0 ≤ x ≤ 6. Hence, by using horizontal line test, give your justification that the inverse function of f(x) exists.",
+    "chapters": [
+      {
+        "chapter": "Form 4 Chapter 1: Functions",
+        "subtopics": [
+          "1.1 Functions",
+          "1.2 Composite Functions",
+          "1.3 Inverse Functions"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question relates to functions, specifically finding the parameters of a function and discussing its inverse, which aligns with Chapter 1 on Functions."
+      },
+      {
+        "chapter": "Form 4 Chapter 2: Quadratic Functions",
+        "subtopics": [],
+        "confidence": 0.7,
+        "rationale": "While not a direct focus, if the function f(x) is manipulated to form a quadratic equation, it can link to Chapter 2."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q13",
@@ -153,7 +382,26 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q13.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S13.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S13.png",
+    "ocr_text": "13. Rajah 13 menunjukkan empat sebutan berturutan bagi suatu janjang.\nDiagram 13 shows four consecutive terms for a progression.\n\nm², m⁴, m⁶, m⁸, ...\n\nRajah 13 / Diagram 13\n\n(a) Berdasarkan jujukan di atas, nyatakan sama ada jujukan berikut ialah janjang geometrik atau janjang aritmetik. Berikan justifikasi anda.\nBased on the sequence above, state whether the following sequence is a geometric progression or arithmetic progression. Give your justification. [2 markah / marks]\n\n(b) Pada tahun 2025, dua buah kilang sawit di suatu daerah iaitu Kilang A dan Kilang B masing-masing memproses 5200 dan 4500 tan metrik sawit. Atas sebab penambahan beberapa buah kilang sawit berdekatan, maka jumlah tan metrik yang diperolehi akan berubah setiap tahun. Didapati bahawa penurunan jumlah sawit adalah mengikut janjang geometri, di mana jumlah tan metrik di Kilang A berkurang sebanyak 12% dan jumlah tan metrik di Kilang B berkurang sebanyak 9% setiap tahun. Pada tahun ke berapakah jumlah tan metrik di Kilang A akan menjadi kurang daripada jumlah tan metrik di Kilang B buat kali pertama?  \nIn 2025, two palm oil factories in a district, namely Factory A and Factory B, process 5200 and 4500 metric tons of palm oil respectively. Due to the addition of several palm oil mills nearby, the total metric tons obtained will change every year. It is found that the decrease in the amount of palm follows a geometric progression, where the total metric tons in Factory A decreases by 12% and the total metric tons in Factory B decreases by 9% each year. In which year will the total metric tons in Factory A be less than the total metric tons in Factory B for the first time? [6 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Chapter 5: Progressions",
+        "subtopics": [
+          "5.1 Arithmetic Progressions",
+          "5.2 Geometric Progressions"
+        ],
+        "confidence": 0.9,
+        "rationale": "The question addresses both arithmetic and geometric progressions, asking students to identify the nature of a sequence as well as to apply properties of geometric progression to a real-world scenario."
+      },
+      {
+        "chapter": "Chapter 6: Linear Law",
+        "subtopics": [],
+        "confidence": 0.7,
+        "rationale": "The second part of the question involves a decrease in metric tons over time, which can be modeled using linear laws in terms of progression and decay."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q14",
@@ -165,7 +413,26 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q14.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S14.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S14.png",
+    "ocr_text": "14. Kaedah pembezaan tidak diterima untuk soalan ini. The differentiation method is not accepted for this question.\n\nRajah 14 menunjukkan fungsi keuntungan tahunan U(x) (dalam juta Ringgit Malaysia) bagi sebuah syarikat yang menghasilkan dan menjual suatu produk teknologi berasaskan kepintaran buatan, AI dengan keadaan x ialah harga jualan produk (dalam ribu Ringgit Malaysia). Diagram 14 shows the annual profit function, U(x) (in millions of Malaysian Ringgit) of a company that produces and sells a technology product based on artificial intelligence AI, where x represents the selling price of the product (in thousands of Malaysian Ringgit).\n\nU(x) = -2x² + 16x - 24\n\nRajah 14 / Diagram 14\n\n(a) Tentukan julat harga jualan produk syarikat tersebut supaya syarikat tidak mengalami kerugian. Determine the range of annual selling prices for the company to avoid incurring losses. [4 markah / marks]\n\n(b) Cari harga jualan produk yang optimum dan jangkaan keuntungan tahunan maksimum yang diperoleh syarikat. Find the optimal selling price of the product and the expected maximum annual profit obtained by the company. [4 markah / marks]",
+    "chapters": [
+      {
+        "chapter": "Form 4 Chapter 2: Quadratic Functions",
+        "subtopics": [
+          "2.1 Quadratic Equations and Inequalities",
+          "2.3 Quadratic Functions"
+        ],
+        "confidence": 0.95,
+        "rationale": "The question involves a profit function given as a quadratic equation, where students must find ranges and maximum values, which are key concepts in analyzing quadratic functions."
+      },
+      {
+        "chapter": "Form 5 Chapter 2: Differentiation",
+        "subtopics": [],
+        "confidence": 0.8,
+        "rationale": "Although the differentiation method is mentioned to be unacceptable in the context of the question, the context suggests analysis of maximum conditions typically relates to differentiation concepts."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   },
   {
     "id": "AM_Kedah_2025_P1_Q15",
@@ -177,6 +444,26 @@
     "section": null,
     "marks": null,
     "question_img": "/questions/AM_Kedah_2025_P1_Q15.png",
-    "solution_img": "/solutions/AM_Kedah_2025_P1_S15.png"
+    "solution_img": "/solutions/AM_Kedah_2025_P1_S15.png",
+    "ocr_text": "15. Rajah 15 menunjukkan jalan di sebuah kawasan perumahan yang membentuk segiempat tepat OABC. Surau (S) terletak di jalan OB dan balai raya (R) terletak di jalan OA. Pondok polis (P) pula terletak di jalan AB yang dipanjangkan dengan keadaan AB = 2BP. Diagram 15 shows roads of a residential area that forms a rectangle OABC. The Surau (S) is at OB road and the public hall (R) is at OA road. The police outpost (P) is at AB road which is extended with the condition AB = 2BP. \n\nDiberi, OA = 4x, OC = 4y, OS = 3x+3y, OR = RA and OS : OB = m : n. \nGiven OA = 4x, OC = 4y, OS = 3x+3y, OR = RA and OS : OB = m : n.\n\n(a) Ungkapan vektor yang mewakili jalan berikut dalam sebutan x dan y.\nExpress the vector representing the following street in terms of x and y. \n\n(i) RS , \n(ii) OP .\n\n(b) Cari nisbah m : n.\nFind the ratio m : n.\n\n(c) Buktikan bahawa bangunan R, S dan P berada dalam satu garis lurus.\nProve that buildings R, S and P reside on the same straight line.",
+    "chapters": [
+      {
+        "chapter": "Chapter 8: Vectors",
+        "subtopics": [
+          "8.1 Vectors",
+          "8.2 Addition and Subtraction of Vectors",
+          "8.3 Vectors in a Cartesian Plane"
+        ],
+        "confidence": 0.95,
+        "rationale": "The question primarily involves vectors to represent locations and relationships between points, which falls under the study of vectors."
+      },
+      {
+        "chapter": "Chapter 7: Coordinate Geometry",
+        "subtopics": [],
+        "confidence": 0.8,
+        "rationale": "The problem requires proving collinearity which relates to concepts in coordinate geometry, although it is secondary to the main vector concepts."
+      }
+    ],
+    "metadata_updated_at": "2025-10-31T10:46:45.560Z"
   }
 ]
