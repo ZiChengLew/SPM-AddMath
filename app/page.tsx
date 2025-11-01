@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   ChevronDown,
   ChevronLeft,
@@ -8,26 +8,146 @@ import {
   ChevronUp,
   Eye,
   HelpCircle,
+  KeyRound,
+  List,
   Mail,
   Menu,
   Play,
   Search,
-  Share2,
   Shuffle,
   Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { createPortal } from 'react-dom';
 
-const ALL_PAPERS = 'all';
-const ALL_YEARS = 'all';
+const ALL_YEARS_LABEL = 'All Years';
+const ALL_STATES_LABEL = 'All States';
+const ALL_PAPERS_LABEL = 'All Papers';
+const STATE_OPTIONS = [
+  'Johor',
+  'Kedah',
+  'Kelantan',
+  'Malacca',
+  'Negeri Sembilan',
+  'Pahang',
+  'Penang',
+  'Perak',
+  'Perlis',
+  'Sabah',
+  'Sarawak',
+  'Selangor',
+  'Terengganu',
+  'Kuala Lumpur',
+  'Labuan',
+  'Putrajaya'
+] as const;
+const PAPER_OPTIONS = [
+  { value: 'P1', label: 'Paper 1' },
+  { value: 'P2', label: 'Paper 2' }
+] as const;
+const PAPER_VALUE_TO_LABEL = new Map(PAPER_OPTIONS.map((option) => [option.value, option.label]));
+const PAPER_LABEL_TO_VALUE = new Map(PAPER_OPTIONS.map((option) => [option.label, option.value]));
+
+function paperCodeToValue(code: string): string {
+  const mapped = PAPER_LABEL_TO_VALUE.get(code);
+  if (mapped) {
+    return mapped;
+  }
+  const match = code.match(/Paper\s*(\d+)/i);
+  if (match) {
+    return `P${match[1]}`;
+  }
+  return code;
+}
+
+function paperValueToLabel(value: string): string {
+  return PAPER_VALUE_TO_LABEL.get(value) ?? value;
+}
+
+type DropdownCoords = { top: number; left: number; width: number } | null;
+
+function useFloatingDropdown(minWidth = 360, maxWidth = 420, offset = 10) {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [coords, setCoords] = useState<DropdownCoords>(null);
+
+  const updatePosition = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const trigger = triggerRef.current;
+    if (!trigger) {
+      return;
+    }
+    const rect = trigger.getBoundingClientRect();
+    const width = Math.max(minWidth, Math.min(maxWidth, rect.width));
+    const viewportPadding = 16;
+    const left = Math.min(
+      Math.max(viewportPadding, rect.left),
+      Math.max(viewportPadding, window.innerWidth - width - viewportPadding)
+    );
+    const top = rect.bottom + offset;
+    setCoords({ top, left, width });
+  }, [maxWidth, minWidth, offset]);
+
+  useLayoutEffect(() => {
+    if (open) {
+      updatePosition();
+    }
+  }, [open, updatePosition]);
+
+  useEffect(() => {
+    if (!open || typeof window === 'undefined') {
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      const firstOption = dropdownRef.current?.querySelector<HTMLElement>('[data-dropdown-option]');
+      firstOption?.focus();
+    });
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (dropdownRef.current?.contains(target) || triggerRef.current?.contains(target)) {
+        return;
+      }
+      setOpen(false);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    };
+
+    const handleWindowChange = () => updatePosition();
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleWindowChange);
+    window.addEventListener('scroll', handleWindowChange, true);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleWindowChange);
+      window.removeEventListener('scroll', handleWindowChange, true);
+    };
+  }, [open, updatePosition]);
+
+  return {
+    open,
+    setOpen,
+    triggerRef,
+    dropdownRef,
+    coords,
+    updatePosition
+  };
+}
 
 type ChapterCatalogEntry = {
   form: 'Form 4' | 'Form 5';
@@ -64,34 +184,6 @@ const CHAPTER_LOOKUP = new Map(
 const CHAPTER_DISPLAY_LOOKUP = new Map(
   CHAPTER_CATALOG.map((entry) => [entry.display.toLowerCase(), entry])
 );
-
-const FEATURE_CARDS = [
-  {
-    title: 'Smarter exam revision with topical practice',
-    description:
-      'Filter questions instantly by chapter to turn scattered revision into focused sessions for topics that need the most attention.'
-  },
-  {
-    title: 'Flexible filtering options',
-    description:
-      'Mix and match paper, year, and topic filters to mirror real exam structures or create custom drills in seconds.'
-  },
-  {
-    title: 'Clean display for better focus',
-    description:
-      'View each question and solution in a distraction-free canvas with quick toggles between official marking schemes and AI explanations.'
-  },
-  {
-    title: 'Personalised study tools',
-    description:
-      'Save interesting questions, build custom lists, and return to them anytime to monitor progress chapter by chapter.'
-  },
-  {
-    title: 'Built for students and teachers',
-    description:
-      'Students drill the exact topics they are learning while teachers can assemble ready-made sets for classwork or homework in minutes.'
-  }
-];
 
 type ChapterTag = {
   chapter: string;
@@ -187,24 +279,62 @@ function formatChapterBanner(chapter: string) {
   return chapter;
 }
 
-function formatPaperLabel(question: Question | null) {
-  if (!question) {
-    return '';
-  }
-  return `${question.state} ${question.year} ${question.paper_code}`;
-}
-
 export default function HomePage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPaper, setSelectedPaper] = useState<string>(ALL_PAPERS);
-  const [selectedYear, setSelectedYear] = useState<string>(ALL_YEARS);
+  const [draftPapers, setDraftPapers] = useState<string[]>([]);
+  const [draftYears, setDraftYears] = useState<string[]>([]);
+  const [draftStates, setDraftStates] = useState<string[]>([]);
+  const [draftChapters, setDraftChapters] = useState<string[]>([]);
+  const [appliedPapers, setAppliedPapers] = useState<string[]>([]);
+  const [appliedYears, setAppliedYears] = useState<string[]>([]);
+  const [appliedStates, setAppliedStates] = useState<string[]>([]);
+  const [appliedChapters, setAppliedChapters] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'question' | 'solution'>('question');
-  const [selectedChapters, setSelectedChapters] = useState<string[]>([]);
-  const [topicMenuOpen, setTopicMenuOpen] = useState(false);
-  const topicDropdownRef = useRef<HTMLDivElement | null>(null);
+  const {
+    open: topicMenuOpen,
+    setOpen: setTopicMenuOpen,
+    triggerRef: topicTriggerRef,
+    dropdownRef: topicDropdownRef,
+    coords: topicDropdownCoords,
+    updatePosition: updateTopicDropdownPosition
+  } = useFloatingDropdown();
+  const {
+    open: stateMenuOpen,
+    setOpen: setStateMenuOpen,
+    triggerRef: stateTriggerRef,
+    dropdownRef: stateDropdownRef,
+    coords: stateDropdownCoords,
+    updatePosition: updateStateDropdownPosition
+  } = useFloatingDropdown();
+  const {
+    open: yearMenuOpen,
+    setOpen: setYearMenuOpen,
+    triggerRef: yearTriggerRef,
+    dropdownRef: yearDropdownRef,
+    coords: yearDropdownCoords,
+    updatePosition: updateYearDropdownPosition
+  } = useFloatingDropdown();
+  const {
+    open: paperMenuOpen,
+    setOpen: setPaperMenuOpen,
+    triggerRef: paperTriggerRef,
+    dropdownRef: paperDropdownRef,
+    coords: paperDropdownCoords,
+    updatePosition: updatePaperDropdownPosition
+  } = useFloatingDropdown();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const searchParamString = searchParams.toString();
+  const closeAllMenus = useCallback(() => {
+    setTopicMenuOpen(false);
+    setStateMenuOpen(false);
+    setYearMenuOpen(false);
+    setPaperMenuOpen(false);
+  }, [setPaperMenuOpen, setStateMenuOpen, setTopicMenuOpen, setYearMenuOpen]);
 
   useEffect(() => {
     const load = async () => {
@@ -236,16 +366,6 @@ export default function HomePage() {
     load();
   }, []);
 
-  const paperOptions = useMemo(() => {
-    const seen = new Map<string, Question>();
-    questions.forEach((question) => {
-      if (!seen.has(question.paper_id)) {
-        seen.set(question.paper_id, question);
-      }
-    });
-    return Array.from(seen.values());
-  }, [questions]);
-
   const yearOptions = useMemo(() => {
     const years = new Set<string>();
     questions.forEach((question) => {
@@ -255,12 +375,79 @@ export default function HomePage() {
     });
     return Array.from(years).sort((a, b) => Number(a) - Number(b));
   }, [questions]);
+  const yearOptionsDesc = useMemo(
+    () => [...yearOptions].sort((a, b) => Number(b) - Number(a)),
+    [yearOptions]
+  );
+
+  useEffect(() => {
+    if (questions.length === 0) {
+      return;
+    }
+    const paperParam = searchParams.get('paper');
+    const yearParam = searchParams.get('year');
+    const stateParam = searchParams.get('state');
+    const chaptersParam = searchParams.get('chapters');
+
+    const paperCandidates = new Set<string>(PAPER_OPTIONS.map((option) => option.value));
+    const stateCandidates = new Set<string>(STATE_OPTIONS);
+    const validYears = new Set(yearOptions);
+    const nextPapers = paperParam
+      ? Array.from(
+          new Set(
+            paperParam
+              .split(',')
+              .map((value) => value.trim().toUpperCase())
+              .filter((value) => paperCandidates.has(value))
+          )
+        )
+      : [];
+    const nextYears = yearParam
+      ? Array.from(
+          new Set(
+            yearParam
+              .split(',')
+              .map((value) => value.trim())
+              .filter((value) => validYears.has(value))
+          )
+        )
+      : [];
+    const nextStates = stateParam
+      ? Array.from(
+          new Set(
+            stateParam
+              .split(',')
+              .map((value) => value.trim())
+              .filter((value) => stateCandidates.has(value))
+          )
+        )
+      : [];
+    const sortedStates = [...nextStates].sort((a, b) => STATE_OPTIONS.indexOf(a) - STATE_OPTIONS.indexOf(b));
+    const sortedYears = [...nextYears].sort((a, b) => Number(b) - Number(a));
+    const order = PAPER_OPTIONS.map((option) => option.value);
+    const sortedPapers = [...nextPapers].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    const nextChapters = chaptersParam
+      ? Array.from(new Set(chaptersParam.split(',').map((item) => item.trim()).filter(Boolean)))
+      : [];
+
+    setDraftPapers(sortedPapers);
+    setDraftYears(sortedYears);
+    setDraftStates(sortedStates);
+    setDraftChapters(nextChapters);
+    setAppliedPapers(sortedPapers);
+    setAppliedYears(sortedYears);
+    setAppliedStates(sortedStates);
+    setAppliedChapters(nextChapters);
+  }, [questions.length, searchParams, searchParamString, yearOptions]);
 
   const chapterOptions = useMemo(() => {
-    const relevant =
-      selectedPaper === ALL_PAPERS
-        ? questions
-        : questions.filter((question) => question.paper_id === selectedPaper);
+    const relevant = questions.filter((question) => {
+      const paperValue = paperCodeToValue(question.paper_code);
+      const matchesPaper = draftPapers.length === 0 || draftPapers.includes(paperValue);
+      const matchesState = draftStates.length === 0 || draftStates.includes(question.state);
+      const matchesYear = draftYears.length === 0 || draftYears.includes(String(question.year));
+      return matchesPaper && matchesState && matchesYear;
+    });
 
     const counts = new Map<
       string,
@@ -294,7 +481,7 @@ export default function HomePage() {
     });
 
     return Array.from(counts.values()).sort((a, b) => a.chapter.localeCompare(b.chapter));
-  }, [questions, selectedPaper]);
+  }, [draftPapers, draftStates, draftYears, questions]);
 
   const chapterGroups = useMemo(() => {
     const groupMap = new Map<'Form 4' | 'Form 5' | 'Unknown', Array<{ chapter: string; total: number; label: string; chapterNumber?: string }>>();
@@ -339,18 +526,23 @@ export default function HomePage() {
 
   const filteredQuestions = useMemo(() => {
     return questions
-      .filter((question) => selectedPaper === ALL_PAPERS || question.paper_id === selectedPaper)
-      .filter((question) => selectedYear === ALL_YEARS || String(question.year) === selectedYear)
       .filter((question) => {
-        if (selectedChapters.length === 0) {
+        const paperValue = paperCodeToValue(question.paper_code);
+        const matchesPaper = appliedPapers.length === 0 || appliedPapers.includes(paperValue);
+        const matchesState = appliedStates.length === 0 || appliedStates.includes(question.state);
+        const matchesYear = appliedYears.length === 0 || appliedYears.includes(String(question.year));
+        if (!matchesPaper || !matchesState || !matchesYear) {
+          return false;
+        }
+        if (appliedChapters.length === 0) {
           return true;
         }
         const chapters = question.chapters ?? [];
         const names = new Set(chapters.map((tag) => tag.chapter));
-        return selectedChapters.some((chapter) => names.has(chapter));
+        return appliedChapters.some((chapter) => names.has(chapter));
       })
       .sort((a, b) => a.question_number - b.question_number);
-  }, [questions, selectedPaper, selectedYear, selectedChapters]);
+  }, [appliedChapters, appliedPapers, appliedStates, appliedYears, questions]);
 
   const hasQuestions = filteredQuestions.length > 0;
   const currentQuestion = hasQuestions ? filteredQuestions[currentIndex] : null;
@@ -367,37 +559,161 @@ export default function HomePage() {
   useEffect(() => {
     setCurrentIndex(0);
     setActiveTab('question');
-  }, [selectedPaper, selectedChapters, selectedYear]);
+  }, [appliedChapters, appliedPapers, appliedStates, appliedYears]);
 
   useEffect(() => {
     setActiveTab('question');
   }, [currentIndex]);
 
-  useEffect(() => {
-    setSelectedChapters([]);
-    setTopicMenuOpen(false);
-  }, [selectedPaper]);
-
-  useEffect(() => {
-    if (!topicMenuOpen) {
-      return;
-    }
-    const handleClick = (event: MouseEvent) => {
-      if (topicDropdownRef.current && !topicDropdownRef.current.contains(event.target as Node)) {
-        setTopicMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [topicMenuOpen]);
-
   const toggleChapter = (chapter: string) => {
-    setSelectedChapters((prev) =>
+    setDraftChapters((prev) =>
       prev.includes(chapter) ? prev.filter((item) => item !== chapter) : [...prev, chapter]
     );
   };
 
-  const clearChapters = () => setSelectedChapters([]);
+  const clearChapters = () => setDraftChapters([]);
+
+  const toggleStateValue = (value: string) => {
+    setDraftStates((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
+      }
+      const next = [...prev, value];
+      return next.sort((a, b) => STATE_OPTIONS.indexOf(a) - STATE_OPTIONS.indexOf(b));
+    });
+  };
+
+  const clearStates = () => setDraftStates([]);
+
+  const toggleYearValue = (value: string) => {
+    setDraftYears((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
+      }
+      const next = [...prev, value];
+      return next.sort((a, b) => Number(b) - Number(a));
+    });
+  };
+
+  const clearYears = () => setDraftYears([]);
+
+  const togglePaperValue = (value: string) => {
+    setDraftPapers((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((item) => item !== value);
+      }
+      const next = [...prev, value];
+      const order = PAPER_OPTIONS.map((option) => option.value);
+      return next.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    });
+  };
+
+  const clearPapers = () => setDraftPapers([]);
+
+  const isAllStatesSelected = draftStates.length === 0;
+  const isAllYearsSelected = draftYears.length === 0;
+  const isAllPapersSelected = draftPapers.length === 0;
+
+  const renderChipSummary = (
+    items: string[],
+    fallback: string,
+    formatter: (value: string) => string = (value) => value
+  ) => {
+    if (items.length === 0) {
+      return <span className="truncate text-slate-600">{fallback}</span>;
+    }
+    const unique = Array.from(new Set(items));
+    const display = unique.length > 3 ? unique.slice(0, 2) : unique;
+    const remainder = unique.length > 3 ? unique.length - 2 : 0;
+    return (
+      <div className="flex items-center gap-1 overflow-hidden">
+        {display.map((value) => (
+          <span
+            key={value}
+            className="shrink-0 rounded-full bg-[#e6ecff] px-2 py-0.5 text-xs font-semibold text-[#1d4ed8]"
+          >
+            {formatter(value)}
+          </span>
+        ))}
+        {remainder > 0 && (
+          <span className="shrink-0 rounded-full bg-[#dbe7ff] px-2 py-0.5 text-xs font-semibold text-[#1d4ed8]">
+            +{remainder}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const moveFocusWithin = (root: HTMLDivElement | null, direction: 1 | -1) => {
+    if (!root) {
+      return;
+    }
+    const focusable = Array.from(root.querySelectorAll<HTMLElement>('[data-dropdown-option]'));
+    if (focusable.length === 0) {
+      return;
+    }
+    const activeElement = document.activeElement as HTMLElement | null;
+    let index = focusable.findIndex((element) => element === activeElement);
+    if (index === -1) {
+      index = direction === 1 ? 0 : focusable.length - 1;
+    } else {
+      index = (index + direction + focusable.length) % focusable.length;
+    }
+    focusable[index]?.focus();
+  };
+
+  const handleDropdownKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    close: () => void,
+    trigger: HTMLButtonElement | null
+  ) => {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      moveFocusWithin(event.currentTarget, 1);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      moveFocusWithin(event.currentTarget, -1);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+      trigger?.focus();
+    }
+  };
+
+  const handleSearch = useCallback(() => {
+    setAppliedPapers(draftPapers);
+    setAppliedYears(draftYears);
+    setAppliedStates(draftStates);
+    setAppliedChapters(draftChapters);
+    closeAllMenus();
+    setActiveTab('question');
+    setCurrentIndex(0);
+
+    const params = new URLSearchParams();
+    if (draftPapers.length > 0) {
+      params.set('paper', draftPapers.join(','));
+    }
+    if (draftStates.length > 0) {
+      params.set('state', draftStates.join(','));
+    }
+    if (draftYears.length > 0) {
+      params.set('year', draftYears.join(','));
+    }
+    if (draftChapters.length > 0) {
+      params.set('chapters', draftChapters.join(','));
+    }
+
+    const paramsString = params.toString();
+    router.replace(paramsString ? `${pathname}?${paramsString}` : pathname, { scroll: false });
+  }, [
+    closeAllMenus,
+    draftChapters,
+    draftPapers,
+    draftStates,
+    draftYears,
+    pathname,
+    router
+  ]);
 
   const handlePrev = () => {
     if (!hasQuestions) {
@@ -424,19 +740,15 @@ export default function HomePage() {
     setActiveTab('question');
   };
 
-  const topicSummary = (() => {
-    if (selectedChapters.length === 0) {
-      return 'Select Topic';
+  const chapterSummary = (() => {
+    if (draftChapters.length === 0) {
+      return 'Select Chapter(s)';
     }
-    if (selectedChapters.length === 1) {
-      return formatChapterLabel(selectedChapters[0]);
+    if (draftChapters.length === 1) {
+      return formatChapterLabel(draftChapters[0]);
     }
-    return `${selectedChapters.length} topics selected`;
+    return `${draftChapters.length} chapters selected`;
   })();
-
-  const selectedPaperMeta =
-    currentQuestion ??
-    (selectedPaper === ALL_PAPERS ? null : paperOptions.find((item) => item.paper_id === selectedPaper) ?? null);
 
   if (loading) {
     return (
@@ -457,7 +769,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#eff3f9] text-slate-800">
       <header className="border-b border-slate-200">
-        <div className="container mx-auto flex items-center justify-between px-4 py-3">
+        <div className="container mx-auto flex items-center justify-between px-6 py-3 md:px-8">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="text-slate-700">
               <Menu className="h-5 w-5" />
@@ -488,8 +800,8 @@ export default function HomePage() {
       </header>
 
       <section className="border-b border-slate-200 bg-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-4 flex items-center gap-3">
+        <div className="container mx-auto px-6 py-5 md:px-8">
+          <div className="mb-2 flex items-center gap-3">
             <h1 className="text-3xl font-bold text-[#3b82f6]">TOPICAL PAST PAPER QUESTIONS</h1>
             <Button variant="ghost" size="icon" className="rounded-full bg-slate-100 hover:bg-slate-200">
               <Play className="h-4 w-4 text-slate-700" />
@@ -516,168 +828,426 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-6">
-        <div className="rounded-2xl border-2 border-[#3b82f6] bg-[#dbe9f7] p-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-2 text-sm text-slate-700">
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
-                </svg>
-                Curriculum:
+      <section className="sticky top-0 z-30 bg-[#eff3f9]/95 backdrop-blur">
+        <div className="container mx-auto px-6 py-4 md:px-8">
+          <div className="rounded-2xl border border-[#c6d6f8] bg-[#e8f0ff] px-5 py-4">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex w-full flex-col gap-2 md:w-auto">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Subject
               </span>
-              <div className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
-                MALAYSIA SPM
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-2 text-sm text-slate-700">
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-                </svg>
-                Subject:
-              </span>
-              <div className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+              <div className="flex h-10 items-center rounded-lg border border-[#b7c7ef] bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm">
                 Additional Mathematics (3472)
-                <span className="rounded-full bg-[#3b82f6] px-3 py-1 text-xs font-semibold text-white">
-                  Chapterized Till : Sep 2022
-                </span>
               </div>
             </div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            <div className="sm:col-span-2" ref={topicDropdownRef}>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Topic(s):
-              </label>
+            <div className="relative flex w-full flex-col gap-2 md:w-auto md:flex-1">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Chapter(s)
+              </span>
               <button
                 type="button"
                 className={cn(
-                  'flex w-full items-center justify-between rounded-md border border-slate-300 bg-white px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:border-[#3b82f6]',
-                  topicMenuOpen && 'border-[#3b82f6] ring-2 ring-[#3b82f6]/30'
+                  'flex h-10 w-full items-center justify-between rounded-lg border border-[#b7c7ef] bg-white px-3 text-left text-sm font-semibold text-slate-700 transition hover:border-[#1d4ed8]',
+                  topicMenuOpen && 'border-[#1d4ed8] ring-2 ring-[#1d4ed8]/30'
                 )}
-                onClick={() => setTopicMenuOpen((prev) => !prev)}
+                ref={topicTriggerRef}
+                onClick={() =>
+                  setTopicMenuOpen((prev) => {
+                    const next = !prev;
+                    if (next) {
+                      setStateMenuOpen(false);
+                      setYearMenuOpen(false);
+                      setPaperMenuOpen(false);
+                      updateTopicDropdownPosition();
+                    }
+                    return next;
+                  })
+                }
               >
-                <span className="truncate">{topicSummary}</span>
+                <span className="truncate">{chapterSummary}</span>
                 <ChevronDown className="h-4 w-4 text-slate-400" />
               </button>
-              {topicMenuOpen && (
-                <div className="absolute z-50 mt-2 max-h-[360px] w-[min(320px,85vw)] overflow-hidden rounded-xl border border-[#9bb9e8] bg-white p-4 shadow-2xl">
-                  <div className="mb-3 flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      Chapters
-                    </span>
-                    <Button
+            </div>
+            {typeof document !== 'undefined' && topicMenuOpen && topicDropdownCoords
+              ? createPortal(
+                  <div
+                    ref={topicDropdownRef}
+                    style={{
+                      position: 'fixed',
+                      top: topicDropdownCoords.top,
+                      left: topicDropdownCoords.left,
+                      width: topicDropdownCoords.width,
+                      maxHeight: '60vh'
+                    }}
+                    className="relative z-[70] flex max-h-[60vh] flex-col overflow-hidden rounded-xl border border-[#9bb9e8] bg-white shadow-xl"
+                  >
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="sm"
                       onClick={clearChapters}
-                      disabled={selectedChapters.length === 0}
+                      disabled={draftChapters.length === 0}
+                      className="absolute right-3 top-2 text-xs font-semibold text-[#2563eb] disabled:text-slate-300"
                     >
                       Clear all
-                    </Button>
-                  </div>
-                  <div className="max-h-[260px] space-y-4 overflow-y-auto pr-1">
-                    {chapterGroups.map(({ form, items }) => (
-                      <div key={form} className="space-y-2">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{form}</p>
-                        <div className="space-y-1">
-                          {items.map(({ chapter, total, label }) => {
-                            const checked = selectedChapters.includes(chapter);
-                            return (
-                              <label
-                                key={chapter}
-                                className={cn(
-                                  'flex cursor-pointer items-center justify-between rounded-lg border border-transparent px-3 py-2 text-sm transition',
-                                  checked
-                                    ? 'border-[#3b82f6] bg-[#e6f0ff] font-semibold text-[#1d4ed8]'
-                                    : 'hover:bg-slate-50'
-                                )}
-                              >
-                                <span className="flex items-center gap-2">
+                    </button>
+                    <div className="flex-1 space-y-4 overflow-y-auto px-4 pb-3 pt-4">
+                      {chapterGroups.map(({ form, items }) => (
+                        <div key={form} className="space-y-2">
+                          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{form}</p>
+                          <div className="space-y-1">
+                            {items.map(({ chapter, total, label }) => {
+                              const checked = draftChapters.includes(chapter);
+                              return (
+                                <label
+                                  key={chapter}
+                                  className={cn(
+                                    'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm transition',
+                                    checked ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                                  )}
+                                >
                                   <input
                                     type="checkbox"
                                     checked={checked}
                                     onChange={() => toggleChapter(chapter)}
-                                    className="size-4 rounded border-slate-300 text-[#3b82f6] focus:ring-[#3b82f6]"
+                                    className="size-4 rounded border-slate-300 text-[#2563eb] focus:ring-[#2563eb]"
+                                    data-dropdown-option
                                   />
-                                  <span>{label}</span>
-                                </span>
-                                <span className="text-xs text-slate-500">{total}</span>
-                              </label>
+                                  <span className="flex-1">{label}</span>
+                                  <span className="text-xs font-semibold text-slate-500">{total}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                      {chapterGroups.length === 0 && (
+                        <p className="text-sm text-slate-500">No chapter metadata for the current selection.</p>
+                      )}
+                    </div>
+                  </div>,
+                  document.body
+                )
+              : null}
+            <div className="relative flex w-full flex-col gap-2 md:w-[190px]">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500">State</span>
+              <button
+                type="button"
+                ref={stateTriggerRef}
+                className={cn(
+                  'flex h-10 w-full items-center justify-between rounded-lg border border-[#b7c7ef] bg-white px-3 text-left text-sm font-semibold text-slate-700 transition hover:border-[#1d4ed8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40',
+                  stateMenuOpen && 'border-[#1d4ed8] ring-2 ring-[#1d4ed8]/30'
+                )}
+                onClick={() =>
+                  setStateMenuOpen((prev) => {
+                    const next = !prev;
+                    if (next) {
+                      setTopicMenuOpen(false);
+                      setYearMenuOpen(false);
+                      setPaperMenuOpen(false);
+                      updateStateDropdownPosition();
+                    }
+                    return next;
+                  })
+                }
+                aria-haspopup="listbox"
+                aria-expanded={stateMenuOpen}
+              >
+                <span className="flex-1 overflow-hidden pr-3">
+                  {renderChipSummary(draftStates, ALL_STATES_LABEL)}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
+              </button>
+              {typeof document !== 'undefined' && stateMenuOpen && stateDropdownCoords
+                ? createPortal(
+                    <div
+                      ref={stateDropdownRef}
+                      style={{
+                        position: 'fixed',
+                        top: stateDropdownCoords.top,
+                        left: stateDropdownCoords.left,
+                        width: stateDropdownCoords.width,
+                        maxHeight: '60vh'
+                      }}
+                      className="z-[70] flex max-h-[60vh] flex-col overflow-hidden rounded-xl border border-[#9bb9e8] bg-white shadow-xl"
+                      tabIndex={-1}
+                      role="listbox"
+                      aria-multiselectable="true"
+                      onKeyDown={(event) => handleDropdownKeyDown(event, () => setStateMenuOpen(false), stateTriggerRef.current)}
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
+                        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          States
+                        </span>
+                        <Button type="button" variant="ghost" size="sm" onClick={clearStates} disabled={draftStates.length === 0}>
+                          Clear all
+                        </Button>
+                      </div>
+                      <div className="flex-1 space-y-2 overflow-y-auto px-2 py-3">
+                        <button
+                          type="button"
+                          className={cn(
+                            'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                            isAllStatesSelected ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                          )}
+                          onClick={clearStates}
+                          data-dropdown-option
+                          role="option"
+                          aria-selected={isAllStatesSelected}
+                        >
+                          <input
+                            type="checkbox"
+                            readOnly
+                            checked={isAllStatesSelected}
+                            tabIndex={-1}
+                            className="size-4 rounded border-slate-300 text-[#2563eb]"
+                          />
+                          <span className="flex-1">{ALL_STATES_LABEL}</span>
+                        </button>
+                        <div className="space-y-1">
+                          {STATE_OPTIONS.map((state) => {
+                            const checked = draftStates.includes(state);
+                            return (
+                              <button
+                                key={state}
+                                type="button"
+                                className={cn(
+                                  'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                                  checked ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                                )}
+                                onClick={() => toggleStateValue(state)}
+                                data-dropdown-option
+                                role="option"
+                                aria-selected={checked}
+                              >
+                                <input
+                                  type="checkbox"
+                                  readOnly
+                                  checked={checked}
+                                  tabIndex={-1}
+                                  className="size-4 rounded border-slate-300 text-[#2563eb]"
+                                />
+                                <span className="flex-1">{state}</span>
+                              </button>
                             );
                           })}
                         </div>
                       </div>
-                    ))}
-                    {chapterGroups.length === 0 && (
-                      <p className="text-sm text-slate-500">
-                        No chapter metadata for the current selection.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
+                    </div>,
+                    document.body
+                  )
+                : null}
             </div>
-
-            <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Paper(s):
-              </label>
-              <Select value={selectedPaper} onValueChange={setSelectedPaper}>
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select Paper" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={ALL_PAPERS}>All Papers</SelectItem>
-                  {paperOptions.map((paper) => (
-                    <SelectItem key={paper.paper_id} value={paper.paper_id}>
-                      {formatPaperLabel(paper)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="relative flex w-full flex-col gap-2 md:w-[150px]">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Year(s)
+              </span>
+              <button
+                type="button"
+                ref={yearTriggerRef}
+                className={cn(
+                  'flex h-10 w-full items-center justify-between rounded-lg border border-[#b7c7ef] bg-white px-3 text-left text-sm font-semibold text-slate-700 transition hover:border-[#1d4ed8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40',
+                  yearMenuOpen && 'border-[#1d4ed8] ring-2 ring-[#1d4ed8]/30'
+                )}
+                onClick={() =>
+                  setYearMenuOpen((prev) => {
+                    const next = !prev;
+                    if (next) {
+                      setTopicMenuOpen(false);
+                      setStateMenuOpen(false);
+                      setPaperMenuOpen(false);
+                      updateYearDropdownPosition();
+                    }
+                    return next;
+                  })
+                }
+                aria-haspopup="listbox"
+                aria-expanded={yearMenuOpen}
+              >
+                <span className="flex-1 overflow-hidden pr-3">
+                  {renderChipSummary(draftYears, ALL_YEARS_LABEL)}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
+              </button>
+              {typeof document !== 'undefined' && yearMenuOpen && yearDropdownCoords
+                ? createPortal(
+                    <div
+                      ref={yearDropdownRef}
+                      style={{
+                        position: 'fixed',
+                        top: yearDropdownCoords.top,
+                        left: yearDropdownCoords.left,
+                        width: yearDropdownCoords.width,
+                        maxHeight: '60vh'
+                      }}
+                      className="z-[70] flex max-h-[60vh] flex-col overflow-hidden rounded-xl border border-[#9bb9e8] bg-white shadow-xl"
+                      tabIndex={-1}
+                      role="listbox"
+                      aria-multiselectable="true"
+                      onKeyDown={(event) => handleDropdownKeyDown(event, () => setYearMenuOpen(false), yearTriggerRef.current)}
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
+                        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Years
+                        </span>
+                        <Button type="button" variant="ghost" size="sm" onClick={clearYears} disabled={draftYears.length === 0}>
+                          Clear all
+                        </Button>
+                      </div>
+                      <div className="flex-1 space-y-1 overflow-y-auto px-2 py-3">
+                        <button
+                          type="button"
+                          className={cn(
+                            'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                            isAllYearsSelected ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                          )}
+                          onClick={clearYears}
+                          data-dropdown-option
+                          role="option"
+                          aria-selected={isAllYearsSelected}
+                        >
+                          <input type="checkbox" readOnly checked={isAllYearsSelected} tabIndex={-1} className="size-4 rounded border-slate-300 text-[#2563eb]" />
+                          <span className="flex-1">{ALL_YEARS_LABEL}</span>
+                        </button>
+                        {yearOptionsDesc.map((year) => {
+                          const checked = draftYears.includes(year);
+                          return (
+                            <button
+                              key={year}
+                              type="button"
+                              className={cn(
+                                'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                                checked ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                              )}
+                              onClick={() => toggleYearValue(year)}
+                              data-dropdown-option
+                              role="option"
+                              aria-selected={checked}
+                            >
+                              <input type="checkbox" readOnly checked={checked} tabIndex={-1} className="size-4 rounded border-slate-300 text-[#2563eb]" />
+                              <span className="flex-1">{year}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>,
+                    document.body
+                  )
+                : null}
             </div>
-
-            <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Year(s):
-              </label>
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select Year" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={ALL_YEARS}>All Years</SelectItem>
-                  {yearOptions.map((year) => (
-                    <SelectItem key={year} value={year}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="relative flex w-full flex-col gap-2 md:w-[150px]">
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500">Paper</span>
+              <button
+                type="button"
+                ref={paperTriggerRef}
+                className={cn(
+                  'flex h-10 w-full items-center justify-between rounded-lg border border-[#b7c7ef] bg-white px-3 text-left text-sm font-semibold text-slate-700 transition hover:border-[#1d4ed8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40',
+                  paperMenuOpen && 'border-[#1d4ed8] ring-2 ring-[#1d4ed8]/30'
+                )}
+                onClick={() =>
+                  setPaperMenuOpen((prev) => {
+                    const next = !prev;
+                    if (next) {
+                      setTopicMenuOpen(false);
+                      setStateMenuOpen(false);
+                      setYearMenuOpen(false);
+                      updatePaperDropdownPosition();
+                    }
+                    return next;
+                  })
+                }
+                aria-haspopup="listbox"
+                aria-expanded={paperMenuOpen}
+              >
+                <span className="flex-1 overflow-hidden pr-3">
+                  {renderChipSummary(draftPapers, ALL_PAPERS_LABEL, (value) => value)}
+                </span>
+                <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
+              </button>
+              {typeof document !== 'undefined' && paperMenuOpen && paperDropdownCoords
+                ? createPortal(
+                    <div
+                      ref={paperDropdownRef}
+                      style={{
+                        position: 'fixed',
+                        top: paperDropdownCoords.top,
+                        left: paperDropdownCoords.left,
+                        width: paperDropdownCoords.width,
+                        maxHeight: '60vh'
+                      }}
+                      className="z-[70] flex max-h-[60vh] flex-col overflow-hidden rounded-xl border border-[#9bb9e8] bg-white shadow-xl"
+                      tabIndex={-1}
+                      role="listbox"
+                      aria-multiselectable="true"
+                      onKeyDown={(event) => handleDropdownKeyDown(event, () => setPaperMenuOpen(false), paperTriggerRef.current)}
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
+                        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          Papers
+                        </span>
+                        <Button type="button" variant="ghost" size="sm" onClick={clearPapers} disabled={draftPapers.length === 0}>
+                          Clear all
+                        </Button>
+                      </div>
+                      <div className="flex-1 space-y-1 overflow-y-auto px-2 py-3">
+                        <button
+                          type="button"
+                          className={cn(
+                            'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                            isAllPapersSelected ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                          )}
+                          onClick={clearPapers}
+                          data-dropdown-option
+                          role="option"
+                          aria-selected={isAllPapersSelected}
+                        >
+                          <input type="checkbox" readOnly checked={isAllPapersSelected} tabIndex={-1} className="size-4 rounded border-slate-300 text-[#2563eb]" />
+                          <span className="flex-1">{ALL_PAPERS_LABEL}</span>
+                        </button>
+                        {PAPER_OPTIONS.map((paper) => {
+                          const checked = draftPapers.includes(paper.value);
+                          return (
+                            <button
+                              key={paper.value}
+                              type="button"
+                              className={cn(
+                                'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-left transition',
+                                checked ? 'bg-[#e6f0ff] font-semibold text-[#1d4ed8]' : 'hover:bg-slate-50'
+                              )}
+                              onClick={() => togglePaperValue(paper.value)}
+                              data-dropdown-option
+                              role="option"
+                              aria-selected={checked}
+                            >
+                              <input type="checkbox" readOnly checked={checked} tabIndex={-1} className="size-4 rounded border-slate-300 text-[#2563eb]" />
+                              <span className="flex-1">{paper.value}</span>
+                              <span className="text-xs text-slate-500">{paper.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>,
+                    document.body
+                  )
+                : null}
             </div>
-
-            <div className="flex items-end">
+            <div className="flex w-full justify-end md:ml-auto md:w-auto">
               <Button
                 type="button"
-                className="w-full bg-[#3b82f6] text-white hover:bg-[#2563eb]"
-                onClick={() => setTopicMenuOpen(false)}
+                className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#2563eb] px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1d4ed8] md:w-[130px]"
+                onClick={handleSearch}
               >
-                <Search className="mr-2 h-4 w-4" />
+                <Search className="h-4 w-4" />
                 Search
               </Button>
             </div>
           </div>
         </div>
+        </div>
       </section>
 
-      <section className="container mx-auto px-4 py-6">
+      <section className="container mx-auto px-6 pb-8 pt-2 md:px-8 md:pt-3">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <aside className="lg:col-span-3">
-            <div className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="flex items-center justify-between bg-slate-50 px-4 py-3 text-xs font-semibold text-slate-600">
                 <button
                   type="button"
@@ -761,120 +1331,88 @@ export default function HomePage() {
           </aside>
 
           <article className="lg:col-span-9">
-            <div className="flex min-h-[620px] flex-col overflow-hidden rounded-2xl border-2 border-slate-200 bg-white">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 px-6 py-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-slate-900">SPM Additional Mathematics</h2>
-                  <p className="text-sm text-slate-600">
-                    {selectedPaperMeta ? formatPaperLabel(selectedPaperMeta) : 'Select a paper to begin'}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="text-slate-600"
-                    disabled={!currentQuestion}
-                    onClick={() => {
-                      if (!currentQuestion) {
-                        return;
-                      }
-                      const link = `${currentQuestion.question_img}`;
-                      void navigator.clipboard?.writeText(link);
-                    }}
-                    title="Copy question image link"
-                  >
-                    <Share2 className="h-5 w-5" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={handlePrev}
-                    disabled={!hasQuestions || currentIndex === 0}
-                    className="text-slate-600"
-                    title="Previous question"
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleNext}
-                    disabled={!hasQuestions || currentIndex === filteredQuestions.length - 1}
-                    className="text-slate-600"
-                    title="Next question"
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-6 py-3">
-                <button
+            <div className="flex min-h-[620px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="flex items-center justify-center gap-6 border-b border-slate-200 bg-[#e7efff] px-5 py-3 md:px-6">
+                <Button
                   type="button"
+                  variant="ghost"
+                  className="flex flex-col items-center gap-1 text-sm font-semibold text-slate-600 hover:text-[#1d4ed8]"
+                  onClick={handlePrev}
+                  disabled={!hasQuestions || currentIndex === 0}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                  <span>Previous</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex flex-col items-center gap-1 text-sm font-semibold text-slate-600 hover:text-[#1d4ed8]"
+                  onClick={handleNext}
+                  disabled={!hasQuestions || currentIndex === filteredQuestions.length - 1}
+                >
+                  <ChevronRight className="h-5 w-5" />
+                  <span>Next</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
                   className={cn(
-                    'rounded-full px-4 py-2 text-sm font-semibold transition',
-                    activeTab === 'question'
-                      ? 'bg-[#3b82f6] text-white shadow'
-                      : 'text-slate-600 hover:bg-slate-100'
+                    'flex flex-col items-center gap-1 text-sm font-semibold transition',
+                    activeTab === 'question' ? 'text-[#2563eb]' : 'text-slate-600 hover:text-[#1d4ed8]'
                   )}
                   onClick={() => setActiveTab('question')}
                   disabled={!hasQuestions}
                 >
-                  Question
-                </button>
-                <button
+                  <List className="h-5 w-5" />
+                  <span>Question</span>
+                </Button>
+                <Button
                   type="button"
+                  variant="ghost"
                   className={cn(
-                    'rounded-full px-4 py-2 text-sm font-semibold transition',
-                    activeTab === 'solution'
-                      ? 'bg-[#3b82f6] text-white shadow'
-                      : 'text-slate-600 hover:bg-slate-100'
+                    'flex flex-col items-center gap-1 text-sm font-semibold transition',
+                    activeTab === 'solution' ? 'text-[#2563eb]' : 'text-slate-600 hover:text-[#1d4ed8]'
                   )}
                   onClick={() => setActiveTab('solution')}
                   disabled={!hasQuestions || !currentQuestion?.solution_img}
                 >
-                  Answer
-                </button>
+                  <KeyRound className="h-5 w-5" />
+                  <span>Answer</span>
+                </Button>
               </div>
 
               {hasQuestions && currentQuestion?.chapters && currentQuestion.chapters.length > 0 && (
-                <div className="border-b border-slate-200 bg-[#eef5ff] px-6 py-3 text-sm font-semibold text-slate-700">
-                  Topic(s):{' '}
+                <div className="border-b border-slate-200 bg-[#eef5ff] px-5 py-3 text-sm font-semibold text-slate-700 md:px-6">
+                  Chapter(s):{' '}
                   <span className="font-normal">
                     {currentQuestion.chapters.map((tag) => formatChapterBanner(tag.chapter)).join(', ')}
                   </span>
                 </div>
               )}
 
-              <div className="flex flex-1 items-center justify-center bg-white px-6 py-6">
+              <div className="flex flex-1 items-start justify-center bg-white px-0 py-0">
                 {hasQuestions ? (
                   activeTab === 'solution' && !currentQuestion?.solution_img ? (
                     <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">
                       No solution image available for this question.
                     </div>
                   ) : (
-                    <div className="w-full max-w-3xl">
-                      <div className="mx-auto flex h-[500px] items-start justify-center overflow-y-auto rounded-xl border border-slate-200 bg-white p-4 shadow-inner">
-                        <img
-                          src={
-                            activeTab === 'solution'
-                              ? currentQuestion?.solution_img ?? ''
-                              : currentQuestion?.question_img ?? ''
-                          }
-                          alt={
-                            currentQuestion
-                              ? `${activeTab === 'solution' ? 'Solution' : 'Question'} for question ${currentQuestion.question_number}`
-                              : 'Question image'
-                          }
-                          onContextMenu={(event) => event.preventDefault()}
-                          draggable={false}
-                          className="h-auto max-w-full"
-                        />
-                      </div>
+                    <div className="h-[600px] w-full max-w-4xl overflow-y-auto rounded-2xl bg-white">
+                      <img
+                        src={
+                          activeTab === 'solution'
+                            ? currentQuestion?.solution_img ?? ''
+                            : currentQuestion?.question_img ?? ''
+                        }
+                        alt={
+                          currentQuestion
+                          ? `${activeTab === 'solution' ? 'Solution' : 'Question'} for question ${currentQuestion.question_number}`
+                          : 'Question image'
+                        }
+                        onContextMenu={(event) => event.preventDefault()}
+                        draggable={false}
+                        className="w-full rounded-2xl"
+                      />
                     </div>
                   )
                 ) : (
@@ -894,47 +1432,13 @@ export default function HomePage() {
                 )}
               </div>
 
-              <div className="flex items-center justify-between border-t border-slate-200 bg-slate-50 px-6 py-4">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="font-semibold text-slate-700 hover:text-[#1d4ed8]"
-                  onClick={handlePrev}
-                  disabled={!hasQuestions || currentIndex === 0}
-                >
-                  Previous
-                </Button>
-                <span className="text-sm font-semibold text-slate-600">
-                  {hasQuestions ? `${currentIndex + 1} of ${filteredQuestions.length}` : '0 of 0'}
-                </span>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="font-semibold text-slate-700 hover:text-[#1d4ed8]"
-                  onClick={handleNext}
-                  disabled={!hasQuestions || currentIndex === filteredQuestions.length - 1}
-                >
-                  Next
-                </Button>
-              </div>
             </div>
           </article>
         </div>
       </section>
 
-      <section className="container mx-auto px-4 pb-12">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {FEATURE_CARDS.map((card) => (
-            <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="mb-3 text-lg font-semibold text-slate-800">{card.title}</h3>
-              <p className="text-sm leading-relaxed text-slate-600">{card.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <footer className="border-t border-slate-200 bg-[#eff3f9]">
-        <div className="container mx-auto flex items-center justify-between px-4 py-6 text-sm text-slate-600">
+        <div className="container mx-auto flex items-center justify-between px-6 py-6 text-sm text-slate-600 md:px-8">
           <p>2025 © exam-mate</p>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-slate-800">
