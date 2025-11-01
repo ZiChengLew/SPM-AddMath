@@ -1,21 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type { FormEvent, KeyboardEvent } from 'react';
 import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
   Eye,
-  HelpCircle,
   KeyRound,
   List,
-  Mail,
-  Menu,
-  Play,
-  Search,
-  Shuffle,
-  Users
+  Plus,
+  Search
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -210,6 +206,14 @@ type Question = {
   chapters?: ChapterTag[];
 };
 
+type QuestionList = {
+  id: string;
+  name: string;
+  items: string[];
+  updatedAt?: string;
+  createdAt?: string;
+};
+
 function normaliseChapterTag(tag: ChapterTag): ChapterTag {
   const original = tag.chapter?.trim() ?? '';
   if (!original) {
@@ -293,6 +297,19 @@ export default function HomePage() {
   const [appliedChapters, setAppliedChapters] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'question' | 'solution'>('question');
+  const [questionLists, setQuestionLists] = useState<QuestionList[]>([]);
+  const [listsReady, setListsReady] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<string[]>([]);
+  const addButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [isUpdatingList, setIsUpdatingList] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+  const [addModalSelectedListId, setAddModalSelectedListId] = useState<string>('');
+  const [addModalNewListName, setAddModalNewListName] = useState('');
+  const addModalInputRef = useRef<HTMLInputElement | null>(null);
+  const [addModalError, setAddModalError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     open: topicMenuOpen,
     setOpen: setTopicMenuOpen,
@@ -335,6 +352,161 @@ export default function HomePage() {
     setYearMenuOpen(false);
     setPaperMenuOpen(false);
   }, [setPaperMenuOpen, setStateMenuOpen, setTopicMenuOpen, setYearMenuOpen]);
+
+  const exitSelectMode = useCallback(() => {
+    setSelectMode(false);
+    setSelectedQuestionIds([]);
+  }, []);
+
+  const showToast = useCallback((message: string) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    setToastMessage(message);
+    toastTimeoutRef.current = setTimeout(() => setToastMessage(null), 3000);
+  }, []);
+
+  const handleListsResponse = useCallback(async (response: Response) => {
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || 'Failed to update question lists.');
+    }
+    const payload = (await response.json()) as QuestionList[];
+    setQuestionLists(payload);
+    setListsReady(true);
+    return payload;
+  }, []);
+
+  const fetchQuestionLists = useCallback(async () => {
+    try {
+      const response = await fetch('/api/lists', { cache: 'no-store' });
+      await handleListsResponse(response);
+    } catch (error) {
+      console.error('Failed to fetch question lists:', error);
+      setQuestionLists([]);
+      setListsReady(true);
+    }
+  }, [handleListsResponse]);
+
+  const handleToggleSelectMode = () => {
+    setSelectMode((prev) => {
+      const next = !prev;
+      if (!prev) {
+        setSelectedQuestionIds([]);
+      }
+      if (!next) {
+        setSelectedQuestionIds([]);
+      }
+      return next;
+    });
+  };
+
+  const handleCancelSelection = useCallback(() => {
+    exitSelectMode();
+    addButtonRef.current?.focus();
+  }, [exitSelectMode]);
+
+  const handleCheckboxChange = (id: string, checked: boolean) => {
+    setSelectedQuestionIds((prev) => {
+      if (checked) {
+        if (prev.includes(id)) {
+          return prev;
+        }
+        return [...prev, id];
+      }
+      return prev.filter((item) => item !== id);
+    });
+  };
+
+  const openAddModal = useCallback(() => {
+    if (selectedQuestionIds.length === 0) {
+      return;
+    }
+    closeAllMenus();
+    const defaultListId = questionLists[0]?.id ?? '';
+    setAddModalSelectedListId(defaultListId);
+    setAddModalNewListName('');
+    setAddModalError(null);
+    setAddModalOpen(true);
+    setTimeout(() => {
+      if (!defaultListId) {
+        addModalInputRef.current?.focus();
+      }
+    }, 0);
+  }, [closeAllMenus, questionLists, selectedQuestionIds.length]);
+
+  const closeAddModal = useCallback(() => {
+    setAddModalOpen(false);
+    setAddModalError(null);
+    setAddModalNewListName('');
+    setAddModalSelectedListId('');
+    addButtonRef.current?.focus();
+  }, []);
+
+  const handleConfirmAddToList = useCallback(async () => {
+    const trimmedName = addModalNewListName.trim();
+    const itemsToAdd = selectedQuestionIds;
+    if (itemsToAdd.length === 0) {
+      setAddModalError('Select at least one question.');
+      return;
+    }
+
+    if (!trimmedName && !addModalSelectedListId) {
+      setAddModalError('Select an existing list or enter a new name.');
+      return;
+    }
+
+    setIsUpdatingList(true);
+    try {
+      let updatedLists: QuestionList[] = [];
+      if (trimmedName) {
+        const response = await fetch('/api/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: trimmedName, items: itemsToAdd })
+        });
+        updatedLists = await handleListsResponse(response);
+      } else if (addModalSelectedListId) {
+        const response = await fetch(`/api/lists/${addModalSelectedListId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ addItems: itemsToAdd })
+        });
+        updatedLists = await handleListsResponse(response);
+      }
+
+      const toastList = trimmedName
+        ? updatedLists.find((list) => list.name === trimmedName)
+        : updatedLists.find((list) => list.id === addModalSelectedListId);
+
+      const nameForToast = toastList?.name || trimmedName || 'List';
+      showToast(`Added ${itemsToAdd.length} question${itemsToAdd.length === 1 ? '' : 's'} to '${nameForToast}'`);
+      exitSelectMode();
+      setAddModalOpen(false);
+      addButtonRef.current?.focus();
+      setAddModalNewListName('');
+      setAddModalSelectedListId('');
+    } catch (error) {
+      console.error(error);
+      const message = error instanceof Error ? error.message : 'Failed to update list.';
+      setAddModalError(message);
+      showToast(message);
+    } finally {
+      setIsUpdatingList(false);
+    }
+  }, [addModalNewListName, addModalSelectedListId, addButtonRef, exitSelectMode, handleListsResponse, selectedQuestionIds, showToast]);
+
+  useEffect(() => {
+    fetchQuestionLists();
+  }, [fetchQuestionLists]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -548,6 +720,16 @@ export default function HomePage() {
   const currentQuestion = hasQuestions ? filteredQuestions[currentIndex] : null;
 
   useEffect(() => {
+    setSelectedQuestionIds((prev) => {
+      const next = prev.filter((id) => filteredQuestions.some((question) => question.id === id));
+      if (next.length === prev.length) {
+        return prev;
+      }
+      return next;
+    });
+  }, [filteredQuestions]);
+
+  useEffect(() => {
     setCurrentIndex((prev) => {
       if (!hasQuestions) {
         return 0;
@@ -663,7 +845,7 @@ export default function HomePage() {
   };
 
   const handleDropdownKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
+    event: KeyboardEvent<HTMLDivElement>,
     close: () => void,
     trigger: HTMLButtonElement | null
   ) => {
@@ -731,15 +913,6 @@ export default function HomePage() {
     setActiveTab('question');
   };
 
-  const handleShuffle = () => {
-    if (!hasQuestions) {
-      return;
-    }
-    const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
-    setCurrentIndex(randomIndex);
-    setActiveTab('question');
-  };
-
   const chapterSummary = (() => {
     if (draftChapters.length === 0) {
       return 'Select Chapter(s)';
@@ -767,69 +940,28 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#eff3f9] text-slate-800">
-      <header className="border-b border-slate-200">
-        <div className="container mx-auto flex items-center justify-between px-6 py-3 md:px-8">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="text-slate-700">
-              <Menu className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-2 rounded border border-slate-300 bg-white px-4 py-2">
-              <span className="text-sm text-slate-700">Topical Past Papers eBooks</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-slate-700">
-              <Users className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-slate-700">
-              <HelpCircle className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-slate-700">
-              <Mail className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" className="border-slate-300 bg-white text-slate-700 hover:bg-slate-50">
-              Login
-            </Button>
-            <Button variant="outline" className="border-slate-300 bg-white text-slate-700 hover:bg-slate-50">
-              Register
-            </Button>
-          </div>
-        </div>
-      </header>
-
+    <>
       <section className="border-b border-slate-200 bg-white">
-        <div className="container mx-auto px-6 py-5 md:px-8">
-          <div className="mb-2 flex items-center gap-3">
+        <div className="mx-auto w-full px-6 py-5 md:px-8 lg:max-w-[90vw]">
+          <div className="mb-2 flex items-center">
             <h1 className="text-3xl font-bold text-[#3b82f6]">TOPICAL PAST PAPER QUESTIONS</h1>
-            <Button variant="ghost" size="icon" className="rounded-full bg-slate-100 hover:bg-slate-200">
-              <Play className="h-4 w-4 text-slate-700" />
-            </Button>
           </div>
-          <p className="max-w-5xl text-base leading-relaxed text-slate-600">
-            Practice with real SPM Additional Mathematics questions organised by chapter. Pick a topic, choose a
-            paper, and work through the full question set with answer schemes ready when you need them.
-          </p>
+          <p className="text-base leading-6 text-slate-600">
+  Practice with real SPM Additional Mathematics questions organised by chapter. 
+  Pick a topic, choose a paper, and work through the full question set with answer schemes ready when you need them.
+</p>
 
-          <div className="mt-4 flex w-fit items-center gap-2 rounded border border-orange-300 bg-orange-100 px-4 py-2">
-            <div className="rounded bg-orange-500 px-2 py-0.5 text-xs font-semibold text-white">
-              Not Subscribed
-            </div>
-            <svg className="h-4 w-4 text-orange-600" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fillRule="evenodd"
-                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="text-sm font-semibold text-orange-800">Questions are not downloadable</span>
-          </div>
+          <button
+            type="button"
+            className="mt-3 inline-flex h-10 items-center rounded-xl bg-orange-500 px-4 text-sm font-semibold uppercase tracking-wide text-white"
+          >
+            Not Subscribed
+          </button>
         </div>
       </section>
 
       <section className="sticky top-0 z-30 bg-[#eff3f9]/95 backdrop-blur">
-        <div className="container mx-auto px-6 py-4 md:px-8">
+        <div className="mx-auto w-full px-6 py-4 md:px-8 lg:max-w-[90vw]">
           <div className="rounded-2xl border border-[#c6d6f8] bg-[#e8f0ff] px-5 py-4">
           <div className="flex flex-wrap items-end gap-3">
             <div className="flex w-full flex-col gap-2 md:w-auto">
@@ -1244,81 +1376,127 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-6 pb-8 pt-2 md:px-8 md:pt-3">
+      <section className="mx-auto w-full px-6 pb-8 pt-2 md:px-8 md:pt-3 lg:max-w-[90vw]">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           <aside className="lg:col-span-3">
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
               <div className="flex items-center justify-between bg-slate-50 px-4 py-3 text-xs font-semibold text-slate-600">
-                <button
-                  type="button"
-                  className="flex flex-col items-center gap-1"
-                  onClick={() => {
-                    if (!hasQuestions) {
-                      return;
-                    }
-                    setCurrentIndex(0);
-                    setActiveTab('question');
-                  }}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                  <span>Asc</span>
-                </button>
-                <div className="flex flex-col items-center gap-1">
-                  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>{filteredQuestions.length}</span>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    className="flex flex-col items-center gap-1"
+                    onClick={() => {
+                      if (!hasQuestions) {
+                        return;
+                      }
+                      setCurrentIndex(0);
+                      setActiveTab('question');
+                    }}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                    <span>Asc</span>
+                  </button>
+                  <div className="flex flex-col items-center gap-1">
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fillRule="evenodd"
+                        d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span>{filteredQuestions.length}</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <Eye className="h-4 w-4" />
+                    <span>
+                      {hasQuestions ? `${currentIndex + 1} / ${filteredQuestions.length}` : '0 / 0'}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                  <Eye className="h-4 w-4" />
-                  <span>
-                    {hasQuestions ? `${currentIndex + 1} / ${filteredQuestions.length}` : '0 / 0'}
-                  </span>
-                </div>
-                <button
+                <Button
+                  ref={addButtonRef}
                   type="button"
-                  className="flex flex-col items-center gap-1"
-                  onClick={handleShuffle}
+                  variant={selectMode ? 'default' : 'ghost'}
+                  className={cn(
+                    'flex flex-col items-center gap-1 text-xs font-semibold',
+                    selectMode ? 'bg-[#2563eb] text-white hover:bg-[#1d4ed8]' : 'text-slate-600 hover:text-[#1d4ed8]'
+                  )}
+                  onClick={handleToggleSelectMode}
+                  aria-pressed={selectMode}
                   disabled={!hasQuestions}
                 >
-                  <Shuffle className="h-4 w-4" />
-                  <span>Random</span>
-                </button>
+                  <Plus className="h-4 w-4" />
+                  <span>Add</span>
+                </Button>
               </div>
-
+              {selectMode && (
+                <div className="mx-4 mb-2 mt-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-semibold">
+                      {selectedQuestionIds.length}{' '}
+                      selected
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={openAddModal}
+                        disabled={selectedQuestionIds.length === 0 || isUpdatingList}
+                      >
+                        Add to list
+                      </Button>
+                      <Button type="button" variant="ghost" size="sm" onClick={handleCancelSelection}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="max-h-[600px] space-y-0.5 overflow-y-auto bg-white">
                 {filteredQuestions.map((question, index) => {
                   const active = index === currentIndex;
+                  const checked = selectedQuestionIds.includes(question.id);
                   const badge = `Q${question.question_number.toString().padStart(2, '0')}`;
                   return (
-                    <button
+                    <div
                       key={question.id}
-                      type="button"
                       className={cn(
-                        'flex w-full items-center justify-between px-4 py-3 text-left text-sm transition',
-                        active
-                          ? 'bg-[#e8f1ff] font-semibold text-[#1d4ed8]'
-                          : 'hover:bg-slate-50'
+                        'flex items-center rounded-lg px-3 py-1 transition',
+                        active ? 'bg-[#e8f1ff]' : 'hover:bg-slate-50'
                       )}
-                      onClick={() => {
-                        setCurrentIndex(index);
-                        setActiveTab('question');
-                      }}
                     >
-                      <div className="flex flex-col">
-                        <span className="font-mono text-xs uppercase tracking-wide text-slate-500">
-                          {question.paper_id}
-                        </span>
-                        <span className="text-sm text-slate-700">{badge}</span>
-                      </div>
-                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
-                        {question.year}
+                      <span className="flex w-6 justify-center">
+                        {selectMode ? (
+                          <input
+                            type="checkbox"
+                            className="size-4 rounded border-slate-300 text-[#2563eb] focus:ring-[#2563eb]"
+                            checked={checked}
+                            onChange={(event) => handleCheckboxChange(question.id, event.target.checked)}
+                          />
+                        ) : null}
                       </span>
-                    </button>
+                      <button
+                        type="button"
+                        className={cn(
+                          'flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition',
+                          active ? 'font-semibold text-[#1d4ed8]' : 'text-slate-700'
+                        )}
+                        onClick={() => {
+                          setCurrentIndex(index);
+                          setActiveTab('question');
+                        }}
+                      >
+                        <div className="flex flex-col">
+                          <span className="font-mono text-xs uppercase tracking-wide text-slate-500">
+                            {question.paper_id}
+                          </span>
+                          <span className="text-sm">{badge}</span>
+                        </div>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+                          {question.year}
+                        </span>
+                      </button>
+                    </div>
                   );
                 })}
                 {filteredQuestions.length === 0 && (
@@ -1398,6 +1576,8 @@ export default function HomePage() {
                     </div>
                   ) : (
                     <div className="h-[600px] w-full max-w-4xl overflow-y-auto rounded-2xl bg-white">
+                      {/* Using <img> keeps the natural height so the scroll container works correctly. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={
                           activeTab === 'solution'
@@ -1417,6 +1597,8 @@ export default function HomePage() {
                   )
                 ) : (
                   <div className="flex flex-col items-center gap-4 text-center text-slate-500">
+                    {/* Static illustration hosted externally; Next Image optimisation is unnecessary. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://ext.same-assets.com/794318852/1088674474.webp"
                       alt="No results"
@@ -1438,7 +1620,7 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-slate-200 bg-[#eff3f9]">
-        <div className="container mx-auto flex items-center justify-between px-6 py-6 text-sm text-slate-600 md:px-8">
+        <div className="mx-auto flex w-full items-center justify-between px-6 py-6 text-sm text-slate-600 md:px-8 lg:max-w-[90vw]">
           <p>2025 © exam-mate</p>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-slate-800">
@@ -1450,6 +1632,86 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-    </div>
+
+      {addModalOpen &&
+        createPortal(
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/40 px-4 py-6" role="dialog" aria-modal="true">
+            <div className="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
+              <h2 className="text-lg font-semibold text-slate-800">Add to list</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                {selectedQuestionIds.length} question{selectedQuestionIds.length === 1 ? '' : 's'} selected
+              </p>
+              <div className="mt-4 space-y-4">
+                {questionLists.length > 0 && (
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Existing lists</p>
+                    <div className="space-y-2">
+                      {questionLists.map((list) => (
+                        <label
+                          key={list.id}
+                          className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm hover:border-[#2563eb]"
+                        >
+                          <input
+                            type="radio"
+                            name="list-choice"
+                            className="size-4 text-[#2563eb]"
+                            value={list.id}
+                            checked={addModalSelectedListId === list.id}
+                            onChange={() => {
+                              setAddModalSelectedListId(list.id);
+                              setAddModalNewListName('');
+                              setAddModalError(null);
+                            }}
+                          />
+                          <span className="flex-1">
+                            <span className="font-semibold text-slate-700">{list.name}</span>
+                            <span className="ml-2 text-xs text-slate-500">{list.items.length} saved</span>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Create new</p>
+                  <input
+                    ref={addModalInputRef}
+                    type="text"
+                    value={addModalNewListName}
+                    onChange={(event) => {
+                      setAddModalNewListName(event.target.value);
+                      if (event.target.value) {
+                        setAddModalSelectedListId('');
+                      }
+                      setAddModalError(null);
+                    }}
+                    placeholder="List name"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563eb]/40"
+                  />
+                  <p className="mt-1 text-xs text-slate-500">Leave blank to use an existing list.</p>
+                </div>
+                {addModalError && <p className="text-sm text-red-500">{addModalError}</p>}
+              </div>
+              <div className="mt-4 flex justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={closeAddModal}>
+                  Cancel
+                </Button>
+                <Button type="button" onClick={handleConfirmAddToList}>
+                  Add
+                </Button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {toastMessage &&
+        createPortal(
+          <div className="fixed bottom-4 right-4 z-[90] rounded-lg bg-slate-900 px-4 py-2 text-sm text-white shadow-lg">
+            {toastMessage}
+          </div>,
+          document.body
+        )}
+    </>
   );
 }
