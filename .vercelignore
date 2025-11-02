@@ -1,0 +1,13 @@
+# 忽略所有本地依赖和大文件
+node_modules/
+Textbook/
+*.pdf
+*.zip
+*.mp4
+*.mov
+*.xlsx
+*.csv
+*.psd
+*.dmg
+*.pkg
+*.iso

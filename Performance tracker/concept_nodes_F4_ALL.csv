@@ -1,0 +1,305 @@
+ ,concept,,,The limiting process to find the instantaneous rate of change of a function.,F5C2_CON_01,Limit Concept
+ ,concept,,,Limit of f(x) as x→a defines continuity and enables differentiation.,F5C2_CON_02,Limit and Continuity
+ ,concept,,,Derivative defined as lim(h→0) [f(x+h)-f(x)]/h.,F5C2_CON_03,Derivative (First Principle)
+ ,concept,,,Notation: dy/dx, f′(x), y′ all represent the derivative of y with respect to x.,F5C2_CON_04,Differentiation Notation
+ ,concept,,,Derivative of ax^n is n a x^{n-1} for integer n.,F5C2_CON_05,Power Rule
+ ,concept,,,Derivative of sum/difference equals sum/difference of derivatives.,F5C2_CON_06,Sum/Difference Rule
+ ,concept,,,Derivative of product of two functions u and v: (uv)′ = u′v + uv′.,F5C2_CON_07,Product Rule
+ ,concept,,,Derivative of quotient: (u/v)′ = (v u′ − u v′)/v².,F5C2_CON_08,Quotient Rule
+ ,concept,,,Derivative of composite functions using chain rule (dy/dx = dy/du × du/dx).,F5C2_CON_09,Chain Rule
+ ,concept,,,Second derivative d²y/dx² is the derivative of first derivative.,F5C2_CON_10,Second Derivative
+ ,concept,,,Interpretation of dy/dx as gradient of tangent and instantaneous rate of change.,F5C2_CON_11,Meaning of dy/dx
+ ,concept,,,Equation of tangent and normal lines to a curve at point (x₁,y₁).,F5C2_CON_12,Tangent and Normal Equations
+ ,concept,,,Turning points occur when dy/dx=0; their nature depends on d²y/dx².,F5C2_CON_13,Turning Points
+ ,concept,,,Maxima and minima determined using first and second derivative tests.,F5C2_CON_14,Maxima and Minima
+ ,concept,,,Related rates: one variable changes with respect to another over time.,F5C2_CON_15,Related Rates
+ ,concept,,,Small changes and approximation: dy ≈ f′(x) dx for small dx.,F5C2_CON_16,Differentials and Approximation
+ ,concept,,,Applications of derivatives in motion, economics, and physics.,F5C2_CON_17,Applications of Differentiation
+,concept,,,If event counts multiply across sequential choices, total ways = product.,F5C4_CON_01,Multiplication Rule
+,concept,,,For mutually exclusive cases, total ways = sum.,F5C4_CON_02,Addition Rule
+,concept,,,Definition and algebra of n!; simplifications.,F5C4_CON_03,Factorial
+,concept,,,Arrangements where order matters.,F5C4_CON_04,Permutation (Definition)
+,concept,,,Linear permutations of n distinct items: n!.,F5C4_CON_05,Linear Permutations
+,concept,,,Permutations nPr = n!/(n−r)!.,F5C4_CON_06,nPr Formula
+,concept,,,Circular arrangements of n distinct items = (n−1)!.,F5C4_CON_07,Circular Permutations
+,concept,,,Reflected circular arrangements counted once (÷2).,F5C4_CON_08,Bracelet/Reflection
+,concept,,,Permutations with identical items = n!/(a!b!c!...).,F5C4_CON_09,Identical Object Permutations
+,concept,,,Permutations with conditions (adjacent/separated/alternating).,F5C4_CON_10,Conditional Permutations
+,concept,,,Forming numbers with digits under given rules.,F5C4_CON_11,Digit Constraints
+,concept,,,Combinations where order does not matter.,F5C4_CON_12,Combination (Definition)
+,concept,,,Formula nCr = n!/(r!(n−r)!).,F5C4_CON_13,nCr Formula
+,concept,,,Binomial identities (nC0=1, nC1=n, nCr=nC(n−r)).,F5C4_CON_14,nCr Identities
+,concept,,,Conditional selections (at least, at most, etc.).,F5C4_CON_15,Conditional Combinations
+,concept,,,Partitioning into groups with multiplication rule.,F5C4_CON_16,Partitioning
+,concept,,,Real-life modelling of arrangement/selection problems.,F5C4_CON_17,Applications
+,concept,,,A statistical measure to show change of a variable in a given year relative to a base year (base=100).,F4C10_CON_01,Definition of Index Numbers
+,concept,,,Computation of index numbers as 100 × (quantity or price in current year ÷ base year).,F4C10_CON_02,Formula of Index Numbers
+,concept,,,Interpretation of index numbers greater than, equal to, or less than 100.,F4C10_CON_03,Interpretation of Index Numbers
+,concept,,,Different types of index numbers used for prices, quantities, productivity, and other variables.,F4C10_CON_04,Types of Index Numbers
+,concept,,,Solving problems using relationships among multiple base years (chain index).,F4C10_CON_05,Conversion Between Base Years
+,concept,,,Definition and purpose of composite index as weighted combination of several indices.,F4C10_CON_06,Composite Index (Definition)
+,concept,,,Formula of composite index: weighted mean of individual indices.,F4C10_CON_07,Composite Index Formula
+,concept,,,Weightage represents the relative importance of items within a composite index.,F4C10_CON_08,Weightage Concept
+,concept,,,Difference between composite index with and without weightage.,F4C10_CON_09,Composite Index Variants
+,concept,,,Applications of index numbers in real life (inflation, cost of living, productivity).,F4C10_CON_10,Applications of Index Numbers
+node_id,type,chapter,name,description,id,label
+F4.FN.C01,concept,1.1,Definition of function,A relation where each element x in the domain maps to exactly one element y in the range.,,
+,concept,,,Equation ax^2 + bx + c = 0 with a≠0; roots are x satisfying the equation.,F4C2_CON_01,Quadratic Equation (General Form)
+,concept,,,x-coordinates where y=ax^2+bx+c intersects x-axis; solutions of quadratic equation.,F4C2_CON_02,Roots / Solutions
+,concept,,,Rewrite ax^2+bx+c as a perfect square plus/minus constant to reveal vertex/solve.,F4C2_CON_03,Completing the Square (Concept)
+,concept,,,x = [-b ± sqrt(b^2 - 4ac)] / (2a); derived via completing the square.,F4C2_CON_04,Quadratic Formula
+,concept,,,For ax^2+bx+c=0: α+β=-b/a and αβ=c/a.,F4C2_CON_05,Sum & Product of Roots (Vieta)
+,concept,,,If roots are p and q: x^2 - (p+q)x + pq = 0.,F4C2_CON_06,Forming Quadratic from Given Roots
+,concept,,,Inequalities involving quadratic expressions; solution is range(s) of x.,F4C2_CON_07,Quadratic Inequality (Concept)
+,concept,,,Use y=(quadratic); regions above/below x-axis map to >0/<0.,F4C2_CON_08,Inequality Methods: Graph
+,concept,,,Use critical points (roots) to test sign on intervals.,F4C2_CON_09,Inequality Methods: Number Line
+,concept,,,Tabulate factor signs across intervals to deduce product sign.,F4C2_CON_10,Inequality Methods: Sign Table
+,concept,,,D = b^2 - 4ac for ax^2+bx+c=0.,F4C2_CON_11,Discriminant
+,concept,,,D>0: two distinct real; D=0: equal real; D<0: no real roots (complex).,F4C2_CON_12,Types of Roots (Classification)
+,concept,,,Use inequalities on D to constrain parameters for desired root types.,F4C2_CON_13,Parameter Range via Discriminant
+,concept,,,f(x)=ax^2+bx+c (a≠0); graph is a parabola.,F4C2_CON_14,Quadratic Function (General Form)
+,concept,,,a>0 opens up (min); a<0 opens down (max).,F4C2_CON_15,Parabola Shape & Orientation
+,concept,,,x = -b/(2a).,F4C2_CON_16,Axis of Symmetry (General Form)
+,concept,,,"( -b/(2a), f(-b/(2a)) ).",F4C2_CON_17,Vertex (General Form)
+,concept,,,"f(x)=a(x-p)(x-q); p, q are x-intercepts.",F4C2_CON_18,Intercept Form
+,concept,,,"f(x)=a(x-h)^2 + k; vertex (h,k).",F4C2_CON_19,Vertex Form
+,concept,,,|a| controls width; sign controls opening; y-intercept fixed by c.,F4C2_CON_20,Effect of a (General Form)
+,concept,,,Moves vertex left/right relative to y-axis; shape unchanged.,F4C2_CON_21,Effect of b (General Form)
+,concept,,,"Vertical shift; y-intercept at (0,c).",F4C2_CON_22,Effect of c (General Form)
+,concept,,,Controls opening & width; axis/vertex position kept.,F4C2_CON_23,Effect of a (Vertex Form)
+,concept,,,Horizontal shift; axis at x=h.,F4C2_CON_24,Effect of h (Vertex Form)
+,concept,,,Vertical shift; min/max value changes to k.,F4C2_CON_25,Effect of k (Vertex Form)
+,concept,,,Relation between D and number of x-axis intersections.,F4C2_CON_26,Roots vs Graph Position
+,concept,,,"Identify a, D; vertex/axis; intercepts; plot symmetric points; draw smooth curve.",F4C2_CON_27,Sketching Workflow
+,concept,,,Projectile motion; optimization (min/max); physical structures.,F4C2_CON_28,Applications of Quadratics
+,concept,,,"Algebraic links: expansion, factorisation, completing square.",F4C2_CON_29,Convert Between Forms
+,concept,,,a>0 and D<0 ⇒ always positive; a<0 and D<0 ⇒ always negative.,F4C2_CON_30,Conditions for Always Positive/Negative
+,concept,,,"Three linear equations in x,y,z: ax+by+cz=d.",F4C3_CON_01,System of Linear Equations (3 Vars)
+,concept,,,ax+by+cz=d represents a plane in 3D space.,F4C3_CON_02,Linear Equation in 3D
+,concept,,,Solutions correspond to intersection(s) of planes.,F4C3_CON_03,Solution as Plane Intersections
+,concept,,,Three planes intersect at a single point.,F4C3_CON_04,Unique Solution
+,concept,,,Three planes intersect along a line (or coincide).,F4C3_CON_05,Infinite Solutions
+,concept,,,"Three planes have no common intersection (e.g., parallel/inconsistent).",F4C3_CON_06,No Solution
+,concept,,,Consistency linked to ranks; intuitive check via elimination results.,F4C3_CON_07,Consistency & Rank (Idea)
+,concept,,,"Eliminate variables sequentially to solve for x,y,z.",F4C3_CON_08,Elimination Method (Concept)
+,concept,,,Express a variable in terms of others and substitute.,F4C3_CON_09,Substitution Method (Concept)
+,concept,,,Scaling equations to align coefficients for elimination.,F4C3_CON_10,Coefficient Strategy
+,concept,,,"When infinite solutions, express solution set with parameter t.",F4C3_CON_11,Parameterised Families
+,concept,,,"Contradictions (e.g., 0 = 12) imply no solution.",F4C3_CON_12,Inconsistency Indicator
+,concept,,,Translate contexts into 3-variable linear systems.,F4C3_CON_13,Word Problems → Equations
+,concept,,,Solving via calculator or augmented matrix (Gaussian idea).,F4C3_CON_14,Calculator/Matrix Aid (Idea)
+,concept,,,"One linear eqn and one non-linear eqn in x,y.",F4C3_CON_15,Simultaneous Linear & Non-linear
+,concept,,,Solutions are intersection points of the two graphs.,F4C3_CON_16,Graphical Interpretation
+,concept,,,Use linear eqn to substitute into non-linear eqn.,F4C3_CON_17,Substitution for Non-linear Pair
+,concept,,,Eliminate a variable if algebra permits.,F4C3_CON_18,Elimination Feasibility
+,concept,,,"After substitution, often reduces to quadratic in x or y.",F4C3_CON_19,Quadratic in One Variable
+,concept,,,"Two, one (tangent), or no real solutions depending on discriminant.",F4C3_CON_20,Roots & Multiplicity
+,concept,,,Feasible solutions must satisfy context bounds.,F4C3_CON_21,Domain/Physical Constraints
+,concept,,,Typical modelling pair: linear perimeter + quadratic area.,F4C3_CON_22,Rectangles—Perimeter/Area Models
+,concept,,,Non-linear circle with linear line; solve via substitution.,F4C3_CON_23,Circle/Line Intersections
+,concept,,,Other curve-line intersections handled similarly.,F4C3_CON_24,Hyperbola/Parabola with Line
+,concept,,,Interpretation of solutions within problem units.,F4C3_CON_25,Units & Variable Meaning
+,concept,,,an with base a and index n; exponent rules context.,F4C4_CON_01,Index Notation & Base/Exponent
+,concept,,,am × an = am+n for a≠0.,F4C4_CON_02,Law: Product of Powers
+,concept,,,"am / an = am−n for a≠0, n≤m for integers.",F4C4_CON_03,Law: Quotient of Powers
+,concept,,,(am)n = amn.,F4C4_CON_04,Law: Power of a Power
+,concept,,,"(ab)n = anbn, (a/b)n = an/bn (b≠0).",F4C4_CON_05,Law: Power of a Product/Quotient
+,concept,,,"a0=1 (a≠0), a−n=1/an, a1/n = n√a (a>0).",F4C4_CON_06,Zero/Negative/Fractional Indices
+,concept,,,If am = an ⇒ m=n; if am = bm with m≠0 ⇒ a=b.,F4C4_CON_07,Exponential Equations (Same Base)
+,concept,,,"P=A(1+r)t, N=N0e−λt; solving by indices/logs.",F4C4_CON_08,Exponential Growth/Decay Models
+,concept,,,"Surd = root form with non‑terminating, non‑recurring decimal.",F4C4_CON_09,Irrational Numbers & Surds
+,concept,,,Extract largest square (or nth‑power) factor.,F4C4_CON_10,Simplifiable vs Non‑simplifiable Surds
+,concept,,,"For a,b>0: √a·√b=√(ab), √a/√b=√(a/b).",F4C4_CON_11,Law: √a·√b and √a/√b
+,concept,,,Same irrational factor ⇒ can combine.,F4C4_CON_12,Similar Surds
+,concept,,,a±√b; product (a+√b)(a−√b)=a²−b.,F4C4_CON_13,Conjugate Surds
+,concept,,,Remove surds from denominator using conjugates.,F4C4_CON_14,Rationalising Denominators
+,concept,,,"Right triangles, Pythagoras, lengths with radicals.",F4C4_CON_15,Geometric Interpretation with Surds
+,concept,,,"loga N = x ⇔ ax = N, a>0,a≠1,N>0.",F4C4_CON_16,Logarithm Definition
+,concept,,,"loga(xy)=loga x+loga y, loga(x/y)=loga x−loga y, loga(x^n)=n loga x.",F4C4_CON_17,Log Laws: Product/Quotient/Power
+,concept,,,"loga b = logc b / logc a (c>0,c≠1).",F4C4_CON_18,Change of Base
+,concept,,,Base 10 and base e (ln); antilog concept.,F4C4_CON_19,Common & Natural Logs
+,concept,,,y=a^x and y=loga x are inverses; domain/range links.,F4C4_CON_20,Exponential vs Log Functions (Inverse)
+,concept,,,Solve a^f(x)=b by taking logs; linearise growth/decay.,F4C4_CON_21,Solving with Logarithms
+,concept,,,Compound interest P=A(1+r)^t; doubling time.,F4C4_CON_22,Applications: Finance
+,concept,,,Half‑life N=N0(1/2)^{t/h} = N0 e^{−λ t}.,F4C4_CON_23,Applications: Radioactivity
+,concept,,,Log scales; models using logs and exponentials.,F4C4_CON_24,Applications: Sound/Richter/Population
+,concept,,,EN keywords (Indices, Surds & Logarithms): index; base; rational number; irrational number; surd; radical; recurring decimal; conjugate surd; logarithm; natural logarithm; algebraic expression; coefficient.  MS keywords: indeks; asas; nombor nisbah; nombor tak nisbah; surd; radikal; perpuluhan berulang; surd konjugat; logaritma; logaritma jati; ungkapan algebra; pekali.,F4C4_KW,Indices/Surds/Logs Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F4C4. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C4_KW_NOTE,Indices/Surds/Logs Chapter Keywords (Note)
+,concept,,,EN keywords (Progressions): sequence; arithmetic progression; common difference; geometric progression; common ratio; sum to infinity; recurring decimal.  MS keywords: jujukan; janjang aritmetik; beza sepunya; janjang geometri; nisbah sepunya; hasil tambah ketakterhinggaan; perpuluhan berulang.,F4C5_KW,Progressions Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F4C5. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C5_KW_NOTE,Progressions Chapter Keywords (Note)
+,concept,,,EN keywords (Linear Law): linear relation; non-linear relation; inspection method; line of best fit.  MS keywords: hubungan linear; hubungan tak linear; kaedah pemerinyuan; garis lurus penyesuaian terbaik.,F4C6_KW,Linear Law Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F4C6. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C6_KW_NOTE,Linear Law Chapter Keywords (Note)
+,concept,,,Sequence with constant difference between consecutive terms.,F4C5_CON_01,Arithmetic Progression (Definition)
+,concept,,,Fixed difference d = T_{n} - T_{n-1} in an AP.,F4C5_CON_02,Common Difference d (AP)
+,concept,,,General term T_{n} = a + (n-1)d.,F4C5_CON_03,AP nth Term Formula
+,concept,,,Sum of first n terms S_{n} = n/2 [2a + (n-1)d].,F4C5_CON_04,AP Sum Formula
+,concept,,,Context uses (salaries, seating rows, linear growth totals).,F4C5_CON_05,AP Applications
+,concept,,,Sequence with constant ratio between consecutive terms.,F4C5_CON_11,Geometric Progression (Definition)
+,concept,,,Fixed ratio r = T_{n}/T_{n-1} in a GP.,F4C5_CON_12,Common Ratio r (GP)
+,concept,,,General term T_{n} = a r^{n-1}. ,F4C5_CON_13,GP nth Term Formula
+,concept,,,Sum S_{n} = a(1 - r^{n})/(1 - r) for |r|<1.,F4C5_CON_14,GP Sum Formula (|r|<1)
+,concept,,,Sum S_{n} = a(r^{n} - 1)/(r - 1) for |r|>1.,F4C5_CON_15,GP Sum Formula (|r|>1)
+,concept,,,Sum to infinity S_{∞} = a/(1 - r) where |r|<1.,F4C5_CON_16,Sum to Infinity of GP
+,concept,,,Repeating decimals expressed as geometric series.,F4C5_CON_17,Recurring Decimal as GP
+,concept,,,Discrete GP parallels continuous exponential function behaviour.,F4C5_CON_18,GP vs Exponential Function
+,concept,,,Relation represented by a straight line; can be detected from table/graph.,F4C6_CON_01,Linear Relation (Definition)
+,concept,,,Relation not represented by a straight line; may be made linear by suitable variables.,F4C6_CON_02,Non‑linear Relation (Definition)
+,concept,,,Scatter plot line that balances points above/below; used for modelling & prediction.,F4C6_CON_03,Line of Best Fit (Concept)
+,concept,,,General straight line model with gradient m and intercept c.,F4C6_CON_04,Linear Model Y = mX + c
+,concept,,,Gradient is rate of change ΔY/ΔX determined from two points.,F4C6_CON_05,Gradient (Rate of Change)
+,concept,,,Y‑intercept is value of Y when X=0.,F4C6_CON_06,Y‑Intercept
+,concept,,,Changing variables X=f(x), Y=g(y) to make a curve linear.,F4C6_CON_07,Linearisation via Variable Change
+,concept,,,Example linearisation: y = ax + b/x → (Y=xy , X=x^2).,F4C6_CON_08,Example: y = ax + b/x
+,concept,,,Example linearisation: y = p q^x → (Y=log y , X=x).,F4C6_CON_09,Example: y = p q^x (Log)
+,concept,,,Example linearisation: 3y − p x^2 = qx → (Y=y/x , X=x).,F4C6_CON_10,Example: 3y − p x^2 = qx
+,concept,,,Use linearised straight line to estimate/interpolate values; extrapolation with care.,F4C6_CON_11,Interpretation & Prediction
+,concept,,,Criteria: X,Y cannot contain unknown constants; m,c must be constants.,F4C6_CON_12,Valid Choice of X and Y
+,concept,,,Error sources: outliers, wrong scale, mis‑read points; leverage residual distribution.,F4C6_CON_13,Best‑fit Quality & Errors
+,concept,,,Applications: physics experiments, biology growth, finance scaling.,F4C6_CON_14,Applications of Linear Law
+,concept,,,F4C7_CON_01,Divisor of a Line Segment (Concept),A point P divides AB internally in ratio m:n.
+,concept,,,F4C7_CON_02,Internal Division Ratio,Interpretation of m:n as AP:PB on a segment.
+,concept,,,F4C7_CON_03,Section Formula (Internal),P(x,y)=(n x1 + m x2)/(m+n) , (n y1 + m y2)/(m+n).
+,concept,,,F4C7_CON_04,Midpoint,Special case of section formula with m=n.
+,concept,,,F4C7_CON_05,Gradient Definition,m = (y2−y1)/(x2−x1)=tanθ.
+,concept,,,F4C7_CON_06,Parallel Lines Criterion,Lines are parallel iff m1=m2.
+,concept,,,F4C7_CON_07,Perpendicular Lines Criterion,Lines are perpendicular iff m1·m2=−1.
+,concept,,,F4C7_CON_08,Equation from Point & Gradient,Form y−y1=m(x−x1).
+,concept,,,F4C7_CON_09,Shoelace Area (Triangle),Area = 1/2 |x1y2+x2y3+x3y1−x2y1−x3y2−x1y3|.
+,concept,,,F4C7_CON_10,Shoelace Area (Polygon),General 1/2 cyclic sum over ordered vertices.
+,concept,,,F4C7_CON_11,Collinearity via Area,Three points collinear ⇔ area(Δ)=0.
+,concept,,,F4C7_CON_12,Locus: Fixed Distance from Point,Circle (x−x1)^2+(y−y1)^2=r^2.
+,concept,,,F4C7_CON_13,Locus: Constant Distance Ratio (Apollonius),Circle from PA:PB=m:n.
+,concept,,,F4C7_CON_14,Locus: Perpendicular Bisector,Set PA=PB to get perpendicular bisector.
+,concept,,,F4C7_CON_15,Distance Formula,d=√((x2−x1)^2+(y2−y1)^2).
+,concept,,,F4C7_CON_16,Box Method for Area,Area(rectangle) minus corner triangles.
+,concept,,,Quantities with magnitude & direction (vector) vs magnitude only (scalar).,F4C8_CON_01,Vector vs Scalar
+,concept,,,Vector represented by arrow; length = magnitude, arrow = direction.,F4C8_CON_02,Directed Line Segment
+,concept,,,Vector Notation and Magnitude |a|.,F4C8_CON_03,Vector Notation & Magnitude
+,concept,,,Zero vector (0~); negative reverses direction; equality = same mag & dir.,F4C8_CON_04,Zero / Negative / Same Vectors
+,concept,,,Scalar multiple ka — |ka| = |k||a| ; k>0 same dir, k<0 opposite.,F4C8_CON_05,Scalar Multiplication (ka)
+,concept,,,Vectors a∥b iff a = k b for some scalar k.,F4C8_CON_06,Parallel Vectors Criterion
+,concept,,,Collinearity via AB→ ∥ BC→ with common point ⇒ A,B,C collinear.,F4C8_CON_07,Collinearity via Vectors
+,concept,,,Single vector equivalent to sum/difference of several vectors.,F4C8_CON_08,Resultant Vector
+,concept,,,Triangle Law AB→ + BC→ = AC→ (and subtraction via adding negative).,F4C8_CON_09,Triangle Law
+,concept,,,Parallelogram Law — resultant is diagonal from common tail.,F4C8_CON_10,Parallelogram Law
+,concept,,,Polygon Law — sum around a chain equals tail→head vector.,F4C8_CON_11,Polygon Law
+,concept,,,Unit vectors i = (1,0), j = (0,1); |i| = |j| = 1.,F4C8_CON_12,Unit Vectors i & j
+,concept,,,Position/column vector OB→ = (x,y) = xi + yj ; |OB→| = √(x²+y²).,F4C8_CON_13,Position & Column Vector
+,concept,,,Unit vector in direction r̂ = r/|r| for r≠0.,F4C8_CON_14,Unit Vector r-hat
+,concept,,,Add/subtract by components; scalar multiplies each component.,F4C8_CON_15,Vector Arithmetic (Components)
+,concept,,,Perpendicular vectors have dot product 0 (idea level).,F4C8_CON_16,Orthogonality (Idea)
+,concept,,,Combine motion/wind/stream vectors to get bearing & speed.,F4C8_CON_17,Applications: Relative Velocity
+,concept,,,Relationship between side–length ratios and sine of opposite angles.,F4C9_CON_01,Sine Rule (Definition)
+,concept,,,Use of sine rule to find unknown sides or angles in non-right triangles.,F4C9_CON_02,Sine Rule (Application)
+,concept,,,Existence of multiple triangles when two sides and a non-included acute angle are given.,F4C9_CON_03,Ambiguous Case (SSA)
+,concept,,,Conditions for no triangle, one triangle, or two triangles.,F4C9_CON_04,Ambiguous Case Conditions
+,concept,,,Using sine rule to solve ambiguous cases.,F4C9_CON_05,Sine Rule in Ambiguous Case
+,concept,,,Use of sine rule to solve bearings and height problems.,F4C9_CON_06,Applications of Sine Rule
+,concept,,,Relationship of sides and included angle through cosine formula.,F4C9_CON_07,Cosine Rule (Definition)
+,concept,,,Using cosine rule to find sides/angles with SAS or SSS.,F4C9_CON_08,Cosine Rule (Application)
+,concept,,,Area formula of a triangle via base and height or ½ab sin C.,F4C9_CON_09,Area Formula (½ab sin C)
+,concept,,,Heron’s Formula for area using three sides.,F4C9_CON_10,Heron’s Formula
+,concept,,,Use of sine, cosine, or Heron’s rule to compute area in applied contexts.,F4C9_CON_11,Applications of Area Formulae
+,concept,,,Integration of sine rule, cosine rule, and area formula to solve real-world problems.,F4C9_CON_12,Combined Applications
+,concept,,,Angle measured by arc length over radius; one radian subtends an arc equal to the radius.,F5C1_CON_01,Radian (Definition)
+,concept,,,Conversion between degrees and radians using 2π rad = 360°.,F5C1_CON_02,Degree–Radian Conversion
+,concept,,,Arc length formula s = rθ for θ in radians.,F5C1_CON_03,Arc Length of a Circle
+,concept,,,Perimeter of a segment = chord length + arc length.,F5C1_CON_04,Perimeter of a Segment
+,concept,,,Area of a sector A = ½ r^2 θ for θ in radians.,F5C1_CON_05,Area of a Sector
+,concept,,,Area of a segment = sector area − triangle area.,F5C1_CON_06,Area of a Segment
+,concept,,,Relationship between chord length and included angle via cosine rule.,F5C1_CON_07,Chord Length (via Cosine Rule)
+,concept,,,Use of radians, arc length and sector area in real contexts (distance, fields, design).,F5C1_CON_08,Applications of Circular Measure
+,concept,,,Reflex/major vs minor angles and arcs; 0 &lt; θ &lt; 2π.,F5C1_CON_09,Minor/Major Angles &amp; Arcs
+,concept,,,Central angle–arc–radius proportionality leading to s ∝ θ and A ∝ θ.,F5C1_CON_10,Proportionality in Circular Measure
+,concept,,,Integration as the reverse of differentiation (anti‑derivative).,F5C3_CON_01,Integration (Concept)
+,concept,,,Indefinite integral notation ∫f(x)dx includes constant of integration C.,F5C3_CON_02,Indefinite Integral & +C
+,concept,,,Linearity of integration for sums/differences and constant multiples.,F5C3_CON_03,Linearity of Integration
+,concept,,,Power rule for integration ∫ax^n dx = a x^{n+1}/(n+1) for n≠−1.,F5C3_CON_04,Power Rule (Integration)
+,concept,,,Natural logarithm arises from ∫(1/x)dx = ln|x| + C.,F5C3_CON_05,Integral of 1/x
+,concept,,,Definite integral as signed area/limit of sums.,F5C3_CON_06,Definite Integral (Meaning)
+,concept,,,Evaluation of definite integrals via antiderivatives F(b)−F(a).,F5C3_CON_07,Fundamental Theorem (Eval)
+,concept,,,Properties of definite integrals: reversal of limits, additivity over intervals.,F5C3_CON_08,Properties of ∫_a^b
+,concept,,,Area under a curve and with the x‑axis; handling regions below the axis.,F5C3_CON_09,Area Under Curve
+,concept,,,Area between two curves by integrating y_top − y_bottom.,F5C3_CON_10,Area Between Curves
+,concept,,,Substitution method (u‑sub) for reversing the chain rule.,F5C3_CON_11,Substitution (u‑sub)
+,concept,,,Basic integrals of e^x, sin x, cos x as standard antiderivatives.,F5C3_CON_12,Basic exp/trig Integrals
+,concept,,,Motion in a line: s, v, a related by differentiation/integration.,F5C3_CON_13,Kinematics via Integration
+,concept,,,Variable whose value is determined by outcome of random experiment.,F5C5_CON_01,Random Variable
+,concept,,,Random variable taking countable values.,F5C5_CON_02,Discrete Random Variable
+,concept,,,Random variable taking any value in a continuous range.,F5C5_CON_03,Continuous Random Variable
+,concept,,,List of all possible x with associated probabilities such that ΣP(X)=1.,F5C5_CON_04,Probability Distribution (Discrete)
+,concept,,,Probability mass function and graphical representation.,F5C5_CON_05,Probability Distribution Graph
+,concept,,,Model with n independent Bernoulli trials and success probability p.,F5C5_CON_06,Binomial Distribution
+,concept,,,Formula for binomial probability.,F5C5_CON_07,Binomial Probability Formula
+,concept,,,Mean and variance of binomial distribution (μ=np, σ²=np(1−p)).,F5C5_CON_08,Mean and Variance (Binomial)
+,concept,,,Symmetric bell-shaped continuous distribution.,F5C5_CON_09,Normal Distribution
+,concept,,,Standardised version with μ=0, σ=1.,F5C5_CON_10,Standard Normal Distribution
+,concept,,,Z-score as number of standard deviations from mean.,F5C5_CON_11,Standard Score Z
+,concept,,,Areas under curve correspond to probabilities.,F5C5_CON_12,Probability under Normal Curve
+,concept,,,Use Z-table to find P(X<a) or P(X>b).,F5C5_CON_13,Z-Table
+,concept,,,Approximation of Binomial by Normal when n large, p≈0.5.,F5C5_CON_14,Binomial to Normal Approximation
+ ,concept,,,Ratios on right triangles and unit‑circle definitions of sine, cosine, tangent.,F5C6_CON_01,Trig Functions (Definition)
+ ,concept,,,Reciprocal trig functions and relationships: sec=1/cos, cosec=1/sin, cot=1/tan.,F5C6_CON_02,Reciprocal Functions
+ ,concept,,,Key identities linking trig functions.,F5C6_CON_03,Fundamental Identities
+ ,concept,,,Graphs of sine, cosine, and tangent including period, amplitude, symmetry, and asymptotes.,F5C6_CON_04,Parent Graphs (sin/cos/tan)
+ ,concept,,,Effects of parameters in A f(Bx+C)+D on amplitude, period, phase, and vertical shifts.,F5C6_CON_05,Graph Transformations
+ ,concept,,,Sum and difference formulae for sine, cosine, tangent.,F5C6_CON_06,Compound‑Angle Formulae
+ ,concept,,,Double‑angle formulae for sine, cosine, and tangent.,F5C6_CON_07,Double‑Angle Formulae
+ ,concept,,,Expressing a sin x + b cos x as a single sinusoid R sin(x±α) or R cos(x∓α).,F5C6_CON_08,R‑Formula (Single Sinusoid)
+ ,concept,,,Solving trigonometric equations in specified intervals and as general solutions.,F5C6_CON_09,Trigonometric Equations
+ ,concept,,,Quadratic forms in trig functions solved by substitution.,F5C6_CON_10,Quadratic‑in‑Trig Structure
+ ,concept,,,Inverse trig functions with domains, ranges, and principal values.,F5C6_CON_11,Inverse Trig Functions
+ ,concept,,,Applications of trig functions and identities in modelling and problem solving.,F5C6_CON_12,Applications of Trigonometry
+,concept,,,Represent real-world problems with decision variables, linear constraints and an objective function.,F5C7_CON_01,LP Model
+,concept,,,Unknown quantities to be chosen (e.g., x and y) that the model solves for.,F5C7_CON_02,Decision Variables
+,concept,,,Requirements written as linear inequalities or equations (≤, ≥, <, >, =).,F5C7_CON_03,Constraints
+,concept,,,Linear function to be maximised or minimised, typically k = ax + by.,F5C7_CON_04,Objective Function
+,concept,,,Common region of the plane that satisfies all constraints.,F5C7_CON_05,Feasible Region
+,concept,,,Any point within the feasible region that satisfies all constraints.,F5C7_CON_06,Feasible Solution
+,concept,,,Process of finding the maximum or minimum value of the objective function.,F5C7_CON_07,Optimisation
+,concept,,,Solve 2-variable linear programming by graphing constraints and reading vertices.,F5C7_CON_08,Graphical Method
+,concept,,,For bounded feasible regions, optimum occurs at a vertex (corner point).,F5C7_CON_09,Vertex Principle
+,concept,,,Family of lines k = ax + by used to locate the optimum by parallel translation.,F5C7_CON_10,Iso-profit Line
+,concept,,,Situations where no common region exists, or the optimum does not exist (unbounded).,F5C7_CON_11,Unbounded/No FR
+,concept,,,Implicit constraints x ≥ 0, y ≥ 0 for practical contexts (quantity, time, etc.).,F5C7_CON_12,Non-negativity
+,concept,,,Business, manufacturing, transport, staffing, budgeting, agriculture and more.,F5C7_CON_13,Applications
+,concept,,,Displacement is the distance moved in a specific direction.,F5C8_CON_01,Displacement
+,concept,,,Velocity is the rate of change of displacement with respect to time.,F5C8_CON_02,Velocity
+,concept,,,Acceleration is the rate of change of velocity with respect to time.,F5C8_CON_03,Acceleration
+,concept,,,Instantaneous quantities represent the values at a particular instant.,F5C8_CON_04,Instantaneous Quantities
+,concept,,,Distance is total length of path travelled regardless of direction.,F5C8_CON_05,Distance
+,concept,,,Relationship among s(t), v(t), a(t): v=ds/dt and a=dv/dt.,F5C8_CON_06,Differentiation Relations
+,concept,,,Integration reverses differentiation: s=∫v dt and v=∫a dt.,F5C8_CON_07,Integration Relations
+,concept,,,Graphical interpretation of displacement, velocity, and acceleration functions.,F5C8_CON_08,Graphical Interpretation
+,concept,,,Solving motion problems using calculus methods.,F5C8_CON_09,Kinematics Problem Solving
+,concept,,,Applications in physics, engineering, and daily motion analysis.,F5C8_CON_10,Applications
+,concept,,,EN keywords (Kinematics of Linear Motion): displacement; velocity; acceleration; distance; initial velocity; uniform velocity; maximum velocity; minimum velocity; uniform acceleration; positive velocity; negative velocity; zero velocity; positive displacement; negative displacement; zero displacement.  MS keywords: sesaran; halaju; pecutan; jarak; halaju awal; halaju malar; halaju maksimum; halaju minimum; pecutan malar; halaju positif; halaju negatif; halaju sifar; sesaran positif; sesaran negatif; sesaran sifar.,F5C8_KW,Kinematics Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F5C8. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C8_KW_NOTE,Kinematics Chapter Keywords (Note)
+,concept,,,EN keywords (Linear Programming): mathematical model; constraint; objective function; feasible region; optimisation.  MS keywords: model matematik; kekangan; fungsi objektif; rantau tersaur; pengoptimuman.,F5C7_KW,Linear Programming Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F5C7. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C7_KW_NOTE,Linear Programming Chapter Keywords (Note)
+,concept,,,EN keywords (Trigonometric Functions): degree; radian; trigonometric ratio; quadrant; basic identities; complementary angle formula; addition angle formula; double angle formula.  MS keywords: darjah; radian; nisbah trigonometri; sukuan; identiti asas; rumus sudut pelengkap; rumus sudut majmuk; rumus sudut berganda.,F5C6_KW,Trigonometric Functions Chapter Keywords
+,concept,,,Notes: This node stores textbook "Key words" for F5C6. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C6_KW_NOTE,Trigonometric Functions Chapter Keywords (Note)
+ ,concept,,,EN keywords (Permutation & Combination): product rule; permutations; factorial; arrangement; order; combinations; identical object.  MS keywords: petua pendaraban; pilih atur; faktorial; susunan; tertib; gabungan; objek secaman.,F5C4_KW,Permutation & Combination Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F5C4. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C4_KW_NOTE,Permutation & Combination Chapter Keywords (Note)
+ ,concept,,,EN keywords (Probability Distributions): random variable; discrete random variable; continuous random variable; binomial distribution; normal distribution; mean; variance; standard deviation.  MS keywords: pemboleh ubah rawak; pemboleh ubah rawak diskret; pemboleh ubah rawak selanjar; taburan binomial; taburan normal; min; varians; sisihan piawai.,F5C5_KW,Probability Distributions Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F5C5. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C5_KW_NOTE,Probability Distributions Chapter Keywords (Note)
+ ,concept,,,EN keywords (Circular Measure): radian; degree; centre of circle; radius; segment; sector; perimeter; arc length; area of sector.  MS keywords: radian; darjah; pusat bulatan; jejari; tembereng; sektor; perimeter; panjang lengkok; luas sektor.,F5C1_KW,Circular Measure Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F5C1. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C1_KW_NOTE,Circular Measure Chapter Keywords (Note)
+ ,concept,,,EN keywords (Differentiation): limit; first derivative; gradient of tangent; second derivative; equation of tangent; equation of normal; turning point; rate of change; approximation; stationary point; point of inflection.  MS keywords: had; terbitan pertama; kecerunan tangen; terbitan kedua; persamaan tangen; persamaan normal; titik pusingan; kadar perubahan; penghampiran; titik pegun; titik lengkok balas.,F5C2_KW,Differentiation Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F5C2. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C2_KW_NOTE,Differentiation Chapter Keywords (Note)
+ ,concept,,,EN keywords (Integration): differentiation; integration; gradient function; equation of curve; indefinite integral; definite integral; integration by substitution; region; volume of revolution.  MS keywords: pembezaan; pengamiran; fungsi kecerunan; persamaan lengkung; kamiran tak tentu; kamiran tentu; pengamiran melalui penggantian; rantau; isi padu kisaran.,F5C3_KW,Integration Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F5C3. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F5C3_KW_NOTE,Integration Chapter Keywords (Note)
+ ,concept,,,EN keywords (Functions): function notation; undefined function; absolute value function; vertical line test; arrow diagram; object; image; domain; codomain; range; discrete function; continuous function; composite function; inverse function; horizontal line test.  MS keywords: tatatanda fungsi; fungsi tidak tertakrif; fungsi nilai mutlak; ujian garis mencancang; gambar rajah anak panah; objek; imej; domain; kodomain; julat; fungsi diskret; fungsi selanjar; fungsi gubahan; fungsi songsang; ujian garis mengufuk.,F4C1_KW,Functions Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C1. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C1_KW_NOTE,Functions Chapter Keywords (Note)
+ ,concept,,,EN keywords (Quadratic Functions & Equations): completing the square; root; general form; quadratic inequality; number line; discriminant; real root; imaginary root; vertex form; axis of symmetry; maximum value; minimum value.  MS keywords: penyempurnaan kuasa dua; punca; bentuk am; ketaksamaan kuadratik; garis nombor; pembezaan; punca nyata; punca khayalan; bentuk verteks; paksi simetri; nilai maksimum; nilai minimum.,F4C2_KW,Quadratic Functions Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C2. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C2_KW_NOTE,Quadratic Functions Chapter Keywords (Note)
+ ,concept,,,EN keywords (Systems of Equations): system of equations; variable; linear equation; non-linear equation; elimination method; substitution method; graphical method.  MS keywords: sistem persamaan; pemboleh ubah; persamaan linear; persamaan tak linear; kaedah penghapusan; kaedah penggantian; perwakilan graf.,F4C3_KW,Systems of Equations Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C3. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C3_KW_NOTE,Systems of Equations Chapter Keywords (Note)
+ ,concept,,,EN keywords (Coordinate Geometry): divisor of line segment; parallel straight lines; perpendicular straight lines; gradient; area of polygon; equation of a locus.  MS keywords: pembahagi tembereng garis; garis lurus selari; garis lurus serenjang; kecerunan; luas poligon; persamaan lokus.,F4C7_KW,Coordinate Geometry Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C7. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C7_KW_NOTE,Coordinate Geometry Chapter Keywords (Note)
+ ,concept,,,EN keywords (Vectors): vector; magnitude; direction; directed line segment; zero vector; negative vector; collinear; resultant vector; position vector; triangle law; parallelogram law; polygon law.  MS keywords: vektor; magnitud; arah; tembereng garis berarah; vektor sifar; vektor negatif; segaris; vektor paduan; vektor kedudukan; hukum segi tiga; hukum segi empat selari; hukum poligon.,F4C8_KW,Vectors Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C8. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C8_KW_NOTE,Vectors Chapter Keywords (Note)
+ ,concept,,,EN keywords (Solution of Triangles): acute angle; obtuse angle; sine rule; cosine rule; ambiguous case; included angle; non‑included angle; three dimension.  MS keywords: sudut tirus; sudut cakah; petua sinus; petua kosinus; kes berambiguiti; sudut kandung; sudut bukan kandung; tiga matra.,F4C9_KW,Solution of Triangles Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C9. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C9_KW_NOTE,Solution of Triangles Chapter Keywords (Note)
+ ,concept,,,EN keywords (Index Number): index number; price index; quantity at base time; quantity at specific time; composite index; weightage.  MS keywords: nombor indeks; indeks harga; kuantiti pada masa asas; kuantiti pada masa tertentu; indeks gubahan; pemberat.,F4C10_KW,Index Numbers Chapter Keywords
+ ,concept,,,Notes: This node stores textbook "Key words" for F4C10. Use it as a chapter-level keyword source for tagging/IR. Future chapters can add similar *_KW nodes.,F4C10_KW_NOTE,Index Numbers Chapter Keywords (Note)

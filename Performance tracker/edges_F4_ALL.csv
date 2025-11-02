@@ -1,0 +1,706 @@
+# Chapter 10 internal structure
+F4C10_CON_01,F4C10_SKILL_01,prerequisite,Understand definition and usage of index numbers.
+F4C10_CON_02,F4C10_SKILL_02,prerequisite,Compute index using standard formula.
+F4C10_CON_03,F4C10_SKILL_03,prerequisite,Interpretation based on value relative to 100.
+F4C10_CON_02,F4C10_SKILL_04,prerequisite,Manipulate formula to find base or current values.
+F4C10_CON_05,F4C10_SKILL_05,prerequisite,Use chained relationships among different base years.
+F4C10_CON_02,F4C10_SKILL_06,contains,Apply formula in contextual scenarios.
+F4C10_CON_06,F4C10_SKILL_07,prerequisite,Understand concept of combining several indices.
+F4C10_CON_07,F4C10_SKILL_08,prerequisite,Compute composite index without weightage.
+F4C10_CON_07,F4C10_SKILL_09,prerequisite,Compute composite index with given weights.
+F4C10_CON_08,F4C10_SKILL_10,prerequisite,Interpret effect of different weightages.
+F4C10_CON_09,F4C10_SKILL_09,related_to,Compare weighted vs unweighted composite indices.
+F4C10_CON_10,F4C10_SKILL_11,contains,Use indices to solve multi-variable real-world problems.
+F4C10_CON_10,F4C10_SKILL_12,contains,Link to national economic indicators such as CPI or productivity.
+
+# Cross-chapter strong links
+F4C5_CON_18,F4C10_CON_02,related_to,Exponential growth/decay parallels index-number percentage change.
+F4C6_CON_05,F4C10_CON_02,related_to,Gradient/rate interpretation supports understanding of change rate in index.
+F4C7_CON_15,F4C10_CON_02,related_to,Ratio formula logic parallels distance/gradient formulas.
+F4C8_CON_16,F4C10_CON_07,related_to,Weighted sum resembles vector resultant using components.
+F4C9_CON_09,F4C10_CON_07,related_to,Area weighted average analogy similar to composite index.
+source_id,target_id,relation,description
+,,,
+F4C2_CON_01,F4C2_CON_03,prerequisite,General form underpins completing the square.
+F4C2_CON_03,F4C2_CON_04,related_to,Quadratic formula derived via completing square.
+F4C2_CON_01,F4C2_CON_05,contains,Vieta relations come from general form.
+F4C2_CON_05,F4C2_CON_06,contains,Forming equation from given roots uses Vieta.
+F4C2_CON_01,F4C2_CON_11,contains,Discriminant defined for ax^2+bx+c=0.
+F4C2_CON_11,F4C2_CON_12,prerequisite,D determines types of roots.
+F4C2_CON_12,F4C2_CON_26,prerequisite,Types of roots control x-axis intersection count.
+F4C2_CON_07,F4C2_CON_08,contains,Graph method is one approach to inequalities.
+F4C2_CON_07,F4C2_CON_09,contains,Number line method is one approach to inequalities.
+F4C2_CON_07,F4C2_CON_10,contains,Sign table method is one approach to inequalities.
+F4C2_CON_14,F4C2_CON_15,contains,Shape/orientation property of quadratic functions.
+F4C2_CON_14,F4C2_CON_16,contains,Axis of symmetry for general form.
+F4C2_CON_14,F4C2_CON_17,contains,Vertex for general form.
+F4C2_CON_14,F4C2_CON_18,related_to,Intercept form equivalent representation.
+F4C2_CON_14,F4C2_CON_19,related_to,Vertex form equivalent representation.
+F4C2_CON_14,F4C2_CON_20,contains,Effect of parameter a in general form.
+F4C2_CON_14,F4C2_CON_21,contains,Effect of parameter b in general form.
+F4C2_CON_14,F4C2_CON_22,contains,Effect of parameter c in general form.
+F4C2_CON_19,F4C2_CON_23,contains,Effect of a in vertex form.
+F4C2_CON_19,F4C2_CON_24,contains,Effect of h in vertex form.
+F4C2_CON_19,F4C2_CON_25,contains,Effect of k in vertex form.
+F4C2_CON_11,F4C2_CON_30,prerequisite,D<0 conditions for always positive/negative.
+F4C2_CON_29,F4C2_CON_18,related_to,Converting may yield intercept form if real roots exist.
+F4C2_CON_29,F4C2_CON_19,related_to,Converting between vertex/general.
+F4C2_CON_27,F4C2_CON_28,related_to,Sketching supports applications and modelling.
+F4C2_CON_03,F4C2_SKILL_01,prerequisite,Understand completing square to solve.
+F4C2_CON_04,F4C2_SKILL_02,prerequisite,Know formula to apply correctly.
+F4C2_CON_06,F4C2_SKILL_03,prerequisite,Equation formation from roots.
+F4C2_CON_05,F4C2_SKILL_04,prerequisite,Vieta enables root transformations.
+F4C2_CON_11,F4C2_SKILL_05,prerequisite,Definition of discriminant.
+F4C2_CON_12,F4C2_SKILL_06,prerequisite,Mapping D to root types.
+F4C2_CON_13,F4C2_SKILL_07,prerequisite,Use D inequalities to bound parameters.
+F4C2_CON_08,F4C2_SKILL_08,prerequisite,Graph approach to inequalities.
+F4C2_CON_09,F4C2_SKILL_09,prerequisite,Number line approach.
+F4C2_CON_10,F4C2_SKILL_10,prerequisite,Sign table approach.
+F4C2_CON_29,F4C2_SKILL_11,prerequisite,Complete square to convert.
+F4C2_CON_19,F4C2_SKILL_12,prerequisite,Expand vertex form.
+F4C2_CON_18,F4C2_SKILL_13,prerequisite,Factor to intercept form where possible.
+F4C2_CON_16,F4C2_SKILL_14,prerequisite,Axis formula.
+F4C2_CON_17,F4C2_SKILL_15,prerequisite,Vertex computation.
+F4C2_CON_18,F4C2_SKILL_16,prerequisite,x-intercepts are roots.
+F4C2_CON_14,F4C2_SKILL_17,prerequisite,y-intercept from c.
+F4C2_CON_27,F4C2_SKILL_18,prerequisite,Workflow for sketching.
+F4C2_CON_20,F4C2_SKILL_19,prerequisite,"Effect of a,b,c in general form."
+F4C2_CON_23,F4C2_SKILL_20,prerequisite,"Effect of a,h,k in vertex form."
+F4C2_CON_28,F4C2_SKILL_21,prerequisite,Context of applications.
+F4C2_CON_19,F4C2_SKILL_22,prerequisite,Use vertex for optimisation.
+F4C2_CON_02,F4C2_SKILL_23,prerequisite,Interpret roots in context.
+F4C2_CON_14,F4C2_SKILL_24,prerequisite,Model constraints/domain awareness.
+F4C2_CON_03,F4C2_SKILL_25,prerequisite,Derive quadratic formula by completing square.
+F4C2_SKILL_11,F4C2_SKILL_22,related_to,Vertex via conversion helps optimisation.
+F4C2_SKILL_05,F4C2_SKILL_06,related_to,Compute D then classify roots.
+F4C2_SKILL_06,F4C2_SKILL_08,related_to,Root types inform sign of quadratic on intervals.
+F4C3_CON_01,F4C3_CON_02,contains,Each linear equation corresponds to a plane.
+F4C3_CON_02,F4C3_CON_03,prerequisite,Plane intersections generate solutions.
+F4C3_CON_03,F4C3_CON_04,contains,Single-point intersection implies unique solution.
+F4C3_CON_03,F4C3_CON_05,contains,Line of intersection implies infinite solutions.
+F4C3_CON_03,F4C3_CON_06,contains,No common intersection implies no solution.
+F4C3_CON_08,F4C3_CON_10,contains,Elimination relies on coefficient alignment.
+F4C3_CON_08,F4C3_CON_12,related_to,Elimination may reveal contradictions.
+F4C3_CON_05,F4C3_CON_11,prerequisite,Infinite solutions require parameterisation.
+F4C3_CON_01,F4C3_CON_13,contains,Many contexts map to 3-var systems.
+F4C3_CON_01,F4C3_CON_14,related_to,Calculator/matrix methods support solving.
+F4C3_CON_15,F4C3_CON_16,contains,Intersections of a line and a curve.
+F4C3_CON_15,F4C3_CON_17,contains,Substitution approach for mixed systems.
+F4C3_CON_17,F4C3_CON_19,prerequisite,Substitution yields quadratic in one variable.
+F4C3_CON_19,F4C3_CON_20,contains,Discriminant governs number of real solutions.
+F4C3_CON_21,F4C3_CON_25,related_to,Interpret solutions in units and context.
+F4C3_CON_22,F4C3_CON_15,related_to,Rectangular models yield linear+quadratic pair.
+F4C3_CON_23,F4C3_CON_15,related_to,Circle-line is a standard mixed system.
+F4C3_CON_24,F4C3_CON_15,related_to,Other conics with line behave similarly.
+F4C3_CON_01,F4C3_SKILL_01,prerequisite,Identify whether given equations form a 3-var linear system.
+F4C3_CON_13,F4C3_SKILL_02,prerequisite,Translate words to equations.
+F4C3_CON_10,F4C3_SKILL_03,prerequisite,Plan scaling for elimination.
+F4C3_CON_08,F4C3_SKILL_04,prerequisite,Eliminate one variable.
+F4C3_CON_08,F4C3_SKILL_05,prerequisite,Reduce to two variables.
+F4C3_CON_08,F4C3_SKILL_06,prerequisite,Back-substitute to solve.
+F4C3_CON_12,F4C3_SKILL_07,prerequisite,Identify contradictions.
+F4C3_CON_11,F4C3_SKILL_08,prerequisite,Parameterise solution set.
+F4C3_CON_09,F4C3_SKILL_09,prerequisite,Substitute expressions across equations.
+F4C3_CON_01,F4C3_SKILL_10,prerequisite,Verify solutions in original system.
+F4C3_CON_13,F4C3_SKILL_11,prerequisite,Model typical finance/mixture/rent problems.
+F4C3_CON_14,F4C3_SKILL_12,related_to,Optional matrix view/technology aid.
+F4C3_CON_17,F4C3_SKILL_13,prerequisite,Rearrange and substitute linear into non-linear.
+F4C3_CON_19,F4C3_SKILL_14,prerequisite,Solve the resulting quadratic.
+F4C3_CON_21,F4C3_SKILL_15,prerequisite,Filter roots by context.
+F4C3_CON_16,F4C3_SKILL_16,prerequisite,Use graphs to approximate intersections.
+F4C3_CON_16,F4C3_SKILL_17,prerequisite,Interpret intersection coordinates.
+F4C3_CON_23,F4C3_SKILL_18,prerequisite,Standard procedure for line–circle intersection.
+F4C3_CON_22,F4C3_SKILL_19,prerequisite,Set up perimeter/area models.
+F4C3_CON_25,F4C3_SKILL_20,prerequisite,Sanity-check the answers.
+F4C3_CON_14,F4C3_SKILL_21,related_to,Use tech to check/visualise solutions.
+F4C3_SKILL_03,F4C3_SKILL_04,related_to,Aligned coefficients facilitate elimination.
+F4C3_SKILL_04,F4C3_SKILL_05,related_to,"After eliminating one variable, reduce to two."
+F4C3_SKILL_05,F4C3_SKILL_06,related_to,Solve reduced system then back-substitute.
+F4C3_SKILL_14,F4C3_SKILL_15,related_to,Choose context-appropriate root(s).
+F4C3_SKILL_16,F4C3_SKILL_17,related_to,Interpret plotted intersections.
+F4C3_CON_21,F4C2_CON_14,prerequisite,Domain from Chapter 1 underpins quadratic functions (strong link).
+F4C2_CON_13,F4C2_CON_14,prerequisite,Range from Chapter 1 underpins quadratic functions (strong link).
+F4C2_CON_11,F4C3_SKILL_14,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_13,F4C3_SKILL_14,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_12,F4C3_SKILL_14,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_11,F4C2_SKILL_02,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_13,F4C2_SKILL_02,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_12,F4C2_SKILL_02,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_11,F4C2_SKILL_01,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_13,F4C2_SKILL_01,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_12,F4C2_SKILL_01,related_to,Root properties from Chapter 2 strongly support solving in Chapter 3.
+F4C2_CON_03,F4C2_CON_19,related_to,Completing the square connects strongly to vertex form and sketching.
+F4C2_CON_03,F4C2_CON_23,related_to,Completing the square connects strongly to vertex form and sketching.
+F4C2_CON_03,F4C2_CON_24,related_to,Completing the square connects strongly to vertex form and sketching.
+F4C2_CON_03,F4C2_CON_25,related_to,Completing the square connects strongly to vertex form and sketching.
+F4C2_CON_03,F4C2_CON_27,related_to,Completing the square connects strongly to vertex form and sketching.
+F4C2_CON_14,F4C3_CON_25,related_to,Function notation/context from Ch1 supports units & interpretation in Ch3.
+F4C2_SKILL_18,F4C3_SKILL_16,related_to,Graph sketching is strongly related to graphical intersection methods in Ch3.
+F4C4_CON_01,F4C4_CON_02,contains,Index notation underpins product law.
+F4C4_CON_01,F4C4_CON_03,contains,Index notation underpins quotient law.
+F4C4_CON_01,F4C4_CON_04,contains,Index notation underpins power law.
+F4C4_CON_01,F4C4_CON_05,contains,Index notation underpins product/quotient of powers.
+F4C4_CON_01,F4C4_CON_06,contains,Index notation includes zero/negative/fractional indices.
+F4C4_CON_02,F4C4_SKILL_01,prerequisite,Know product of powers to simplify.
+F4C4_CON_03,F4C4_SKILL_01,prerequisite,Know quotient of powers to simplify.
+F4C4_CON_04,F4C4_SKILL_01,prerequisite,Know power laws to simplify.
+F4C4_CON_06,F4C4_SKILL_01,prerequisite,Zero/negative/fractional indices used in simplification.
+F4C4_CON_07,F4C4_SKILL_02,prerequisite,Same‑base property to equate exponents.
+F4C4_CON_08,F4C4_SKILL_03,prerequisite,Growth/decay models require indices/logs.
+F4C4_CON_09,F4C4_CON_10,contains,Surd simplification principle.
+F4C4_CON_11,F4C4_SKILL_06,prerequisite,Surd laws for operations.
+F4C4_CON_12,F4C4_SKILL_06,prerequisite,Combine only similar surds.
+F4C4_CON_13,F4C4_CON_14,prerequisite,Conjugate concept used for rationalisation.
+F4C4_CON_14,F4C4_SKILL_07,prerequisite,Rationalise single surd denominator.
+F4C4_CON_14,F4C4_SKILL_08,prerequisite,Rationalise binomial surd denominator.
+F4C4_CON_15,F4C4_SKILL_14,related_to,Geometric contexts produce surds to simplify.
+F4C4_CON_09,F4C4_SKILL_04,prerequisite,Identify surd vs non‑surd.
+F4C4_CON_10,F4C4_SKILL_05,prerequisite,Extract largest square factor.
+F4C4_CON_11,F4C4_CON_12,contains,Similar surds rely on common radical factor.
+F4C4_CON_13,F4C4_SKILL_09,prerequisite,Conjugates appear when solving surd equations.
+F4C4_CON_16,F4C4_CON_20,prerequisite,Definition supports inverse relation to exponentials.
+F4C4_CON_17,F4C4_SKILL_10,prerequisite,Use log laws to evaluate/simplify.
+F4C4_CON_18,F4C4_SKILL_11,prerequisite,Change of base for computation.
+F4C4_CON_16,F4C4_SKILL_12,prerequisite,Use logs to solve equations.
+F4C4_CON_19,F4C4_SKILL_13,prerequisite,Common/natural logs for graphing/interpretation.
+F4C4_CON_21,F4C4_SKILL_12,contains,Taking logs to isolate the unknown.
+F4C4_CON_22,F4C4_SKILL_14,prerequisite,Finance applications.
+F4C4_CON_23,F4C4_SKILL_14,prerequisite,Radioactivity/half‑life applications.
+F4C4_CON_24,F4C4_SKILL_14,prerequisite,Log‑scale and population applications.
+F4C2_CON_03,F4C4_CON_13,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_03,F4C4_CON_14,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_19,F4C4_CON_13,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_19,F4C4_CON_14,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_23,F4C4_CON_13,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_23,F4C4_CON_14,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_24,F4C4_CON_13,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_24,F4C4_CON_14,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_25,F4C4_CON_13,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_CON_25,F4C4_CON_14,related_to,Strong link: algebraic manipulation supports conjugate/rationalisation steps.
+F4C2_SKILL_01,F4C4_SKILL_09,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C2_SKILL_01,F4C4_SKILL_12,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C2_SKILL_02,F4C4_SKILL_09,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C2_SKILL_02,F4C4_SKILL_12,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C3_SKILL_14,F4C4_SKILL_09,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C3_SKILL_14,F4C4_SKILL_12,related_to,Strong link: equation‑solving repertoire extends to logs/surds.
+F4C4_CON_01,F4C4_CON_16,related_to,Strong link: indices and logarithms are complementary.
+F4C4_CON_01,F4C4_CON_18,related_to,Strong link: indices and logarithms are complementary.
+F4C4_CON_01,F4C4_CON_21,related_to,Strong link: indices and logarithms are complementary.
+F4C4_CON_07,F4C4_CON_16,related_to,Strong link: indices and logarithms are complementary.
+F4C4_CON_07,F4C4_CON_18,related_to,Strong link: indices and logarithms are complementary.
+F4C4_CON_07,F4C4_CON_21,related_to,Strong link: indices and logarithms are complementary.
+F4C2_CON_11,F4C4_SKILL_14,related_to,Strong link: domain/validity checking carries into log/exp word problems.
+F4C2_CON_12,F4C4_SKILL_14,related_to,Strong link: domain/validity checking carries into log/exp word problems.
+F4C2_CON_13,F4C4_SKILL_14,related_to,Strong link: domain/validity checking carries into log/exp word problems.
+F4C3_CON_21,F4C4_SKILL_14,related_to,Strong link: domain/validity checking carries into log/exp word problems.
+F4C4_CON_07,F4C4_SKILL_02,prerequisite,Same-base property to equate exponents.
+F4C4_CON_09,F4C4_SKILL_04,prerequisite,Identify surd vs non-surd.
+F4C4_CON_23,F4C4_SKILL_14,prerequisite,Radioactivity/half-life applications.
+F4C4_CON_24,F4C4_SKILL_14,prerequisite,Log-scale and population applications.
+F4C4_CON_20,F4C4_CON_16,related_to,Strong link: inverse functions underpin log–exp inverse relationship.
+F4C4_CON_20,F4C4_CON_20,related_to,Strong link: inverse functions underpin log–exp inverse relationship.
+F4C2_SKILL_01,F4C4_SKILL_09,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C2_SKILL_01,F4C4_SKILL_12,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C2_SKILL_02,F4C4_SKILL_09,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C2_SKILL_02,F4C4_SKILL_12,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C3_SKILL_14,F4C4_SKILL_09,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C3_SKILL_14,F4C4_SKILL_12,related_to,Strong link: equation-solving repertoire extends to logs/surds.
+F4C5_CON_01,F4C5_CON_02,contains,AP definition introduces common difference.
+F4C5_CON_01,F4C5_CON_03,prerequisite,Understand AP to use nth term formula.
+F4C5_CON_01,F4C5_CON_04,prerequisite,Understand AP to use sum formula.
+F4C5_CON_03,F4C5_SKILL_02,prerequisite,Use Tn=a+(n-1)d to compute terms.
+F4C5_CON_03,F4C5_SKILL_03,prerequisite,Rearrange nth term to solve for n.
+F4C5_CON_04,F4C5_SKILL_04,prerequisite,Apply AP sum formula.
+F4C5_CON_05,F4C5_SKILL_05,prerequisite,Apply AP in real contexts.
+F4C5_CON_11,F4C5_CON_12,contains,GP definition introduces common ratio.
+F4C5_CON_11,F4C5_CON_13,prerequisite,Understand GP to use nth term formula.
+F4C5_CON_13,F4C5_SKILL_07,prerequisite,Compute GP term using Tn = a r^{n-1}.
+F4C5_CON_14,F4C5_SKILL_08,prerequisite,Apply GP sum formula (|r|<1).
+F4C5_CON_15,F4C5_SKILL_08,prerequisite,Apply GP sum formula (|r|>1).
+F4C5_CON_16,F4C5_SKILL_10,prerequisite,Use S∞ when |r|<1.
+F4C5_CON_17,F4C5_SKILL_11,prerequisite,Convert repeating decimals using GP.
+F4C5_CON_18,F4C5_SKILL_12,prerequisite,Model growth/decay with GP ↔ exponential.
+F4C5_CON_12,F4C5_SKILL_06,prerequisite,Check constant ratio.
+F4C5_CON_01,F4C5_SKILL_01,prerequisite,Check constant difference.
+F4C5_CON_14,F4C5_CON_16,related_to,Sum to infinity is limit case of GP sum when |r|<1.
+F4C5_SKILL_12,F4C5_SKILL_13,related_to,Modelling supports solving word problems.
+
+# Cross-chapter strong links
+F4C4_CON_20,F4C5_CON_18,related_to,Strong link: GP behaviour mirrors exponential function.
+F4C4_CON_16,F4C5_SKILL_09,prerequisite,Logs definition supports solving for n in GP/AP.
+F4C4_CON_17,F4C5_SKILL_09,related_to,Log laws used to isolate n.
+F4C4_SKILL_12,F4C5_SKILL_09,prerequisite,Solve equations using logs extends to GP problems.
+F4C4_CON_08,F4C5_SKILL_12,related_to,Growth/decay models connect to GP sequences.
+F4C4_CON_01,F4C5_CON_18,related_to,Indices underpin GP ↔ exponential connection.
+
+F4C6_CON_01,F4C6_CON_03,prerequisite,Recognise linear relation to justify drawing a best‑fit line.
+F4C6_CON_03,F4C6_CON_04,prerequisite,Best‑fit line models data with Y=mX+c.
+F4C6_CON_04,F4C6_CON_05,contains,Gradient is a key parameter of the linear model.
+F4C6_CON_04,F4C6_CON_06,contains,Intercept is a key parameter of the linear model.
+F4C6_CON_07,F4C6_CON_04,prerequisite,Linearisation converts curves to straight line form Y=mX+c.
+F4C6_CON_08,F4C6_SKILL_08,prerequisite,Example mapping supports the linearising workflow.
+F4C6_CON_09,F4C6_SKILL_09,prerequisite,Log transform linearises exponential model.
+F4C6_CON_10,F4C6_SKILL_10,prerequisite,Division by x gives linear variables.
+F4C6_CON_11,F4C6_SKILL_06,prerequisite,Use model to interpolate/extrapolate.
+F4C6_CON_12,F4C6_SKILL_07,prerequisite,Check validity of chosen X,Y.
+F4C6_CON_13,F4C6_SKILL_12,related_to,Residuals/outliers affect line choice and prediction.
+F4C6_CON_14,F4C6_SKILL_13,related_to,Technology aids constructing and reading best‑fit lines.
+F4C6_CON_05,F4C6_SKILL_03,prerequisite,Compute gradient from graph.
+F4C6_CON_06,F4C6_SKILL_04,prerequisite,Read/compute intercept from graph.
+F4C6_CON_04,F4C6_SKILL_05,prerequisite,Form the equation of best‑fit line.
+F4C6_SKILL_03,F4C6_SKILL_05,related_to,Gradient helps fix equation with intercept.
+F4C6_SKILL_04,F4C6_SKILL_05,related_to,Intercept helps fix equation with gradient.
+
+# Cross‑chapter strong links (Chapter 6 ↔ others)
+F4C4_CON_16,F4C6_CON_09,related_to,Log definition enables linearising exponential models.
+F4C4_CON_17,F4C6_SKILL_09,prerequisite,Log laws support extracting slope/intercept in log–linear graphs.
+F4C5_CON_18,F4C6_CON_09,related_to,GP vs exponential links to log‑linear modelling.
+F4C1_CON_XX,F4C6_SKILL_01,related_to,Function graphs from Chapter 1 support judging linearity.
+F4C1_CON_XX,F4C6_SKILL_06,related_to,Domain/range awareness from Ch1 in interpreting extrapolation.
+F4C2_CON_27,F4C6_SKILL_02,related_to,Graph sketching skills support neat best‑fit lines.
+F4C3_CON_16,F4C6_SKILL_03,related_to,Reading gradients from plotted lines aligns with graphical solutions.
+F4C7_CON_01,F4C7_CON_02,contains,Definition of internal division uses ratio m:n.
+F4C7_CON_02,F4C7_CON_03,prerequisite,Understanding ratio precedes section formula.
+F4C7_CON_03,F4C7_CON_04,contains,Midpoint is special case m=n.
+F4C7_CON_05,F4C7_CON_06,contains,Parallel criterion comes from equal gradients.
+F4C7_CON_05,F4C7_CON_07,contains,Perpendicular criterion from product of gradients −1.
+F4C7_CON_08,F4C7_SKILL_06,prerequisite,Point–slope form used to build parallel line.
+F4C7_CON_07,F4C7_SKILL_07,prerequisite,Use m⊥=−1/m to form perpendicular line.
+F4C7_CON_03,F4C7_SKILL_02,prerequisite,Apply section formula to compute coordinates.
+F4C7_CON_03,F4C7_SKILL_03,prerequisite,Rearrange section formula to find unknown endpoint.
+F4C7_CON_04,F4C7_SKILL_04,prerequisite,Midpoint formula application.
+F4C7_CON_05,F4C7_SKILL_08,prerequisite,Compute gradient from two points.
+F4C7_CON_05,F4C7_SKILL_05,prerequisite,Use gradients to test // and ⟂ lines.
+F4C7_CON_09,F4C7_SKILL_10,prerequisite,Triangle area via shoelace.
+F4C7_CON_10,F4C7_SKILL_11,prerequisite,Polygon area via shoelace.
+F4C7_CON_11,F4C7_SKILL_12,prerequisite,Area zero implies collinearity.
+F4C7_CON_16,F4C7_SKILL_13,prerequisite,Box method steps.
+F4C7_CON_12,F4C7_SKILL_14,prerequisite,Fixed distance locus forms circle.
+F4C7_CON_13,F4C7_SKILL_15,prerequisite,Constant ratio locus forms circle (Apollonius).
+F4C7_CON_14,F4C7_SKILL_16,prerequisite,Perpendicular bisector from PA=PB.
+F4C7_CON_12,F4C7_SKILL_17,related_to,Solve intersection between two circles/lines.
+F4C7_CON_15,F4C7_SKILL_19,prerequisite,Use distance formula in computations.
+F4C7_CON_01,F4C7_SKILL_18,related_to,Movement ratio maps to internal division of segment.
+F4C7_CON_09,F4C7_SKILL_20,related_to,Shoelace supports area ratios in quadrilaterals.
+# Cross-chapter strong links (Chapter 7 ↔ others)
+F4C6_CON_05,F4C7_CON_06,related_to,Gradient concept from Ch6 supports parallel criterion in Ch7.
+F4C6_CON_05,F4C7_CON_07,related_to,Gradient concept from Ch6 supports perpendicular criterion in Ch7.
+F4C6_SKILL_03,F4C7_SKILL_05,related_to,Reading gradient from graphs helps test // and ⟂.
+F4C6_SKILL_05,F4C7_SKILL_06,related_to,Equation of best-fit form informs constructing parallel lines.
+F4C6_SKILL_05,F4C7_SKILL_07,related_to,Equation of best-fit form informs constructing perpendicular lines.
+F4C2_CON_27,F4C7_SKILL_08,related_to,Graph sketching skills support estimating gradients.
+F4C3_CON_16,F4C7_SKILL_17,related_to,Graphical intersection ideas extend to loci intersections.
+# Chapter 8 internal links
+F4C8_CON_01,F4C8_SKILL_01,prerequisite,Know definitions to classify quantities.
+F4C8_CON_02,F4C8_SKILL_02,prerequisite,Directed segment representation.
+F4C8_CON_03,F4C8_SKILL_03,prerequisite,Use notation to read magnitude and direction.
+F4C8_CON_04,F4C8_SKILL_05,prerequisite,Zero/negative/same vectors reasoning.
+F4C8_CON_05,F4C8_SKILL_06,prerequisite,Scalar multiplication properties.
+F4C8_CON_06,F4C8_SKILL_07,prerequisite,Parallel iff scalar multiple.
+F4C8_CON_07,F4C8_SKILL_08,prerequisite,Collinearity via parallelism with common point.
+F4C8_CON_08,F4C8_SKILL_09,contains,Resultants for parallel vectors.
+F4C8_CON_09,F4C8_SKILL_10,contains,Head-to-tail construction.
+F4C8_CON_10,F4C8_SKILL_11,contains,Diagonal is resultant.
+F4C8_CON_11,F4C8_SKILL_12,contains,Summing multi-leg paths.
+F4C8_CON_12,F4C8_SKILL_14,prerequisite,Introduce i and j unit vectors.
+F4C8_CON_13,F4C8_SKILL_14,prerequisite,Position and column vector form.
+F4C8_CON_13,F4C8_SKILL_15,prerequisite,Magnitude from components.
+F4C8_CON_14,F4C8_SKILL_16,prerequisite,Compute unit vector r̂.
+F4C8_CON_15,F4C8_SKILL_17,prerequisite,Component-wise operations.
+F4C8_CON_16,F4C8_SKILL_18,related_to,Idea: ⟂ via dot = 0; ∥ via scalar multiple.
+F4C8_CON_08,F4C8_SKILL_13,related_to,Applications to relative motion.
+
+# Cross-chapter strong links (Vectors ↔ Ch7 Coordinate Geometry)
+F4C7_CON_05,F4C8_SKILL_18,related_to,Gradient ideas from Ch7 support ∥/⟂ tests in vectors.
+F4C7_CON_08,F4C8_SKILL_10,related_to,Point–gradient form helps head-to-tail construction.
+F4C7_SKILL_08,F4C8_SKILL_03,related_to,Gradient/length from two points aids magnitude and direction.
+F4C7_CON_15,F4C8_SKILL_19,related_to,Distance formula aligns with position vectors.
+
+# Cross-chapter strong links (Vectors ↔ Ch6 Linear Law)
+F4C6_CON_05,F4C8_CON_06,related_to,Gradient concept parallels scalar-multiple test for ∥.
+F4C6_SKILL_03,F4C8_SKILL_15,related_to,Reading gradient/magnitude connects to component work.
+F4C6_SKILL_05,F4C8_SKILL_10,related_to,Line equation intuition aids triangle-law layouts.
+
+# Cross-chapter strong links (Vectors ↔ Ch1 Functions)
+F4.FN.C01,F4C8_SKILL_19,related_to,Function/coordinate sense supports position-vector modelling.
+
+# Cross-chapter strong links (Vectors ↔ Ch2 Quadratics)
+F4C2_CON_27,F4C8_SKILL_03,related_to,Graph sketch discipline aids precise vector diagrams.
+
+# Textbook applications
+F4C8_CON_17,F4C8_SKILL_13,contains,Use speed/bearing examples (boat/wind/river).
+# Chapter 9 internal structure
+F4C9_CON_01,F4C9_SKILL_01,prerequisite,Define and verify sine rule.
+F4C9_CON_02,F4C9_SKILL_02,prerequisite,Apply sine rule to find unknowns.
+F4C9_CON_03,F4C9_SKILL_03,prerequisite,Recognise ambiguous case pattern (SSA).
+F4C9_CON_04,F4C9_SKILL_04,prerequisite,Analyse a vs h and c to decide existence.
+F4C9_CON_05,F4C9_SKILL_05,prerequisite,Solve both configurations if possible.
+F4C9_CON_06,F4C9_SKILL_06,contains,Use sine rule for bearings and elevation.
+F4C9_CON_07,F4C9_SKILL_07,prerequisite,Verify cosine rule geometrically.
+F4C9_CON_08,F4C9_SKILL_08,prerequisite,Apply cosine rule for SAS/SSS.
+F4C9_CON_08,F4C9_SKILL_09,contains,Solve contextual cosine-rule problems.
+F4C9_CON_09,F4C9_SKILL_10,prerequisite,Derive area = ½ab sin C.
+F4C9_CON_09,F4C9_SKILL_11,contains,Use ½ab sin C to find area.
+F4C9_CON_10,F4C9_SKILL_12,prerequisite,Apply Heron’s formula.
+F4C9_CON_11,F4C9_SKILL_13,contains,Use area formula in practical problems.
+F4C9_CON_12,F4C9_SKILL_14,prerequisite,Integrate sine/cosine/area rules.
+F4C9_CON_12,F4C9_SKILL_15,contains,Apply in 3D or bearing contexts.
+
+# Cross-chapter strong links
+F4C7_CON_05,F4C9_CON_07,related_to,Gradient concept (cos θ) leads into cosine rule.
+F4C8_CON_16,F4C9_CON_07,related_to,Orthogonality and dot-product idea connects to cosine rule.
+F4C8_SKILL_18,F4C9_SKILL_07,related_to,Component reasoning extends to cosine formula.
+F4C8_SKILL_15,F4C9_SKILL_11,related_to,Vector component multiplication underpins ½ab sin C area rule.
+F4C5_CON_18,F4C9_CON_09,related_to,Exponential growth/decay parallels geometric derivation of area via sine.
+F4C6_SKILL_03,F4C9_SKILL_08,related_to,Gradient/rate interpretation parallels side–angle relationships.
+F4C9_CON_09,F4C9_CON_10,related_to,½ab sin C connects with Heron’s formula.
+# Form 5 Chapter 1 Circular Measure — internal structure
+F5C1_CON_01,F5C1_SKILL_01,prerequisite,Definition of radian supports conversions.
+F5C1_CON_02,F5C1_SKILL_01,prerequisite,Degree–radian relationship used for conversion.
+F5C1_CON_02,F5C1_SKILL_02,contains,Recall of special angles in both units.
+F5C1_CON_03,F5C1_SKILL_03,prerequisite,Arc length formula application.
+F5C1_CON_03,F5C1_SKILL_04,prerequisite,Rearranging s=rθ to find unknowns.
+F5C1_CON_05,F5C1_SKILL_05,prerequisite,Sector area formula application.
+F5C1_CON_05,F5C1_SKILL_06,prerequisite,Rearranging A=½ r^2 θ to find unknowns.
+F5C1_CON_07,F5C1_SKILL_08,prerequisite,Chord length via cosine rule.
+F5C1_CON_04,F5C1_SKILL_07,contains,Segment perimeter requires chord plus arc.
+F5C1_CON_09,F5C1_SKILL_11,prerequisite,Working with minor vs reflex angles.
+F5C1_CON_06,F5C1_SKILL_10,contains,Segment area from sector minus triangle.
+F5C1_CON_10,F5C1_SKILL_03,related_to,Proportionality justifies s=rθ.
+F5C1_CON_10,F5C1_SKILL_05,related_to,Proportionality justifies A∝θ.
+F5C1_CON_08,F5C1_SKILL_12,contains,Apply circular measure in contexts.
+
+# Cross‑chapter strong links (Form 5 Ch1 ↔ earlier chapters)
+F4C9_CON_07,F5C1_CON_07,related_to,Cosine rule from Ch9 underpins chord computations.
+F4C9_SKILL_11,F5C1_SKILL_09,related_to,Area ½ab sin C from Ch9 used for segment area.
+F4C7_CON_05,F5C1_SKILL_08,related_to,Gradient/angle notions support angle interpretation.
+F4C7_CON_12,F5C1_SKILL_07,related_to,Circle geometry in Ch7 links to segment perimeter ideas.
+F4C4_CON_16,F5C1_SKILL_01,related_to,Log/exp not needed but unit manipulation discipline supports conversion.
+F4C6_CON_05,F5C1_CON_10,related_to,Rate/angle proportionality parallels gradient intuition.
+
+# Cross‑chapter links (anticipatory within Form 5)
+F5C6_CON_TRIG,F5C1_CON_03,related_to,Trigonometric functions will reuse radian measure.
+F5C6_CON_TRIG,F5C1_SKILL_01,related_to,All trig in calculus topics uses radians by default.
+# Form 5 Chapter 2 Differentiation — internal structure
+F5C2_CON_01,F5C2_CON_02,contains,Limit concept extends to continuity and differentiation.
+F5C2_CON_02,F5C2_CON_03,prerequisite,Limit principle defines derivative.
+F5C2_CON_03,F5C2_SKILL_02,prerequisite,Compute derivative using first principle.
+F5C2_CON_05,F5C2_SKILL_03,prerequisite,Use power rule for monomials.
+F5C2_CON_06,F5C2_SKILL_04,prerequisite,Sum/difference rule for combinations.
+F5C2_CON_07,F5C2_SKILL_05,prerequisite,Use product rule.
+F5C2_CON_08,F5C2_SKILL_06,prerequisite,Use quotient rule.
+F5C2_CON_09,F5C2_SKILL_07,prerequisite,Use chain rule.
+F5C2_CON_10,F5C2_SKILL_08,prerequisite,Second derivative computation.
+F5C2_CON_11,F5C2_SKILL_09,prerequisite,Interpret meaning of derivative.
+F5C2_CON_12,F5C2_SKILL_10,prerequisite,Find tangent and normal equations.
+F5C2_CON_13,F5C2_SKILL_11,prerequisite,Use second derivative test for classification.
+F5C2_CON_14,F5C2_SKILL_12,prerequisite,Apply derivative tests for optimization.
+F5C2_CON_15,F5C2_SKILL_13,prerequisite,Form and solve related rate equations.
+F5C2_CON_16,F5C2_SKILL_14,prerequisite,Apply dy≈f′(x)dx for small changes.
+F5C2_CON_17,F5C2_SKILL_15,contains,Use differentiation in applied problems.
+
+# Cross‑chapter strong links (Differentiation ↔ earlier chapters)
+F5C1_CON_01,F5C2_CON_03,related_to,Radian measure connects with definition of instantaneous rate.
+F4C6_CON_05,F5C2_CON_11,related_to,Gradient concept in Ch6 supports interpretation of derivative.
+F4C5_CON_18,F5C2_CON_17,related_to,Exponential and logarithmic differentiation build on GP/exponential growth.
+F4C4_CON_16,F5C2_CON_03,related_to,Logarithm definition links to limits and derivatives of log/exp.
+F4C7_CON_05,F5C2_SKILL_09,related_to,Gradient in coordinate geometry supports meaning of dy/dx.
+F4C9_CON_07,F5C2_SKILL_05,related_to,Cosine rule’s rate-of-change idea connects to product rule applications.
+F4C9_SKILL_08,F5C2_SKILL_12,related_to,Optimization parallels max/min in triangles.
+F4C10_CON_02,F5C2_SKILL_14,related_to,Percentage change in indices parallels small-change approximations.
+
+# Cross‑chapter forward links (Differentiation ↔ later)
+F5C3_CON_01,F5C2_CON_10,related_to,Second derivative extends to curvature in integration chapter.
+F5C4_CON_01,F5C2_CON_03,related_to,Integration defined as reverse of differentiation.
+# Form 5 Chapter 3 Integration — internal structure
+F5C3_CON_01,F5C3_CON_02,contains,Concept leads to notation with +C.
+F5C3_CON_01,F5C3_CON_03,contains,Anti‑derivative idea underpins linearity.
+F5C3_CON_01,F5C3_CON_04,contains,Anti‑derivative idea underpins power rule.
+F5C3_CON_04,F5C3_SKILL_03,prerequisite,Use power rule for n≠−1.
+F5C3_CON_05,F5C3_SKILL_04,prerequisite,Recognise ln|x| as antiderivative of 1/x.
+F5C3_CON_02,F5C3_SKILL_05,prerequisite,Include +C and verify by differentiating.
+F5C3_CON_06,F5C3_CON_07,prerequisite,Meaning connects to evaluation via antiderivative.
+F5C3_CON_07,F5C3_SKILL_06,prerequisite,Compute definite integrals by F(b)−F(a).
+F5C3_CON_08,F5C3_SKILL_07,prerequisite,Apply standard properties of definite integrals.
+F5C3_CON_09,F5C3_SKILL_08,contains,Set up area as accumulation; handle sign.
+F5C3_CON_10,F5C3_SKILL_09,contains,Subtract lower curve from upper curve between intersections.
+F5C3_CON_11,F5C3_SKILL_11,prerequisite,Reverse chain rule using u‑substitution.
+F5C3_CON_12,F5C3_SKILL_12,contains,Recall standard integrals of e^x, sin x, cos x.
+F5C3_CON_13,F5C3_SKILL_13,contains,Integrate/accumulate to obtain v from a and s from v.
+F5C3_CON_06,F5C3_SKILL_10,related_to,Choose bounds from graph/context before evaluating ∫.
+F5C3_CON_06,F5C3_SKILL_14,related_to,Interpretation of ∫ requires correct units and context.
+
+# Cross‑chapter strong links (Differentiation ↔ Integration)
+F5C2_CON_03,F5C3_CON_01,related_to,Integration is the reverse of differentiation.
+F5C2_CON_11,F5C3_CON_06,related_to,Gradient/accumulation duality links dy/dx and ∫.
+F5C2_CON_14,F5C3_CON_09,related_to,Turning points/areas interplay in applications questions.
+F4C6_CON_05,F5C3_CON_09,related_to,Rate of change intuition supports area accumulation.
+F4C7_CON_05,F5C3_CON_10,related_to,Intersection points from coordinate geometry provide bounds.
+# Form 5 Chapter 4 Permutation & Combination — internal links
+F5C4_CON_01,F5C4_SKILL_01,prerequisite,Product rule defines sequential count.
+F5C4_CON_03,F5C4_SKILL_02,prerequisite,Know factorial basics.
+F5C4_CON_04,F5C4_SKILL_03,prerequisite,Understand n! arrangement concept.
+F5C4_CON_06,F5C4_SKILL_04,prerequisite,Compute nPr for ordered selection.
+F5C4_CON_07,F5C4_SKILL_05,prerequisite,Compute circular permutations.
+F5C4_CON_08,F5C4_SKILL_07,prerequisite,Account for reflection symmetry.
+F5C4_CON_09,F5C4_SKILL_08,prerequisite,Handle identical objects.
+F5C4_CON_10,F5C4_SKILL_09,prerequisite,Solve grouped/separated conditions.
+F5C4_CON_11,F5C4_SKILL_10,contains,Digit constraints for numbers.
+F5C4_CON_02,F5C4_SKILL_16,prerequisite,Addition rule supports either/or.
+F5C4_CON_12,F5C4_SKILL_11,prerequisite,Recognise order/no-order difference.
+F5C4_CON_13,F5C4_SKILL_12,prerequisite,Apply nCr.
+F5C4_CON_14,F5C4_SKILL_13,prerequisite,Use basic nCr identities.
+F5C4_CON_15,F5C4_SKILL_14,contains,Combinations with conditions.
+F5C4_CON_16,F5C4_SKILL_15,contains,Grouping via product of stages.
+F5C4_CON_17,F5C4_SKILL_17,contains,Model real-world tasks with P&C.
+F5C4_CON_13,F5C4_SKILL_18,related_to,Use nCr for geometric counting.
+F5C4_CON_03,F5C4_SKILL_19,related_to,Use calculator factorial/nPr/nCr.
+F5C4_CON_04,F5C4_SKILL_20,related_to,Combine nPr/nCr in mixed problems.
+
+# Cross-chapter links (strong)
+F4C5_CON_11,F5C4_CON_12,related_to,Progression discrete terms relate to combinations.
+F5C3_CON_06,F5C4_CON_16,related_to,Integral segmentation parallels combinatorial grouping.
+F4C9_CON_09,F5C4_CON_18,related_to,Triangle counts (nC3) link to geometry.
+# Form 5 Chapter 5 Probability Distribution — internal structure
+F5C5_CON_01,F5C5_SKILL_01,prerequisite,Understand definition of random variable.
+F5C5_CON_02,F5C5_SKILL_02,prerequisite,Compare discrete vs continuous.
+F5C5_CON_04,F5C5_SKILL_03,prerequisite,Define probability distribution for discrete variable.
+F5C5_CON_04,F5C5_SKILL_04,contains,Construct probability table.
+F5C5_CON_05,F5C5_SKILL_05,contains,Draw probability distribution graph.
+F5C5_CON_06,F5C5_SKILL_06,prerequisite,Define binomial distribution.
+F5C5_CON_07,F5C5_SKILL_07,prerequisite,Compute binomial probability.
+F5C5_CON_06,F5C5_SKILL_08,contains,Construct binomial probability tables and graphs.
+F5C5_CON_08,F5C5_SKILL_09,prerequisite,Compute mean, variance, SD.
+F5C5_CON_06,F5C5_SKILL_10,contains,Solve applied binomial problems.
+F5C5_CON_09,F5C5_SKILL_11,prerequisite,Describe properties of normal distribution graph.
+F5C5_CON_10,F5C5_SKILL_12,prerequisite,Define standard normal.
+F5C5_CON_11,F5C5_SKILL_13,prerequisite,Compute Z-scores.
+F5C5_CON_12,F5C5_SKILL_14,prerequisite,Use Z-table to find probabilities.
+F5C5_CON_12,F5C5_SKILL_15,contains,Shade appropriate regions on normal curve.
+F5C5_CON_12,F5C5_SKILL_16,contains,Apply normal distribution in contexts.
+F5C5_CON_14,F5C5_SKILL_17,related_to,Approximate binomial by normal when suitable.
+
+# Cross-chapter strong links
+F5C2_CON_17,F5C5_CON_06,related_to,Differentiation applications support modelling of random processes.
+F5C3_CON_06,F5C5_CON_12,related_to,Integration’s area interpretation parallels area under probability curve.
+F4C10_CON_02,F5C5_CON_09,related_to,Index number percentage changes parallel distribution of continuous values.
+F4C5_CON_18,F5C5_CON_14,related_to,GP/exponential forms relate to normal approximation behaviour.
+# Form 5 Chapter 6 Trigonometric Functions — internal structure
+F5C6_CON_01,F5C6_SKILL_01,prerequisite,Know definitions to work with trig ratios.
+F5C6_CON_02,F5C6_SKILL_02,prerequisite,Define sec,cosec,cot and relate to primary ratios.
+F5C6_CON_03,F5C6_SKILL_03,prerequisite,Fundamental identities underpin simplification.
+F5C6_CON_04,F5C6_SKILL_05,prerequisite,Understand sine graph features.
+F5C6_CON_04,F5C6_SKILL_06,prerequisite,Understand cosine graph features.
+F5C6_CON_04,F5C6_SKILL_07,prerequisite,Understand tangent graph features and asymptotes.
+F5C6_CON_05,F5C6_SKILL_08,prerequisite,Read amplitude/period/phase/shift for sine.
+F5C6_CON_05,F5C6_SKILL_09,prerequisite,Read amplitude/period/phase/shift for cosine.
+F5C6_CON_05,F5C6_SKILL_10,prerequisite,Read period and shifts for tangent.
+F5C6_CON_06,F5C6_SKILL_11,prerequisite,Apply sum/difference identities.
+F5C6_CON_07,F5C6_SKILL_12,prerequisite,Apply double‑angle identities.
+F5C6_CON_08,F5C6_SKILL_13,prerequisite,Rewrite a sin x + b cos x using R‑formula.
+F5C6_CON_03,F5C6_SKILL_14,prerequisite,Use identities when proving.
+F5C6_CON_03,F5C6_SKILL_15,prerequisite,Use identities to simplify expressions.
+F5C6_CON_09,F5C6_SKILL_16,prerequisite,Solve basic equations for specified intervals.
+F5C6_CON_05,F5C6_SKILL_17,prerequisite,Account for transformations when solving.
+F5C6_CON_06,F5C6_SKILL_18,prerequisite,Use compound/double‑angle in solving.
+F5C6_CON_10,F5C6_SKILL_19,prerequisite,Handle quadratic‑in‑trig forms via substitution.
+F5C6_CON_09,F5C6_SKILL_20,contains,Write general solutions using periodicity.
+F5C6_CON_11,F5C6_SKILL_21,prerequisite,Understand principal values and domains.
+F5C6_CON_12,F5C6_SKILL_22,contains,Apply trig models to real contexts.
+
+# Cross‑chapter strong links (Form 5 Ch6 ↔ others)
+F5C1_CON_01,F5C6_CON_04,related_to,Radian measure supports correct graphing and calculus later.
+F5C1_CON_02,F5C6_SKILL_04,related_to,Angle unit conversions align with trig and calculus usage.
+F4C6_CON_05,F5C6_CON_05,related_to,Gradient/rate ideas aid interpretation of phase and period.
+F4C9_CON_07,F5C6_SKILL_11,related_to,Cosine rule familiarity helps with angle addition contexts.
+F5C2_CON_11,F5C6_SKILL_13,related_to,Derivative interpretation connects with R‑formula modelling.
+F5C2_CON_14,F5C6_SKILL_18,related_to,Optimisation sometimes involves trig identities.
+F5C3_CON_12,F5C6_CON_06,related_to,Integrals of sin/cos pair with double/compound angles.
+# Form 5 Chapter 7 Linear Programming — internal structure
+F5C7_CON_02,F5C7_SKILL_01,prerequisite,Choose variables before forming model.
+F5C7_CON_04,F5C7_SKILL_02,prerequisite,Objective function structure needed for optimisation.
+F5C7_CON_03,F5C7_SKILL_03,prerequisite,Understand constraints to translate from text.
+F5C7_CON_08,F5C7_SKILL_04,prerequisite,Graph single inequality as part of the graphical method.
+F5C7_CON_08,F5C7_SKILL_05,prerequisite,Line style depends on inequality type.
+F5C7_CON_08,F5C7_SKILL_06,prerequisite,Find vertices by intersecting boundary lines.
+F5C7_CON_05,F5C7_SKILL_07,prerequisite,Construct and label feasible region R.
+F5C7_CON_05,F5C7_SKILL_08,contains,Use test point to confirm feasibility.
+F5C7_CON_10,F5C7_SKILL_09,prerequisite,Plot one objective line k = ax + by.
+F5C7_CON_10,F5C7_SKILL_10,contains,Translate the objective line parallel to itself.
+F5C7_CON_09,F5C7_SKILL_11,prerequisite,Evaluate k at vertices to confirm optimum.
+F5C7_CON_07,F5C7_SKILL_12,contains,Interpret optimal solution in context.
+F5C7_CON_03,F5C7_SKILL_13,contains,Handle inequality forms including ratios.
+F5C7_CON_05,F5C7_SKILL_14,contains,Read allowable ranges along slices x=c or y=c.
+F5C7_CON_07,F5C7_SKILL_15,contains,Decide whether the task is max or min.
+F5C7_CON_08,F5C7_SKILL_16,related_to,Technology assists the graphical process.
+F5C7_CON_12,F5C7_SKILL_17,prerequisite,Include non-negativity constraints when appropriate.
+F5C7_CON_11,F5C7_SKILL_18,contains,Identify empty or unbounded feasible regions.
+
+# Cross-chapter strong links
+F4C7_CON_05,F5C7_SKILL_06,related_to,Gradient/line intersection skills from Coordinate Geometry help compute vertices.
+F4C7_CON_08,F5C7_SKILL_04,related_to,Point–slope/line forms support drawing boundaries.
+F4C3_CON_16,F5C7_SKILL_06,related_to,Graphical intersection ideas from mixed systems extend to LP vertices.
+F4C6_CON_05,F5C7_SKILL_09,related_to,Linear model understanding aids plotting objective lines.
+F4C6_CON_11,F5C7_SKILL_14,related_to,Reading values from linear graphs supports slice/range queries.
+# Form 5 Chapter 8 Kinematics internal structure
+F5C8_CON_01,F5C8_SKILL_01,prerequisite,Understand displacement as directed distance.
+F5C8_CON_02,F5C8_SKILL_02,prerequisite,Understand velocity as ds/dt.
+F5C8_CON_03,F5C8_SKILL_03,prerequisite,Understand acceleration as dv/dt.
+F5C8_CON_04,F5C8_SKILL_04,prerequisite,Compute instantaneous values via calculus.
+F5C8_CON_05,F5C8_SKILL_05,prerequisite,Compute total distance from path or v–t graph.
+F5C8_CON_06,F5C8_SKILL_06,prerequisite,Link differentiation relations among s,v,a.
+F5C8_CON_06,F5C8_SKILL_07,contains,Find velocity from displacement.
+F5C8_CON_06,F5C8_SKILL_08,contains,Find acceleration from velocity.
+F5C8_CON_06,F5C8_SKILL_09,contains,Find acceleration from displacement.
+F5C8_CON_07,F5C8_SKILL_10,contains,Integrate a to obtain v.
+F5C8_CON_07,F5C8_SKILL_11,contains,Integrate v to obtain s.
+F5C8_CON_08,F5C8_SKILL_12,contains,Interpret s–t, v–t, a–t graphs.
+F5C8_CON_09,F5C8_SKILL_13,prerequisite,Use calculus to solve motion problems.
+F5C8_CON_09,F5C8_SKILL_14,contains,Check units in motion calculations.
+F5C8_CON_09,F5C8_SKILL_15,related_to,Technology assists in solving and verification.
+F5C8_CON_10,F5C8_SKILL_13,related_to,Applications link calculus with real motion.
+
+# Cross-chapter strong links
+F5C2_CON_03,F5C8_CON_02,related_to,Differentiation foundation from Ch2 supports velocity calculation.
+F5C2_CON_07,F5C8_CON_03,related_to,Product and chain rules used for acceleration derivation.
+F5C3_CON_01,F5C8_CON_07,related_to,Integration foundation from Ch3 supports motion equations.
+F5C3_CON_13,F5C8_SKILL_13,related_to,Integration in kinematics directly continues from Ch3 applications.
+F5C6_CON_01,F5C8_CON_03,related_to,Trigonometric motion examples connect angles to displacement functions.
+F4C7_CON_05,F5C8_CON_08,related_to,Gradient interpretation aligns with rate of change in motion graphs.
+# Kinematics Chapter 8 keyword links
+F5C8_KW,F5C3_CON_13,related_to,"Kinematics keywords ↔ Integration application in motion (s, v, a via ∫/d/dx)."
+F5C8_KW,F5C3_SKILL_13,related_to,"Kinematics keywords ↔ Skill: Solve Kinematics via ∫ (recover s from v, v from a)."
+F5C8_KW,F5C1_CON_03,related_to,"Kinematics keywords ↔ Arc length / circular motion contexts when applicable."
+F5C7_KW,F5C7_CON_01,related_to,"Keywords ↔ LP model (mathematical model)."
+F5C7_KW,F5C7_SKILL_02,related_to,"Keywords ↔ Skill: Form Objective Function."
+F5C7_KW,F5C7_SKILL_03,related_to,"Keywords ↔ Skill: Translate Constraints."
+F5C7_KW,F5C7_CON_05,related_to,"Keywords ↔ Feasible region concept."
+F5C7_KW,F5C7_SKILL_07,related_to,"Keywords ↔ Optimisation process."
+# Trigonometric Functions Chapter Keywords links
+F5C6_KW,F5C6_CON_01,related_to,"Keywords ↔ Definition of Trig Functions (trigonometric ratio, degree, radian)."
+F5C6_KW,F5C6_CON_03,related_to,"Keywords ↔ Basic identities."
+F5C6_KW,F5C6_CON_06,related_to,"Keywords ↔ Addition angle formula."
+F5C6_KW,F5C6_CON_07,related_to,"Keywords ↔ Double angle formula."
+F5C6_KW,F5C6_SKILL_01,related_to,"Keywords ↔ Skill: Define and compute trigonometric ratios."
+F5C6_KW,F5C6_SKILL_02,related_to,"Keywords ↔ Skill: Use reciprocal functions."
+F5C6_KW,F5C6_SKILL_03,related_to,"Keywords ↔ Skill: Apply basic identities."
+# F5C4/F5C5 Chapter Keyword ↔ Concept/Skill links
+F5C4_KW,F5C4_SKILL_01,related_to,"Keywords ↔ Multiplication/Product rule."
+F5C4_KW,F5C4_SKILL_03,related_to,"Keywords ↔ Permutations of n different objects."
+F5C4_KW,F5C4_SKILL_04,related_to,"Keywords ↔ nPr formula usage."
+F5C4_KW,F5C4_SKILL_08,related_to,"Keywords ↔ Permutations with identical/repeated objects."
+F5C4_KW,F5C4_SKILL_12,related_to,"Keywords ↔ Combinations nCr."
+F5C4_KW,F5C4_SKILL_13,related_to,"Keywords ↔ Identities involving nCr."
+F5C4_KW,F5C4_SKILL_20,related_to,"Keywords ↔ Mixed P&C applications."
+
+F5C5_KW,F5C5_CON_01,related_to,"Keywords ↔ Random variable concept."
+F5C5_KW,F5C5_CON_02,related_to,"Keywords ↔ Discrete vs continuous."
+F5C5_KW,F5C5_SKILL_06,related_to,"Keywords ↔ Binomial distribution."
+F5C5_KW,F5C5_SKILL_07,related_to,"Keywords ↔ Binomial probability formula."
+F5C5_KW,F5C5_CON_09,related_to,"Keywords ↔ Normal distribution concept."
+F5C5_KW,F5C5_SKILL_13,related_to,"Keywords ↔ Z-score."
+F5C5_KW,F5C5_SKILL_14,related_to,"Keywords ↔ Z-table/probabilities."
+F5C5_KW,F5C5_SKILL_10,related_to,"Keywords ↔ Applied binomial problems."
+F5C5_KW,F5C5_SKILL_16,related_to,"Keywords ↔ Applied normal problems."
+# Keyword node links for F5 chapters
+F5C1_KW,F5C1_CON_01,related_to,"Keywords ↔ Definition of Radian and Degree."
+F5C1_KW,F5C1_CON_03,related_to,"Keywords ↔ Arc length formula s=rθ."
+F5C1_KW,F5C1_CON_05,related_to,"Keywords ↔ Area of sector."
+F5C1_KW,F5C1_CON_06,related_to,"Keywords ↔ Area of segment."
+F5C1_KW,F5C1_CON_04,related_to,"Keywords ↔ Perimeter of segment."
+
+F5C2_KW,F5C2_CON_01,related_to,"Keywords ↔ Limit concept."
+F5C2_KW,F5C2_CON_03,related_to,"Keywords ↔ First derivative definition."
+F5C2_KW,F5C2_CON_11,related_to,"Keywords ↔ Gradient of tangent."
+F5C2_KW,F5C2_CON_10,related_to,"Keywords ↔ Second derivative."
+F5C2_KW,F5C2_CON_12,related_to,"Keywords ↔ Equation of tangent and normal."
+F5C2_KW,F5C2_CON_13,related_to,"Keywords ↔ Turning point and stationary point."
+F5C2_KW,F5C2_CON_15,related_to,"Keywords ↔ Related rates and rate of change."
+F5C2_KW,F5C2_CON_16,related_to,"Keywords ↔ Approximation and small changes."
+F5C2_KW,F5C2_CON_14,related_to,"Keywords ↔ Point of inflection and maxima/minima."
+
+F5C3_KW,F5C3_CON_01,related_to,"Keywords ↔ Integration as reverse of differentiation."
+F5C3_KW,F5C3_CON_02,related_to,"Keywords ↔ Indefinite integral with constant of integration."
+F5C3_KW,F5C3_CON_07,related_to,"Keywords ↔ Definite integral and fundamental theorem."
+F5C3_KW,F5C3_CON_11,related_to,"Keywords ↔ Integration by substitution."
+F5C3_KW,F5C3_CON_09,related_to,"Keywords ↔ Area under curve (region)."
+F5C3_KW,F5C3_CON_13,related_to,"Keywords ↔ Volume of revolution and kinematics applications."
+# Keyword node links
+F4C1_KW,F4.FN.C01,related_to,"Keywords ↔ Function definition & notation."
+F4C1_KW,F4.FN.S01,related_to,"Keywords ↔ Skill: Explain functions with graphs/notation."
+F4C1_KW,F4C7_CON_05,related_to,"Keywords ↔ Gradient concept supports vertical/horizontal line tests (function/inverse)."
+
+F4C2_KW,F4C2_CON_03,related_to,"Keywords ↔ Completing the square."
+F4C2_KW,F4C2_CON_11,related_to,"Keywords ↔ Discriminant."
+F4C2_KW,F4C2_CON_12,related_to,"Keywords ↔ Root classification."
+F4C2_KW,F4C2_CON_14,related_to,"Keywords ↔ Quadratic function (general form)."
+F4C2_KW,F4C2_CON_19,related_to,"Keywords ↔ Vertex form."
+F4C2_KW,F4C2_CON_07,related_to,"Keywords ↔ Quadratic inequality (methods: number line/graph/sign table)."
+F4C2_KW,F4C2_CON_16,related_to,"Keywords ↔ Axis of symmetry."
+F4C2_KW,F4C2_CON_15,related_to,"Keywords ↔ Max/Min via concavity."
+
+F4C3_KW,F4C3_CON_01,related_to,"Keywords ↔ System of linear equations (3 vars)."
+F4C3_KW,F4C3_CON_03,related_to,"Keywords ↔ Solution as plane intersections."
+F4C3_KW,F4C3_CON_08,related_to,"Keywords ↔ Elimination method (concept)."
+F4C3_KW,F4C3_CON_09,related_to,"Keywords ↔ Substitution method (concept)."
+F4C3_KW,F4C3_CON_16,related_to,"Keywords ↔ Graphical interpretation."
+# Keyword node links for F4C4 (Indices/Surds/Logs)
+F4C4_KW,F4C4_CON_01,related_to,"Keywords ↔ Index/base/exponent concepts."
+F4C4_KW,F4C4_CON_09,related_to,"Keywords ↔ Surd / irrational numbers."
+F4C4_KW,F4C4_CON_13,related_to,"Keywords ↔ Conjugate surds."
+F4C4_KW,F4C4_CON_16,related_to,"Keywords ↔ Logarithm definition."
+F4C4_KW,F4C4_CON_19,related_to,"Keywords ↔ Common & natural logs."
+F4C4_KW,F4C4_SKILL_01,related_to,"Keywords ↔ Simplify using laws of indices."
+F4C4_KW,F4C4_SKILL_07,related_to,"Keywords ↔ Rationalise denominators."
+F4C4_KW,F4C4_SKILL_10,related_to,"Keywords ↔ Evaluate using log laws."
+F4C4_KW,F4C4_SKILL_11,related_to,"Keywords ↔ Change of base / compute logs."
+
+# Keyword node links for F4C5 (Progressions)
+F4C5_KW,F4C5_CON_01,related_to,"Keywords ↔ Sequence/AP definition."
+F4C5_KW,F4C5_CON_03,related_to,"Keywords ↔ AP nth-term & common difference."
+F4C5_KW,F4C5_CON_11,related_to,"Keywords ↔ GP definition."
+F4C5_KW,F4C5_CON_13,related_to,"Keywords ↔ GP nth-term & common ratio."
+F4C5_KW,F4C5_CON_16,related_to,"Keywords ↔ Sum to infinity."
+F4C5_KW,F4C5_CON_17,related_to,"Keywords ↔ Recurring decimal as GP."
+F4C5_KW,F4C5_SKILL_01,related_to,"Keywords ↔ Identify AP."
+F4C5_KW,F4C5_SKILL_07,related_to,"Keywords ↔ Compute GP term."
+F4C5_KW,F4C5_SKILL_10,related_to,"Keywords ↔ Sum to infinity condition."
+F4C5_KW,F4C5_SKILL_11,related_to,"Keywords ↔ Recurring decimal to fraction via GP."
+
+# Keyword node links for F4C6 (Linear Law)
+F4C6_KW,F4C6_CON_01,related_to,"Keywords ↔ Linear relation."
+F4C6_KW,F4C6_CON_02,related_to,"Keywords ↔ Non‑linear relation."
+F4C6_KW,F4C6_CON_03,related_to,"Keywords ↔ Line of best fit concept."
+F4C6_KW,F4C6_SKILL_01,related_to,"Keywords ↔ Identify linear vs non‑linear."
+F4C6_KW,F4C6_SKILL_02,related_to,"Keywords ↔ Scatter & best‑fit."
+F4C6_KW,F4C6_SKILL_05,related_to,"Keywords ↔ Equation of best‑fit line."
+F4C7_KW,F4C7_CON_01,related_to,"Keywords ↔ Divisor of a line segment / internal division."
+F4C7_KW,F4C7_CON_05,related_to,"Keywords ↔ Gradient."
+F4C7_KW,F4C7_CON_06,related_to,"Keywords ↔ Parallel lines criterion."
+F4C7_KW,F4C7_CON_07,related_to,"Keywords ↔ Perpendicular lines criterion."
+F4C7_KW,F4C7_CON_09,related_to,"Keywords ↔ Shoelace area (triangle)."
+F4C7_KW,F4C7_CON_10,related_to,"Keywords ↔ Shoelace area (polygon)."
+F4C7_KW,F4C7_CON_12,related_to,"Keywords ↔ Locus: fixed distance from point."
+F4C7_KW,F4C7_CON_13,related_to,"Keywords ↔ Locus: constant distance ratio (Apollonius)."
+F4C7_KW,F4C7_CON_14,related_to,"Keywords ↔ Locus: perpendicular bisector."
+
+F4C8_KW,F4C8_CON_01,related_to,"Keywords ↔ Vector vs scalar definitions."
+F4C8_KW,F4C8_CON_02,related_to,"Keywords ↔ Directed line segment."
+F4C8_KW,F4C8_CON_03,related_to,"Keywords ↔ Magnitude & notation."
+F4C8_KW,F4C8_CON_04,related_to,"Keywords ↔ Zero/negative/same vectors."
+F4C8_KW,F4C8_CON_08,related_to,"Keywords ↔ Resultant / triangle law."
+F4C8_KW,F4C8_CON_10,related_to,"Keywords ↔ Parallelogram law."
+F4C8_KW,F4C8_CON_11,related_to,"Keywords ↔ Polygon law."
+F4C8_KW,F4C8_CON_13,related_to,"Keywords ↔ Position & column vectors."
+
+F4C9_KW,F4C9_CON_01,related_to,"Keywords ↔ Sine rule."
+F4C9_KW,F4C9_CON_07,related_to,"Keywords ↔ Cosine rule."
+F4C9_KW,F4C9_CON_03,related_to,"Keywords ↔ Ambiguous case."
+F4C9_KW,F4C9_CON_04,related_to,"Keywords ↔ Ambiguous case conditions."
+F4C9_KW,F4C9_CON_12,related_to,"Keywords ↔ Combined applications / 3D bearings."
+
+F4C10_KW,F4C10_CON_01,related_to,"Keywords ↔ Definition of index numbers."
+F4C10_KW,F4C10_CON_02,related_to,"Keywords ↔ Formula of index numbers."
+F4C10_KW,F4C10_CON_06,related_to,"Keywords ↔ Composite index (definition)."
+F4C10_KW,F4C10_CON_07,related_to,"Keywords ↔ Composite index formula."
+F4C10_KW,F4C10_CON_08,related_to,"Keywords ↔ Weightage concept."

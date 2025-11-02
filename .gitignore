@@ -25,3 +25,4 @@ Textbook/*.pdf
 *.pdf
 Textbook/
 *.pdf
+.vercel

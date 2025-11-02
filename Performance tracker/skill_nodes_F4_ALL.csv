@@ -1,0 +1,311 @@
+,skill,,,F5C2_SKILL_01,Compute Limit,Determine the limit of a function as variable approaches a value.
+,skill,,,F5C2_SKILL_02,Apply First Principle,Use lim(h→0)[f(x+h)-f(x)]/h to derive f′(x).
+,skill,,,F5C2_SKILL_03,Use Power Rule,Apply dy/dx = n a x^{n−1}.
+,skill,,,F5C2_SKILL_04,Differentiate Polynomial/Sum,Find derivatives of simple and combined algebraic functions.
+,skill,,,F5C2_SKILL_05,Use Product Rule,Apply (uv)′ = u′v + uv′ to algebraic expressions.
+,skill,,,F5C2_SKILL_06,Use Quotient Rule,Apply (u/v)′ = (v u′ − u v′)/v².
+,skill,,,F5C2_SKILL_07,Use Chain Rule,Find derivative of composite functions.
+,skill,,,F5C2_SKILL_08,Compute Second Derivative,Differentiate f′(x) to get f″(x).
+,skill,,,F5C2_SKILL_09,Interpret dy/dx,Explain meaning as rate of change or slope at a point.
+,skill,,,F5C2_SKILL_10,Find Tangent and Normal,Compute gradient and form equations at given x₁.
+,skill,,,F5C2_SKILL_11,Classify Turning Points,Use sign of d²y/dx² to classify maxima/minima.
+,skill,,,F5C2_SKILL_12,Solve Optimization Problems,Find values maximizing/minimizing a quantity.
+,skill,,,F5C2_SKILL_13,Compute Related Rates,Form chain rule relation between variables over time.
+,skill,,,F5C2_SKILL_14,Approximate Small Changes,Use dy≈f′(x)dx to estimate small variations.
+,skill,,,F5C2_SKILL_15,Apply Differentiation in Contexts,Solve physics/economic/application problems.
+,skill,,,F4C10_SKILL_01,Define Index Numbers,Explain the meaning and purpose of index numbers in statistics and economics.
+,skill,,,F4C10_SKILL_02,Compute Simple Index,Use I = (Q1/Q0) × 100 to find price/quantity index for one variable.
+,skill,,,F4C10_SKILL_03,Interpret Index Numbers,Judge increase/decrease/no change based on whether index >, =, or < 100.
+,skill,,,F4C10_SKILL_04,Find Base Year or Quantity,Rearrange I = (Q1/Q0)×100 to compute unknown base/current value.
+,skill,,,F4C10_SKILL_05,Convert Between Base Years,Apply ratio relationships to find index across different bases.
+,skill,,,F4C10_SKILL_06,Apply Index Numbers in Context,Use given data to model inflation, cost, productivity, or visitor count.
+,skill,,,F4C10_SKILL_07,Define Composite Index,Explain how multiple individual indices combine to one overall index.
+,skill,,,F4C10_SKILL_08,Compute Composite Index (Without Weight),Average given indices assuming equal importance.
+,skill,,,F4C10_SKILL_09,Compute Composite Index (With Weight),Apply Ī = Σ(Iiwi)/Σwi using provided weights or percentages.
+,skill,,,F4C10_SKILL_10,Interpret Composite Index,Explain meaning of overall increase/decrease and significance of weights.
+,skill,,,F4C10_SKILL_11,Solve Composite Index Problems,Handle multi-step questions requiring both simple and composite calculations.
+,skill,,,F4C10_SKILL_12,Relate Composite Index to Real Data,Link CPI, productivity, or admission index to weighted average reasoning.
+node_id,type,chapter,name,id,label,description
+F4.FN.S01,skill,1.1,Explain function using graphical representations and notations,,,
+,skill,,,F4C2_SKILL_01,Solve by Completing the Square,Solve ax^2+bx+c=0 via completing square.
+,skill,,,F4C2_SKILL_02,Solve by Quadratic Formula,Apply x=[-b±√(b^2-4ac)]/(2a).
+,skill,,,F4C2_SKILL_03,Form Equation from Given Roots,"Construct x^2-(p+q)x+pq=0 given roots p,q."
+,skill,,,F4C2_SKILL_04,Transform Roots & Form Equation,"Handle α+3, 2α, α^2 etc. using Vieta transformations."
+,skill,,,F4C2_SKILL_05,Compute Discriminant,"Find D=b^2-4ac for given a,b,c."
+,skill,,,F4C2_SKILL_06,Classify Roots by D,"State types: D>0, D=0, D<0."
+,skill,,,F4C2_SKILL_07,Parameter Range for Root Types,"Solve inequalities on parameters to enforce D>0, =0, <0."
+,skill,,,F4C2_SKILL_08,Solve Quadratic Inequality (Graph),Use graph of y=quadratic to find >0 or <0 regions.
+,skill,,,F4C2_SKILL_09,Solve Quadratic Inequality (Number Line),Critical points & test values on intervals.
+,skill,,,F4C2_SKILL_10,Solve Quadratic Inequality (Sign Table),Sign analysis of factors to deduce product sign.
+,skill,,,F4C2_SKILL_11,Convert General→Vertex,Complete the square to get a(x-h)^2+k.
+,skill,,,F4C2_SKILL_12,Convert Vertex→General,Expand a(x-h)^2+k.
+,skill,,,F4C2_SKILL_13,Factorise to Intercept Form,Write as a(x-p)(x-q) when real roots exist.
+,skill,,,F4C2_SKILL_14,Find Axis of Symmetry,Compute x=-b/(2a) or x=h.
+,skill,,,F4C2_SKILL_15,Find Vertex Coordinates,"Compute (-b/2a, f(-b/2a)) or (h,k)."
+,skill,,,F4C2_SKILL_16,Find x-Intercepts,Solve f(x)=0 to get p and q.
+,skill,,,F4C2_SKILL_17,Find y-Intercept,Compute f(0)=c.
+,skill,,,F4C2_SKILL_18,Sketch Quadratic Function,Follow workflow to draw accurate parabola.
+,skill,,,F4C2_SKILL_19,"Analyse Effect of a,b,c",Describe changes to shape/position when a/b/c vary.
+,skill,,,F4C2_SKILL_20,"Analyse Effect of a,h,k",Describe changes when a/h/k vary in vertex form.
+,skill,,,F4C2_SKILL_21,Model Real Scenario with Quadratic,Translate word problem to quadratic function/equation.
+,skill,,,F4C2_SKILL_22,Optimise Using Vertex,Use vertex to find max/min values.
+,skill,,,F4C2_SKILL_23,Time/Roots Interpretation,"Interpret variable meaning (e.g., time when h(t)=0)."
+,skill,,,F4C2_SKILL_24,Check Domain/Validity,Reject extraneous or non-physical solutions.
+,skill,,,F4C2_SKILL_25,Derive Formula via Completing Square,(Optional) Derive quadratic formula from completing square.
+,skill,,,F4C3_SKILL_01,Identify System Type (3 Vars),Recognise whether given equations form a 3-variable linear system.
+,skill,,,F4C3_SKILL_02,Set Up from Context (3 Vars),Define variables and form three linear equations from a word problem.
+,skill,,,F4C3_SKILL_03,Align Coefficients,Scale equations to match coefficients for elimination.
+,skill,,,F4C3_SKILL_04,Eliminate One Variable,Combine two equations to remove one variable.
+,skill,,,F4C3_SKILL_05,Form Reduced 2-Var System,Obtain two-equation system in two variables after elimination.
+,skill,,,F4C3_SKILL_06,Back-substitute to Solve,Solve reduced system and back-substitute to find all variables.
+,skill,,,F4C3_SKILL_07,Detect Inconsistency,Identify contradictions like 0=12 to conclude no solution.
+,skill,,,F4C3_SKILL_08,Parameterise Infinite Solutions,Express solution set using a free parameter when rank-deficient.
+,skill,,,F4C3_SKILL_09,Use Substitution in 3 Vars,Make a variable subject and substitute into others.
+,skill,,,F4C3_SKILL_10,Check Solutions,"Verify (x,y,z) satisfies all original equations."
+,skill,,,F4C3_SKILL_11,Model & Solve (Applications),"Translate and solve real-life 3-var systems (mixtures, finance, rent)."
+,skill,,,F4C3_SKILL_12,Augmented Matrix (Optional),Write augmented matrix and perform row operations (idea-level).
+,skill,,,F4C3_SKILL_13,Substitute Linear→Non-linear,"Rearrange linear eqn, substitute into non-linear eqn."
+,skill,,,F4C3_SKILL_14,Solve Resulting Quadratic,Factorise/complete square/use formula to solve.
+,skill,,,F4C3_SKILL_15,Choose Valid Roots,Apply domain/context to accept/reject roots.
+,skill,,,F4C3_SKILL_16,Graphical Solution (Plot),Construct tables/plots to estimate intersections.
+,skill,,,F4C3_SKILL_17,Interpret Intersections,Map intersection points back to context.
+,skill,,,F4C3_SKILL_18,Line–Circle Intersection,Solve systems with circle equation via substitution.
+,skill,,,F4C3_SKILL_19,Perimeter–Area Pair Modelling,"Set up rectangle models: P=2(x+y), A=xy etc."
+,skill,,,F4C3_SKILL_20,Check Reasonableness,"Assess units, signs, and magnitudes of solutions."
+,skill,,,F4C3_SKILL_21,Use Calculator Software,Leverage calculator/GeoGebra/Desmos for checking.
+,skill,,,F4C4_SKILL_01,Simplify Using Laws of Indices,Apply product/quotient/power/zero/negative/fractional laws.
+,skill,,,F4C4_SKILL_02,Solve Exponential Eqn (Same Base),Express both sides with common base and equate indices.
+,skill,,,F4C4_SKILL_03,Model & Compute Growth/Decay,Apply P=A(1+r)^t or N=N0 e^{−λ t} to find t or amount.
+,skill,,,F4C4_SKILL_04,Classify Numbers as Surds/Not Surds,Determine if radical simplifies to rational number.
+,skill,,,F4C4_SKILL_05,Simplify Surds (Extract Square Factor),Write √n = k√m with maximal k.
+,skill,,,F4C4_SKILL_06,Add/Subtract/Multiply Surds,Combine similar surds; expand/binomial with radicals.
+,skill,,,F4C4_SKILL_07,Rationalise Denominator (Single),Multiply by √a or conjugate to remove surd.
+,skill,,,F4C4_SKILL_08,Rationalise Denominator (Binomial),Use conjugate a−√b for (a+√b) and vice versa.
+,skill,,,F4C4_SKILL_09,Solve Surd Equations,"Isolate radicals, square carefully, check extraneous solutions."
+,skill,,,F4C4_SKILL_10,Use Log Laws to Evaluate,Compute logs using product/quotient/power laws without calculator.
+,skill,,,F4C4_SKILL_11,Change of Base & Evaluate,Convert to log10 or ln; compute numerically.
+,skill,,,F4C4_SKILL_12,Solve Equations Using Logs,Take log/ln both sides to solve for unknowns.
+,skill,,,F4C4_SKILL_13,Graph/Interpret Exp & Log,Sketch y=a^x and y=loga x; interpret inverse relationship.
+,skill,,,F4C4_SKILL_14,Word Problems (Indices/Surds/Logs),"Translate context to equations, solve, interpret units."
+,skill,,,F4C5_SKILL_01,Identify Arithmetic Progression,Check constant difference and justify AP.
+,skill,,,F4C5_SKILL_02,Compute Tn in AP,Use Tn=a+(n-1)d for term values.
+,skill,,,F4C5_SKILL_03,Find n from Tn in AP,Solve a+(n-1)d = given value.
+,skill,,,F4C5_SKILL_04,Compute Sn in AP,Use Sn = n/2[2a+(n-1)d] or Sn = n/2(a+l).
+,skill,,,F4C5_SKILL_05,Word Problems (AP),Model totals/increments and interpret units.
+,skill,,,F4C5_SKILL_06,Identify Geometric Progression,Check constant ratio and justify GP.
+,skill,,,F4C5_SKILL_07,Compute Tn in GP,Use Tn = a r^{n-1}.
+,skill,,,F4C5_SKILL_08,Compute Sn in GP,Use Sn = a(1-r^n)/(1-r) or a(r^n-1)/(r-1).
+,skill,,,F4C5_SKILL_09,Solve for n using Logs (GP/AP),Apply logs to solve for n when unknown is in exponent or count.
+,skill,,,F4C5_SKILL_10,Sum to Infinity (|r|<1),Use S∞ = a/(1-r) and validity |r|<1.
+,skill,,,F4C5_SKILL_11,Recurring Decimal → Fraction via GP,Represent repeating decimals as geometric series.
+,skill,,,F4C5_SKILL_12,Model Growth/Decay with GP,Translate growth rates (%, doubling/halving) into GP.
+,skill,,,F4C5_SKILL_13,Word Problems (GP),Set up and solve multi-step GP contexts.
+,skill,,,F4C6_SKILL_01,Identify Linear vs Non‑linear,Decide from table/graph whether relation is linear.
+,skill,,,F4C6_SKILL_02,Draw Scatter & Best‑fit Line,Plot data with suitable scales and sketch balanced best‑fit line.
+,skill,,,F4C6_SKILL_03,Compute Gradient from Graph,Select two well‑spaced points on line; calculate m.
+,skill,,,F4C6_SKILL_04,Find Y‑intercept from Graph,Read c from axis cut or use point‑slope method.
+,skill,,,F4C6_SKILL_05,Form Equation of Best‑fit,Use y=mx+c from gradient & intercept/points.
+,skill,,,F4C6_SKILL_06,Predict via Inter/Extrapolation,Use model to estimate unknown Y or X; note range limits.
+,skill,,,F4C6_SKILL_07,Choose X,Y for Linearisation,Propose valid (X,Y) so that curve becomes straight line.
+,skill,,,F4C6_SKILL_08,Linearise y=ax+b/x,Form X=x^2, Y=xy or variants; justify constants in m,c.
+,skill,,,F4C6_SKILL_09,Linearise y=p q^x,Take logs: Y=log y, X=x; identify m=log q, c=log p.
+,skill,,,F4C6_SKILL_10,Linearise 3y−p x^2 = qx,Divide by x: Y=y/x, X=x; read p/3 from gradient, q/3 from intercept.
+,skill,,,F4C6_SKILL_11,Read Parameters from Graph,Map gradient/intercept back to constants of original model.
+,skill,,,F4C6_SKILL_12,Detect & Handle Outliers,Spot points far from trend; reason about experimental error.
+,skill,,,F4C6_SKILL_13,Technology: Desmos/Calc,Enter data, draw best‑fit, read m and c.
+,skill,,,F4C6_SKILL_14,Explain Validity Conditions,Justify that X,Y contain only variables; m,c only constants.
+,skill,,,F4C7_SKILL_01,Interpret Ratio on Segment,Relate position of P on AB to m:n (AP:PB).
+,skill,,,F4C7_SKILL_02,Use Section Formula (Find Point),Compute coordinates of point dividing AB in m:n.
+,skill,,,F4C7_SKILL_03,Find Unknown Endpoint with Ratio,Given A,P and m:n find B (or vice versa).
+,skill,,,F4C7_SKILL_04,Find Midpoint,Apply midpoint formula as m=n case.
+,skill,,,F4C7_SKILL_05,Test Parallel/Perpendicular from Equations,Compare gradients; use m1m2=−1.
+,skill,,,F4C7_SKILL_06,Line Through Point Parallel to Given,Keep m same; use y−y1=m(x−x1).
+,skill,,,F4C7_SKILL_07,Line Through Point Perpendicular to Given,Use m⊥=−1/m; then point–slope.
+,skill,,,F4C7_SKILL_08,Compute Gradient from Two Points,Use m=(y2−y1)/(x2−x1).
+,skill,,,F4C7_SKILL_09,Convert to Gradient Form,Rearrange to y=mx+c to read m,c.
+,skill,,,F4C7_SKILL_10,Area of Triangle (Shoelace),Apply 1/2|…| for ordered vertices.
+,skill,,,F4C7_SKILL_11,Area of Polygon (Shoelace),Apply general 1/2 cyclic sum (n≥3).
+,skill,,,F4C7_SKILL_12,Prove Collinearity by Area,Show area(Δ)=0.
+,skill,,,F4C7_SKILL_13,Area by Box Method,Enclose in rectangle and subtract corner triangles.
+,skill,,,F4C7_SKILL_14,Locus: Fixed Distance (Circle),Form (x−x1)^2+(y−y1)^2=r^2.
+,skill,,,F4C7_SKILL_15,Locus: Constant Ratio to Two Points,((x−x1)^2+(y−y1)^2)/((x−x2)^2+(y−y2)^2)=(m^2)/(n^2).
+,skill,,,F4C7_SKILL_16,Locus: Perpendicular Bisector,Set PA=PB and simplify to ax+by+c=0.
+,skill,,,F4C7_SKILL_17,Intersect Two Loci,Solve simultaneous equations of two loci.
+,skill,,,F4C7_SKILL_18,Apply Speed/Ratio on Segment,Translate time/speed ratios to AP:PB and coordinates.
+,skill,,,F4C7_SKILL_19,Use Distance Formula,Compute lengths; compare ratios.
+,skill,,,F4C7_SKILL_20,Area & Ratio in Parallelogram/Trapezium,Use midpoint/diagonal facts with shoelace.
+,skill,,,F4C8_SKILL_01,Classify Vector vs Scalar,Classify a quantity as vector or scalar with justification.
+,skill,,,F4C8_SKILL_02,Draw Directed Segment,Represent a vector with scale, magnitude and direction labelled.
+,skill,,,F4C8_SKILL_03,Read / Compute Magnitude and Direction,Compute |AB→| and state direction or bearing.
+,skill,,,F4C8_SKILL_04,Use Vector Notations,Switch consistently between AB→, a~, |a|.
+,skill,,,F4C8_SKILL_05,Identify Zero / Negative / Same Vectors,Decide 0~, −a~, or equality and justify.
+,skill,,,F4C8_SKILL_06,Apply Scalar Multiples,Produce ka~ and reason about length and direction for k ±.
+,skill,,,F4C8_SKILL_07,Test Parallelism (Scalar Multiple),Decide a∥b by checking a = k b and find k if parallel.
+,skill,,,F4C8_SKILL_08,Prove Collinearity with Vectors,Use AB→ = k BC→ (common point) to deduce collinearity.
+,skill,,,F4C8_SKILL_09,Add/Subtract Parallel Vectors,Compute sums/differences on a line and interpret resultants.
+,skill,,,F4C8_SKILL_10,Triangle Law Construction,Perform head-to-tail addition/subtraction for non-parallel vectors.
+,skill,,,F4C8_SKILL_11,Parallelogram Law Construction,Form resultant from two concurrent vectors.
+,skill,,,F4C8_SKILL_12,Polygon Law Chain,Reduce multi-leg paths to a single resultant.
+,skill,,,F4C8_SKILL_13,Solve Relative Motion Problems,Combine river/wind/boat vectors to find speed and bearing.
+,skill,,,F4C8_SKILL_14,Express in Components,Write vectors as (x,y) and xi + yj.
+,skill,,,F4C8_SKILL_15,Compute Magnitude from Components,Use √(x²+y²) and interpret units.
+,skill,,,F4C8_SKILL_16,Find Unit Vector r̂,Divide by magnitude; handle signs and decimals/surds.
+,skill,,,F4C8_SKILL_17,Component-wise Arithmetic,Add/subtract or multiply by scalar component-wise.
+,skill,,,F4C8_SKILL_18,Parallel/Perpendicular via Components (Idea),Use ratios for ∥; recognise ⟂ ( dot = 0 ) idea level.
+,skill,,,F4C8_SKILL_19,Model with Position Vectors,Use OA→, OB→ and AC→ = AB→ + BC→ to solve placement / ratio problems.
+,skill,,,F4C9_SKILL_01,Derive and Verify Sine Rule,Form and test ratio a/sin A = b/sin B = c/sin C.
+,skill,,,F4C9_SKILL_02,Apply Sine Rule,Find unknown sides or angles from given data.
+,skill,,,F4C9_SKILL_03,Identify Ambiguous Case,Check when given two sides and a non-included acute angle (SSA).
+,skill,,,F4C9_SKILL_04,Analyse Ambiguous Case Conditions,Compare a with height h and adjacent side c to decide existence/number of triangles.
+,skill,,,F4C9_SKILL_05,Solve Ambiguous Triangles,Compute both possible sets of angles/sides when two triangles exist.
+,skill,,,F4C9_SKILL_06,Solve Bearing/Height Problems (Sine Rule),Model navigation or elevation problems.
+,skill,,,F4C9_SKILL_07,Verify Cosine Rule,Derive b² = a² + c² − 2ac cos B from geometry.
+,skill,,,F4C9_SKILL_08,Apply Cosine Rule (SAS or SSS),Find sides or angles when two sides and included angle or three sides are known.
+,skill,,,F4C9_SKILL_09,Solve Word Problems (Cosine Rule),Model lengths/angles in survey or construction contexts.
+,skill,,,F4C9_SKILL_10,Derive Area Formula,Use trigonometric ratios to obtain ½ab sin C.
+,skill,,,F4C9_SKILL_11,Compute Area (½ab sin C),Find area from two sides and included angle.
+,skill,,,F4C9_SKILL_12,Use Heron’s Formula,Calculate area when three sides are given.
+,skill,,,F4C9_SKILL_13,Apply Area Formula in Contexts,Solve land, design, or navigation problems involving area.
+,skill,,,F4C9_SKILL_14,Integrate Sine/Cosine/Area Rules,Select appropriate rule to solve composite problems.
+,skill,,,F4C9_SKILL_15,Model 3D / Bearing Problems,Apply rules in three-dimensional and bearing questions.
+,skill,,,F5C1_SKILL_01,Convert Degrees↔Radians,Use θ(rad)=θ(°)×π/180 and θ(°)=θ(rad)×180/π.
+,skill,,,F5C1_SKILL_02,Estimate Common Angles,Recall π/6, π/4, π/3, π/2, π, 2π in degrees.
+,skill,,,F5C1_SKILL_03,Compute Arc Length,Apply s=rθ for given r and θ (in radians).
+,skill,,,F5C1_SKILL_04,Find Radius/Angle from Arc,Rearrange s=rθ to get r or θ from s.
+,skill,,,F5C1_SKILL_05,Compute Sector Area,Use A=½ r^2 θ for given r and θ (in radians).
+,skill,,,F5C1_SKILL_06,Find r or θ from Area,Rearrange A=½ r^2 θ to solve for r or θ.
+,skill,,,F5C1_SKILL_07,Compute Segment Perimeter,Add chord length to arc length for a segment.
+,skill,,,F5C1_SKILL_08,Compute Chord Length (Cosine),Use c=√(a^2+b^2−2ab cosθ) with a=b=r.
+,skill,,,F5C1_SKILL_09,Compute Triangle Area (Trig),Use ½ab sin C to subtract from sector for segment area.
+,skill,,,F5C1_SKILL_10,Compute Segment Area,Area(segment)=A_sector−A_triangle.
+,skill,,,F5C1_SKILL_11,Handle Reflex/Major Angles,Convert between minor and reflex angles; use 2π−θ.
+,skill,,,F5C1_SKILL_12,Solve Application Problems,Model paths, fields, windows, gears using s=rθ and A=½ r^2 θ.
+,skill,,,F5C3_SKILL_01,State Anti‑derivative Concept,Explain that integration is the reverse process of differentiation.
+,skill,,,F5C3_SKILL_02,Use Linearity of ∫,Apply ∫(af(x)±bg(x))dx = a∫f(x)dx ± b∫g(x)dx.
+,skill,,,F5C3_SKILL_03,Apply Power Rule (n≠−1),Use ∫ax^n dx = a x^{n+1}/(n+1) for n≠−1.
+,skill,,,F5C3_SKILL_04,Integrate 1/x,Use ∫(1/x) dx = ln|x| + C and variations a/x.
+,skill,,,F5C3_SKILL_05,Check by Differentiation,Verify an antiderivative by differentiating the result.
+,skill,,,F5C3_SKILL_06,Evaluate Definite Integral,Compute ∫_a^b f(x) dx using F(b) − F(a).
+,skill,,,F5C3_SKILL_07,Use Limits & Properties of ∫,Use properties: ∫_a^a f=0, ∫_a^b=−∫_b^a, interval addition.
+,skill,,,F5C3_SKILL_08,Find Area Under Curve,Set up ∫_a^b |f(x)| dx for area with sign awareness.
+,skill,,,F5C3_SKILL_09,Find Area Between Curves,Form ∫_a^b (y_top − y_bottom) dx with correct intersections.
+,skill,,,F5C3_SKILL_10,Set Up Bounds from Graph/Text,Extract limits a,b from intersections or context.
+,skill,,,F5C3_SKILL_11,Integrate Using Substitution,Use u‑substitution du= f′(x)dx for suitable forms.
+,skill,,,F5C3_SKILL_12,Integrate exp & trig Basics,Compute ∫e^x dx, ∫sin x dx, ∫cos x dx where applicable.
+,skill,,,F5C3_SKILL_13,Solve Kinematics via ∫,Recover displacement from velocity and velocity from acceleration.
+,skill,,,F5C3_SKILL_14,Interpret Units & Context,Attach correct units and interpret accumulation in word problems.
+,skill,,,F5C4_SKILL_01,Apply Multiplication Rule,Use the product rule m×n×… for sequential events.
+,skill,,,F5C4_SKILL_02,Compute n! and Simplify Factorials,Manipulate factorials and evaluate expressions like 11!/9!, 6!/(4!2!).
+,skill,,,F5C4_SKILL_03,Permutations of n Different Objects (Linear),Find permutations when all n distinct items are arranged: n!.
+,skill,,,F5C4_SKILL_04,Permutations nPr (Select r from n, Order Matters),Compute nPr = n!/(n−r)! and apply to posts/seatings/codes.
+,skill,,,F5C4_SKILL_05,Circular Permutations (All n used),Count circular arrangements of n distinct objects: (n−1)!.
+,skill,,,F5C4_SKILL_06,Circular nPr (r from n on a circle),Count circular arrangements when r≤n items chosen: nPr/r (bracelet variants may halve).
+,skill,,,F5C4_SKILL_07,Circular Bracelets with Reflection,Account for clockwise=anticlockwise equivalence by dividing by 2 where appropriate.
+,skill,,,F5C4_SKILL_08,Permutations with Identical Objects,Use n!/(a!b!c!…) for repeated items (e.g., SIMBIOSIS).
+,skill,,,F5C4_SKILL_09,Conditioned Permutations (Grouped/Separated/Alternating),Solve “vowels together”, “A & B together”, alternating, start/end restrictions, etc.
+,skill,,,F5C4_SKILL_10,Forming Numbers under Constraints,Count k-digit numbers with parity/range/no-repeat constraints.
+,skill,,,F5C4_SKILL_11,Distinguish Permutation vs Combination,Decide whether order matters; justify choice.
+,skill,,,F5C4_SKILL_12,Combinations nCr (Select r from n),Compute nCr = n!/(r!(n−r)!) and apply to selections/teams/vertices.
+,skill,,,F5C4_SKILL_13,Use nCr Identities,Prove/use basic binomial identities in counting.
+,skill,,,F5C4_SKILL_14,Combinations with Conditions,Handle “at least/at most”, quotas across categories, complementary counting.
+,skill,,,F5C4_SKILL_15,Multi-stage Grouping via Multiplication Rule,Partition sets into fixed-size groups by staged selections.
+,skill,,,F5C4_SKILL_16,Apply Addition Rule (Mutually Exclusive),Sum counts over disjoint cases (either/or).
+,skill,,,F5C4_SKILL_17,Model Real-World Scenarios,Translate words to counting models (seating, passwords, routes, polygons).
+,skill,,,F5C4_SKILL_18,Counting Diagonals/Polygons via nCr,Use combinations for triangles/diagonals in n-gons.
+,skill,,,F5C4_SKILL_19,Use Technology Checks,Use calculator nPr/nCr and simple applets to verify results.
+,skill,,,F5C4_SKILL_20,Solve Mixed P&C Problems,Combine nPr/nCr, addition & multiplication rules across multi-constraint tasks.
+,skill,,,F5C5_SKILL_01,Define Random Variable,Describe meaning of random variable as a variable whose values depend on outcomes of a random phenomenon.
+,skill,,,F5C5_SKILL_02,Distinguish Discrete vs Continuous,Compare discrete (countable outcomes) and continuous (measurable outcomes) random variables.
+,skill,,,F5C5_SKILL_03,Define Probability Distribution (Discrete),Explain meaning and requirements: ΣP(X)=1, 0≤P(X)≤1.
+,skill,,,F5C5_SKILL_04,Construct Probability Table,Tabulate x and P(X=x) for discrete variable.
+,skill,,,F5C5_SKILL_05,Draw Probability Distribution Graph,Sketch bar graph of x vs P(X) and label clearly.
+,skill,,,F5C5_SKILL_06,Define Binomial Distribution,Describe conditions: n independent trials, 2 outcomes, constant p.
+,skill,,,F5C5_SKILL_07,Compute Binomial Probability,Use P(X=r)=nCr p^r (1−p)^{n−r}.
+,skill,,,F5C5_SKILL_08,Tabulate & Graph Binomial Distribution,Construct probability table and graph for given n,p.
+,skill,,,F5C5_SKILL_09,Compute Mean Variance SD (Binomial),Use μ=np, σ²=np(1−p), σ=√(np(1−p)).
+,skill,,,F5C5_SKILL_10,Solve Applied Binomial Problems,Apply binomial model to real-world probability contexts.
+,skill,,,F5C5_SKILL_11,Describe Normal Distribution,Identify bell-shape symmetry and properties.
+,skill,,,F5C5_SKILL_12,Define Standard Normal Distribution,Describe Z~N(0,1) and standardisation formula.
+,skill,,,F5C5_SKILL_13,Compute Z-Score,Use Z=(X−μ)/σ and interpret meaning.
+,skill,,,F5C5_SKILL_14,Use Z-Table,Find probabilities using standard normal tables.
+,skill,,,F5C5_SKILL_15,Shade Normal Graph Region,Illustrate area corresponding to given probability.
+,skill,,,F5C5_SKILL_16,Solve Applied Normal Problems,Translate contextual data to Z-scores and interpret results.
+,skill,,,F5C5_SKILL_17,Link Binomial→Normal Approximation,Use normal approximation to binomial when n large, p≈0.5.
+,skill,,,F5C6_SKILL_01,Define Trig Functions,State definitions of sin, cos, tan via right triangle ratios and unit circle.
+,skill,,,F5C6_SKILL_02,Relate Reciprocal Functions,Define sec, cosec, cot and relate to cos, sin, tan.
+,skill,,,F5C6_SKILL_03,Use Fundamental Identities,Apply sin^2 x + cos^2 x = 1 and tan x = sin x / cos x.
+,skill,,,F5C6_SKILL_04,Convert Degrees↔Radians (Trig),Ensure angles are in radians when required for calculus contexts.
+,skill,,,F5C6_SKILL_05,Read/Sketch y=sin x,Identify period 2π, amplitude 1, key points and symmetry.
+,skill,,,F5C6_SKILL_06,Read/Sketch y=cos x,Identify period 2π, amplitude 1, key points and symmetry.
+,skill,,,F5C6_SKILL_07,Read/Sketch y=tan x,Identify period π and asymptotes at x=π/2 + kπ.
+,skill,,,F5C6_SKILL_08,Transform A sin(Bx+C)+D,Determine amplitude |A|, period 2π/|B|, phase shift −C/B, and vertical shift D.
+,skill,,,F5C6_SKILL_09,Transform A cos(Bx+C)+D,Analyse amplitude/period/phase/shift as above.
+,skill,,,F5C6_SKILL_10,Transform tan,Determine period π/|B| and vertical/horizontal shifts.
+,skill,,,F5C6_SKILL_11,Use Compound‑Angle Formulae,Apply sin(α±β), cos(α±β), tan(α±β).
+,skill,,,F5C6_SKILL_12,Use Double‑Angle Formulae,Apply sin 2x, cos 2x, tan 2x in simplification and solving.
+,skill,,,F5C6_SKILL_13,Use R‑Formula,Express a sin x + b cos x as R sin(x±α) or R cos(x∓α).
+,skill,,,F5C6_SKILL_14,Prove Trig Identities,Manipulate expressions to verify given identities.
+,skill,,,F5C6_SKILL_15,Simplify Trig Expressions,Reduce to simplest form using identities and algebra.
+,skill,,,F5C6_SKILL_16,Solve Trig Equations (Basic),Solve sin x = k, cos x = k, tan x = k for given intervals.
+,skill,,,F5C6_SKILL_17,Solve Trig Equations (Transformed),Solve A sin(Bx+C)+D = k etc. within specified ranges.
+,skill,,,F5C6_SKILL_18,Solve Trig Equations (Using Identities),Use compound/double‑angle/R‑formula to solve.
+,skill,,,F5C6_SKILL_19,Solve Quadratic‑in‑Trig,Use substitution (e.g., let t = sin x) then solve and back‑substitute.
+,skill,,,F5C6_SKILL_20,General Solutions,Write general solutions using periodicity.
+,skill,,,F5C6_SKILL_21,Use Inverse Trig,Work with arcsin, arccos, arctan; principal values and domains.
+,skill,,,F5C6_SKILL_22,Apply Trig in Contexts,Model oscillations, waves, bearings/elevation angles where appropriate.
+,skill,,,F5C7_SKILL_01,Identify Decision Variables,Choose suitable variables x, y to describe decisions in context.
+,skill,,,F5C7_SKILL_02,Form Objective Function,Write k = ax + by to represent the quantity to optimise (profit/cost/capacity).
+,skill,,,F5C7_SKILL_03,Translate Constraints,Convert verbal conditions (at most/at least/ratio) into linear inequalities/equations.
+,skill,,,F5C7_SKILL_04,Graph Single Inequality,Draw boundary line and choose shading (>, <) with correct solid/dotted style.
+,skill,,,F5C7_SKILL_05,Solid vs Dotted Lines,Use solid line for ≤ or ≥; dotted line for < or >.
+,skill,,,F5C7_SKILL_06,Find Intersections,Solve pairs of boundary lines to obtain vertices of the feasible region.
+,skill,,,F5C7_SKILL_07,Construct Feasible Region,Overlay all constraints and label the common region R.
+,skill,,,F5C7_SKILL_08,Point-in-Region Test,Substitute a test point to validate shading/feasibility.
+,skill,,,F5C7_SKILL_09,Plot Objective Line,Choose convenient k and draw k = ax + by on the same axes.
+,skill,,,F5C7_SKILL_10,Slide Objective Line,Translate the objective line in a parallel manner to locate the optimal vertex.
+,skill,,,F5C7_SKILL_11,Evaluate at Vertices,Compute k at each vertex to confirm the optimum.
+,skill,,,F5C7_SKILL_12,Interpret Solution,State optimal decision with units and real-world meaning.
+,skill,,,F5C7_SKILL_13,Handle Ratio Constraints,Rewrite ratios (e.g., y ≤ 2x, y ≥ (1/4)x) correctly as linear inequalities.
+,skill,,,F5C7_SKILL_14,Slice/Read Ranges,Intersect R with a line like y = c or x = c to read allowable ranges.
+,skill,,,F5C7_SKILL_15,Choose Max vs Min,Recognise whether to maximise or minimise based on the question.
+,skill,,,F5C7_SKILL_16,Use Technology (GeoGebra/Calc),Leverage graphing tools to check inequalities, vertices and objective line.
+,skill,,,F5C7_SKILL_17,Apply Non-negativity,Include x ≥ 0, y ≥ 0 when the context demands.
+,skill,,,F5C7_SKILL_18,Detect Unbounded/No Solution,Diagnose when feasible region is empty or unbounded for the target (max/min).
+,skill,,,F5C8_SKILL_01,Define Displacement,Explain displacement as directed distance from origin to position.
+,skill,,,F5C8_SKILL_02,Define Velocity,Explain velocity as rate of change of displacement (ds/dt).
+,skill,,,F5C8_SKILL_03,Define Acceleration,Explain acceleration as rate of change of velocity (dv/dt).
+,skill,,,F5C8_SKILL_04,Determine Instantaneous Quantities,Compute instantaneous s, v, a using differentiation.
+,skill,,,F5C8_SKILL_05,Find Total Distance,Calculate total distance from velocity-time graph or absolute displacement.
+,skill,,,F5C8_SKILL_06,Relate s,v,a Functions,Connect s(t), v(t), a(t) via differentiation chain.
+,skill,,,F5C8_SKILL_07,Find v from s,Use v = ds/dt.
+,skill,,,F5C8_SKILL_08,Find a from v,Use a = dv/dt.
+,skill,,,F5C8_SKILL_09,Find a from s,Use a = d²s/dt².
+,skill,,,F5C8_SKILL_10,Integrate a to get v,Use v = ∫a dt + C.
+,skill,,,F5C8_SKILL_11,Integrate v to get s,Use s = ∫v dt + C.
+,skill,,,F5C8_SKILL_12,Interpret Graphs,Read gradient/area of s–t, v–t, a–t graphs.
+,skill,,,F5C8_SKILL_13,Solve Kinematic Problems,Apply differentiation/integration in real motion tasks.
+,skill,,,F5C8_SKILL_14,Interpret Units,Ensure consistent units (m, s, m/s, m/s²).
+,skill,,,F5C8_SKILL_15,Use Technology,Use graphing/calculus tools to verify calculations.
+# Helper: Kinematics chapter-level keywords for downstream tools
+,skill,,,F5C8_SKILL_KW,Kinematics Keywords (Chapter),"EN: displacement; velocity; acceleration; distance; initial/uniform/max/min velocity; uniform acceleration; positive/negative/zero velocity; positive/negative/zero displacement.  MS: sesaran; halaju; pecutan; jarak; halaju awal/malar/maksimum/minimum; pecutan malar; halaju positif/negatif/sifar; sesaran positif/negatif/sifar."
+,skill,,,F5C7_SKILL_KW,Linear Programming Keywords (Chapter),"EN: mathematical model; constraint; objective function; feasible region; optimisation.  MS: model matematik; kekangan; fungsi objektif; rantau tersaur; pengoptimuman."
+# Trigonometric Functions Chapter Keywords (for tagging/IR)
+,skill,,,F5C6_SKILL_KW,Trigonometric Functions Keywords (Chapter),"EN: degree; radian; trigonometric ratio; quadrant; basic identities; complementary angle formula; addition angle formula; double angle formula.  MS: darjah; radian; nisbah trigonometri; sukuan; identiti asas; rumus sudut pelengkap; rumus sudut majmuk; rumus sudut berganda."
+ ,skill,,,F5C4_SKILL_KW,Permutation & Combination Keywords (Chapter),"EN: product rule; permutations; factorial; arrangement; order; combinations; identical object.  MS: petua pendaraban; pilih atur; faktorial; susunan; tertib; gabungan; objek secaman."
+ ,skill,,,F5C5_SKILL_KW,Probability Distributions Keywords (Chapter),"EN: random variable; discrete random variable; continuous random variable; binomial distribution; normal distribution; mean; variance; standard deviation.  MS: pemboleh ubah rawak; pemboleh ubah rawak diskret; pemboleh ubah rawak selanjar; taburan binomial; taburan normal; min; varians; sisihan piawai."
+# Chapter-level keyword skills for F5 chapters
+,skill,,,F5C1_SKILL_KW,Circular Measure Keywords (Chapter),"EN: radian; degree; centre of circle; radius; segment; sector; perimeter; arc length; area of sector.  MS: radian; darjah; pusat bulatan; jejari; tembereng; sektor; perimeter; panjang lengkok; luas sektor."
+,skill,,,F5C2_SKILL_KW,Differentiation Keywords (Chapter),"EN: limit; first derivative; gradient of tangent; second derivative; equation of tangent; equation of normal; turning point; rate of change; approximation; stationary point; point of inflection.  MS: had; terbitan pertama; kecerunan tangen; terbitan kedua; persamaan tangen; persamaan normal; titik pusingan; kadar perubahan; penghampiran; titik pegun; titik lengkok balas."
+,skill,,,F5C3_SKILL_KW,Integration Keywords (Chapter),"EN: differentiation; integration; gradient function; equation of curve; indefinite integral; definite integral; integration by substitution; region; volume of revolution.  MS: pembezaan; pengamiran; fungsi kecerunan; persamaan lengkung; kamiran tak tentu; kamiran tentu; pengamiran melalui penggantian; rantau; isi padu kisaran."
+# Helper rows for chapter-level keyword skills
+,skill,,,F4C1_SKILL_KW,Functions Keywords (Chapter),"EN: function notation; undefined function; absolute value function; vertical line test; arrow diagram; object; image; domain; codomain; range; discrete function; continuous function; composite function; inverse function; horizontal line test.  MS: tatatanda fungsi; fungsi tidak tertakrif; fungsi nilai mutlak; ujian garis mencancang; gambar rajah anak panah; objek; imej; domain; kodomain; julat; fungsi diskret; fungsi selanjar; fungsi gubahan; fungsi songsang; ujian garis mengufuk."
+,skill,,,F4C2_SKILL_KW,Quadratic Functions Keywords (Chapter),"EN: completing the square; root; general form; quadratic inequality; number line; discriminant; real root; imaginary root; vertex form; axis of symmetry; maximum value; minimum value.  MS: penyempurnaan kuasa dua; punca; bentuk am; ketaksamaan kuadratik; garis nombor; pembezaan; punca nyata; punca khayalan; bentuk verteks; paksi simetri; nilai maksimum; nilai minimum."
+,skill,,,F4C3_SKILL_KW,Systems of Equations Keywords (Chapter),"EN: system of equations; variable; linear equation; non-linear equation; elimination method; substitution method; graphical method.  MS: sistem persamaan; pemboleh ubah; persamaan linear; persamaan tak linear; kaedah penghapusan; kaedah penggantian; perwakilan graf."
+# Helper rows for chapter-level keyword skills
+,skill,,,F4C4_SKILL_KW,Indices/Surds/Logs Keywords (Chapter),"EN: index; base; rational number; irrational number; surd; radical; recurring decimal; conjugate surd; logarithm; natural logarithm; algebraic expression; coefficient.  MS: indeks; asas; nombor nisbah; nombor tak nisbah; surd; radikal; perpuluhan berulang; surd konjugat; logaritma; logaritma jati; ungkapan algebra; pekali."
+,skill,,,F4C5_SKILL_KW,Progressions Keywords (Chapter),"EN: sequence; arithmetic progression; common difference; geometric progression; common ratio; sum to infinity; recurring decimal.  MS: jujukan; janjang aritmetik; beza sepunya; janjang geometri; nisbah sepunya; hasil tambah ketakterhinggaan; perpuluhan berulang."
+,skill,,,F4C6_SKILL_KW,Linear Law Keywords (Chapter),"EN: linear relation; non-linear relation; inspection method; line of best fit.  MS: hubungan linear; hubungan tak linear; kaedah pemerinyuan; garis lurus penyesuaian terbaik."
+,skill,,,F4C7_SKILL_KW,Coordinate Geometry Keywords (Chapter),"EN: divisor of line segment; parallel straight lines; perpendicular straight lines; gradient; area of polygon; equation of a locus.  MS: pembahagi tembereng garis; garis lurus selari; garis lurus serenjang; kecerunan; luas poligon; persamaan lokus."
+,skill,,,F4C8_SKILL_KW,Vectors Keywords (Chapter),"EN: vector; magnitude; direction; directed line segment; zero vector; negative vector; collinear; resultant vector; position vector; triangle law; parallelogram law; polygon law.  MS: vektor; magnitud; arah; tembereng garis berarah; vektor sifar; vektor negatif; segaris; vektor paduan; vektor kedudukan; hukum segi tiga; hukum segi empat selari; hukum poligon."
+,skill,,,F4C9_SKILL_KW,Solution of Triangles Keywords (Chapter),"EN: acute angle; obtuse angle; sine rule; cosine rule; ambiguous case; included angle; non‑included angle; three dimension.  MS: sudut tirus; sudut cakah; petua sinus; petua kosinus; kes berambiguiti; sudut kandung; sudut bukan kandung; tiga matra."
+,skill,,,F4C10_SKILL_KW,Index Numbers Keywords (Chapter),"EN: index number; price index; quantity at base time; quantity at specific time; composite index; weightage.  MS: nombor indeks; indeks harga; kuantiti pada masa asas; kuantiti pada masa tertentu; indeks gubahan; pemberat."

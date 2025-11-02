@@ -11,9 +11,11 @@ export function Header() {
 
   const goHome = () => router.push('/');
   const goLists = () => router.push('/lists');
+  const goTracker = () => router.push('/tracker/papers');
 
   const onHome = pathname === '/' || pathname === '/page';
   const onLists = pathname?.startsWith('/lists');
+  const onTracker = pathname?.startsWith('/tracker');
 
   return (
     <header className="border-b border-slate-200">
@@ -42,6 +44,17 @@ export function Header() {
             onClick={goLists}
           >
             Question Lists
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className={cn(
+              'inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#1d4ed8] hover:bg-slate-50 hover:text-[#1d4ed8]',
+              onTracker && 'border-[#1d4ed8] text-[#1d4ed8]'
+            )}
+            onClick={goTracker}
+          >
+            Performance Tracker
           </Button>
         </div>
 
