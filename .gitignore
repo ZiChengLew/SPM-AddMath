@@ -4,6 +4,7 @@ node_modules
 # Production
 .next
 out
+.venv
 
 # Logs
 logs

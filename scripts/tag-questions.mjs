@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const questionDir = path.join(rootDir, 'public', 'questions');
 const dataPath = path.join(rootDir, 'data', 'questions.json');
-const chapterListPath = path.join(rootDir, 'Chapter List.md');
+const chapterListPath = path.join(rootDir, 'docs', 'data-knowledge', 'Chapter List.md');
 const envPath = path.join(rootDir, '.env.local');
 
 const force = process.argv.includes('--force');

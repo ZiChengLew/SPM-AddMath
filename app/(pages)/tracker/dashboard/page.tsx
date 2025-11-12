@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   AlertTriangle,
@@ -22,14 +22,9 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import type { RecommendationSet, ResultRecord } from '@/lib/tracker/types';
 
 type ChartMode = 'percent' | 'total';
-
-type ProgressPoint = {
-  date: string;
-  percent: number;
-  total: number;
-};
 
 type WeakLink = {
   subtopic: string;
@@ -56,69 +51,22 @@ type KnowledgeChain = {
   nodes: ChainNode[];
 };
 
-type RecommendationCard = {
-  id: string;
-  weekStart: string;
+type KpiCard = {
   title: string;
-  subtopics: string[];
-  questionCount: number;
-  estimatedTime: number;
-  description: string;
-  carriesForward: boolean;
+  value: string;
+  trend: string;
+  icon: typeof TrendingUp;
+  accent: string;
 };
 
-const KPI_SUMMARY = [
-  {
-    title: 'Avg Score (last 3 attempts)',
-    value: '78%',
-    trend: '+5pp vs prior 3',
-    icon: TrendingUp,
-    accent: 'text-emerald-600'
-  },
-  {
-    title: 'Papers Completed (this week)',
-    value: '3',
-    trend: 'Target: 4/week',
-    icon: CalendarRange,
-    accent: 'text-[#1d4ed8]'
-  },
-  {
-    title: 'Error Rate (last 7 days)',
-    value: '22%',
-    trend: 'Down 4pp vs prior week',
-    icon: AlertTriangle,
-    accent: 'text-amber-500'
-  },
-  {
-    title: 'Active Recommendations',
-    value: '2',
-    trend: 'Smart sets ready',
-    icon: Compass,
-    accent: 'text-fuchsia-600'
-  }
-] as const;
+type ChartPoint = {
+  x: number;
+  y: number;
+  label: string;
+  summary: string;
+};
 
-const PROGRESS_POINTS: ProgressPoint[] = [
-  { date: '2024-03-10', percent: 64, total: 48 },
-  { date: '2024-03-24', percent: 66, total: 51 },
-  { date: '2024-04-07', percent: 69, total: 55 },
-  { date: '2024-04-21', percent: 71, total: 57 },
-  { date: '2024-05-05', percent: 74, total: 59 },
-  { date: '2024-05-19', percent: 75, total: 60 },
-  { date: '2024-06-02', percent: 77, total: 62 },
-  { date: '2024-06-16', percent: 78, total: 63 },
-  { date: '2024-06-30', percent: 81, total: 65 },
-  { date: '2024-07-14', percent: 79, total: 64 },
-  { date: '2024-07-28', percent: 83, total: 68 }
-];
-
-const WEAK_LINKS: WeakLink[] = [
-  { subtopic: 'Applications of Derivative — Tangent Gradient', score: 48, delta: -6, attempts: 7 },
-  { subtopic: 'Integration — Area under Curve', score: 52, delta: +8, attempts: 6 },
-  { subtopic: 'Vectors — 3D Lines & Planes', score: 55, delta: +3, attempts: 5 }
-];
-
-const KNOWLEDGE_CHAINS: KnowledgeChain[] = [
+const KNOWLEDGE_CHAIN_TEMPLATE: KnowledgeChain[] = [
   {
     chapter: 'Differentiation',
     summary: 'Tangent gradient chain needs reinforcement before moving to optimisation questions.',
@@ -187,59 +135,121 @@ const KNOWLEDGE_CHAINS: KnowledgeChain[] = [
   }
 ];
 
-const WEEKLY_RECOMMENDATIONS: RecommendationCard[] = [
-  {
-    id: 'rec-001',
-    weekStart: '2025-11-03',
-    title: 'Smart Revision Set — Week of 2025-11-03',
-    subtopics: [
-      'Differentiation: Tangent Gradient',
-      'Integration: Area Under Curve',
-      'Vectors: Lines & Planes'
-    ],
-    questionCount: 14,
-    estimatedTime: 85,
-    description:
-      'Five question core + two composite problems linking differentiation and vectors. Focus on algebra discipline when moving between coordinate systems.',
-    carriesForward: false
-  },
-  {
-    id: 'rec-002',
-    weekStart: '2025-10-27',
-    title: 'Recovery Set — Week of 2025-10-27',
-    subtopics: ['Probability Distribution: Discrete', 'Functions: Composition Checks'],
-    questionCount: 9,
-    estimatedTime: 60,
-    description:
-      'Kept from last week because there were no new paper uploads. Finish this before regenerating fresh sets.',
-    carriesForward: true
-  }
-];
-
 const STATUS_STYLES: Record<ChainNodeStatus, string> = {
   strong: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   warning: 'border-amber-200 bg-amber-50 text-amber-700',
   critical: 'border-rose-200 bg-rose-50 text-rose-700'
 };
 
+const NODE_CATEGORY_MAP: Record<string, string> = {
+  functions: 'Functions',
+  differentiation: 'Differentiation',
+  applications: 'Applications of Derivative',
+  'anti-derivatives': 'Integration Basics',
+  substitution: 'Integration by Substitution',
+  area: 'Area Under Curve'
+};
+
 export default function TrackerDashboardPage() {
   const [chartMode, setChartMode] = useState<ChartMode>('percent');
-  const [selectedChain, setSelectedChain] = useState(KNOWLEDGE_CHAINS[0].chapter);
-  const [activeNodeId, setActiveNodeId] = useState(KNOWLEDGE_CHAINS[0].nodes[0].id);
-
-  const chain = useMemo(
-    () => KNOWLEDGE_CHAINS.find((item) => item.chapter === selectedChain) ?? KNOWLEDGE_CHAINS[0],
-    [selectedChain]
+  const [results, setResults] = useState<ResultRecord[]>([]);
+  const [recommendations, setRecommendations] = useState<RecommendationSet[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedChain, setSelectedChain] = useState(
+    KNOWLEDGE_CHAIN_TEMPLATE[0]?.chapter ?? 'Differentiation'
+  );
+  const [activeNodeId, setActiveNodeId] = useState(
+    KNOWLEDGE_CHAIN_TEMPLATE[0]?.nodes[0]?.id ?? ''
   );
 
-  const activeNode = chain.nodes.find((node) => node.id === activeNodeId) ?? chain.nodes[0];
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [resultsResponse, recommendationsResponse] = await Promise.all([
+        fetch('/api/tracker/results', { cache: 'no-store' }),
+        fetch('/api/tracker/recommendations', { cache: 'no-store' })
+      ]);
 
-  const chart = useMemo(() => buildChart(chartMode), [chartMode]);
+      if (!resultsResponse.ok) {
+        const body = await resultsResponse.json().catch(() => ({}));
+        throw new Error(body.error ?? 'Failed to load results');
+      }
+      if (!recommendationsResponse.ok) {
+        const body = await recommendationsResponse.json().catch(() => ({}));
+        throw new Error(body.error ?? 'Failed to load recommendations');
+      }
+
+      const resultsJson = (await resultsResponse.json()) as { results?: ResultRecord[] };
+      const recommendationsJson = (await recommendationsResponse.json()) as {
+        recommendations?: RecommendationSet[];
+      };
+      setResults(resultsJson.results ?? []);
+      setRecommendations(recommendationsJson.recommendations ?? []);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const kpiSummary = useMemo(
+    () => buildKpis(results, recommendations),
+    [results, recommendations]
+  );
+  const chart = useMemo(() => buildChart(chartMode, results), [chartMode, results]);
+  const weakLinks = useMemo(() => deriveWeakLinks(results), [results]);
+  const knowledgeChains = useMemo(() => applyKnowledgeChains(results), [results]);
+
+  useEffect(() => {
+    if (knowledgeChains.length === 0) {
+      return;
+    }
+    if (!knowledgeChains.some((chain) => chain.chapter === selectedChain)) {
+      setSelectedChain(knowledgeChains[0].chapter);
+      setActiveNodeId(knowledgeChains[0].nodes[0]?.id ?? '');
+      return;
+    }
+    const chain = knowledgeChains.find((item) => item.chapter === selectedChain);
+    if (!chain) {
+      return;
+    }
+    if (!chain.nodes.some((node) => node.id === activeNodeId)) {
+      setActiveNodeId(chain.nodes[0]?.id ?? '');
+    }
+  }, [knowledgeChains, selectedChain, activeNodeId]);
+
+  const chain = knowledgeChains.find((item) => item.chapter === selectedChain) ?? knowledgeChains[0];
+  const activeNode =
+    chain?.nodes.find((node) => node.id === activeNodeId) ?? chain?.nodes[0] ?? null;
+
+  const activeRecommendations = useMemo(
+    () => recommendations.filter((rec) => rec.status === 'active'),
+    [recommendations]
+  );
 
   return (
     <div className="space-y-8">
+      {error && (
+        <div className="flex items-center justify-between rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <span>{error}</span>
+          <button
+            type="button"
+            className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm transition hover:text-rose-700"
+            onClick={() => loadData()}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {KPI_SUMMARY.map((card) => (
+        {kpiSummary.map((card) => (
           <article
             key={card.title}
             className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm"
@@ -247,7 +257,9 @@ export default function TrackerDashboardPage() {
             <card.icon className={cn('h-6 w-6', card.accent)} />
             <p className="mt-3 text-sm font-semibold text-slate-500">{card.title}</p>
             <p className="mt-2 text-3xl font-bold text-slate-900">{card.value}</p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-400">{card.trend}</p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+              {card.trend}
+            </p>
           </article>
         ))}
       </section>
@@ -270,29 +282,47 @@ export default function TrackerDashboardPage() {
           </header>
 
           <div className="mt-6 h-72 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
-              <defs>
-                <linearGradient id="trendFill" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="rgba(29, 78, 216, 0.25)" />
-                  <stop offset="100%" stopColor="rgba(29, 78, 216, 0)" />
-                </linearGradient>
-              </defs>
-              <path d={chart.areaPath} fill="url(#trendFill)" className="transition-all duration-300 ease-out" />
-              <path d={chart.linePath} fill="none" stroke="#1d4ed8" strokeWidth={2.5} className="transition-all duration-300 ease-out" />
-              {chart.points.map((point) => (
-                <g key={point.label}>
-                  <circle cx={point.x} cy={point.y} r={1.6} fill="#1d4ed8" />
-                </g>
-              ))}
-            </svg>
-            <div className="mt-4 grid grid-cols-3 gap-4 text-xs text-slate-500 sm:grid-cols-5">
-              {chart.points.map((point) => (
-                <div key={point.label}>
-                  <p className="font-semibold text-slate-600">{point.summary}</p>
-                  <p>{point.label}</p>
+            {chart.points.length === 0 ? (
+              <div className="flex h-full items-center justify-center text-sm text-slate-500">
+                {loading ? 'Loading trend...' : 'Add paper results to unlock progress trends.'}
+              </div>
+            ) : (
+              <>
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
+                  <defs>
+                    <linearGradient id="trendFill" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stopColor="rgba(29, 78, 216, 0.25)" />
+                      <stop offset="100%" stopColor="rgba(29, 78, 216, 0)" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d={chart.areaPath}
+                    fill="url(#trendFill)"
+                    className="transition-all duration-300 ease-out"
+                  />
+                  <path
+                    d={chart.linePath}
+                    fill="none"
+                    stroke="#1d4ed8"
+                    strokeWidth={2.5}
+                    className="transition-all duration-300 ease-out"
+                  />
+                  {chart.points.map((point) => (
+                    <g key={`${point.label}-${point.summary}`}>
+                      <circle cx={point.x} cy={point.y} r={1.6} fill="#1d4ed8" />
+                    </g>
+                  ))}
+                </svg>
+                <div className="mt-4 grid grid-cols-3 gap-4 text-xs text-slate-500 sm:grid-cols-5">
+                  {chart.points.map((point) => (
+                    <div key={`${point.label}-${point.summary}`}>
+                      <p className="font-semibold text-slate-600">{point.summary}</p>
+                      <p>{point.label}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         </article>
 
@@ -300,44 +330,50 @@ export default function TrackerDashboardPage() {
           <header className="flex items-start justify-between">
             <div>
               <h3 className="text-lg font-semibold text-slate-900">Weak Links (Top 3 Subtopics)</h3>
-              <p className="text-sm text-slate-500">Based on last 7 days (min 3 attempts)</p>
+              <p className="text-sm text-slate-500">Based on last 7 days (min 1 attempt)</p>
             </div>
           </header>
           <div className="mt-6 space-y-5">
-            {WEAK_LINKS.map((link) => (
-              <div key={link.subtopic} className="space-y-2">
-                <div className="flex items-center justify-between text-sm text-slate-600">
-                  <span className="font-semibold text-slate-700">{link.subtopic}</span>
-                  <span className={cn('font-semibold', link.delta >= 0 ? 'text-emerald-600' : 'text-rose-600')}>
-                    {link.delta >= 0 ? '+' : ''}
-                    {link.delta}pp vs prev
-                  </span>
+            {weakLinks.length === 0 ? (
+              <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+                {loading ? 'Scanning recent results...' : 'No weak links yet. Keep logging your papers to unlock targeted sets.'}
+              </p>
+            ) : (
+              weakLinks.map((link) => (
+                <div key={link.subtopic} className="space-y-2">
+                  <div className="flex items-center justify-between text-sm text-slate-600">
+                    <span className="font-semibold text-slate-700">{link.subtopic}</span>
+                    <span className={cn('font-semibold', link.delta >= 0 ? 'text-emerald-600' : 'text-rose-600')}>
+                      {link.delta >= 0 ? '+' : ''}
+                      {link.delta}pp vs prev
+                    </span>
+                  </div>
+                  <div className="h-3 w-full rounded-full bg-slate-100">
+                    <div
+                      style={{ width: `${Math.min(link.score, 100)}%` }}
+                      className={cn(
+                        'h-3 rounded-full transition-all',
+                        link.score < 50 ? 'bg-rose-400' : link.score < 70 ? 'bg-amber-400' : 'bg-emerald-400'
+                      )}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-slate-500">
+                    <span>
+                      Score: <span className="font-semibold text-slate-700">{link.score}%</span>
+                    </span>
+                    <span>{link.attempts} questions</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full rounded-full border-slate-300 bg-white text-sm font-semibold text-[#1d4ed8] hover:bg-slate-50"
+                  >
+                    Fix it
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="h-3 w-full rounded-full bg-slate-100">
-                  <div
-                    style={{ width: `${Math.min(link.score, 100)}%` }}
-                    className={cn(
-                      'h-3 rounded-full transition-all',
-                      link.score < 50 ? 'bg-rose-400' : link.score < 70 ? 'bg-amber-400' : 'bg-emerald-400'
-                    )}
-                  />
-                </div>
-                <div className="flex items-center justify-between text-xs text-slate-500">
-                  <span>
-                    Score: <span className="font-semibold text-slate-700">{link.score}%</span>
-                  </span>
-                  <span>{link.attempts} questions</span>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full rounded-full border-slate-300 bg-white text-sm font-semibold text-[#1d4ed8] hover:bg-slate-50"
-                >
-                  Fix it
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </article>
       </section>
@@ -347,20 +383,25 @@ export default function TrackerDashboardPage() {
           <header className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h3 className="text-lg font-semibold text-slate-900">Knowledge Link Chain View</h3>
-              <p className="text-sm text-slate-500">{chain.summary}</p>
+              <p className="text-sm text-slate-500">
+                {chain?.summary ?? 'Log results to unlock knowledge link insights.'}
+              </p>
             </div>
-            <Select value={selectedChain} onValueChange={(value) => {
-              setSelectedChain(value);
-              const fallback = KNOWLEDGE_CHAINS.find((item) => item.chapter === value);
-              if (fallback) {
-                setActiveNodeId(fallback.nodes[0].id);
-              }
-            }}>
+            <Select
+              value={selectedChain}
+              onValueChange={(value) => {
+                setSelectedChain(value);
+                const fallback = knowledgeChains.find((item) => item.chapter === value);
+                if (fallback) {
+                  setActiveNodeId(fallback.nodes[0]?.id ?? '');
+                }
+              }}
+            >
               <SelectTrigger className="w-64 rounded-full border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-700">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white text-slate-700">
-                {KNOWLEDGE_CHAINS.map((item) => (
+                {knowledgeChains.map((item) => (
                   <SelectItem key={item.chapter} value={item.chapter}>
                     {item.chapter}
                   </SelectItem>
@@ -370,7 +411,7 @@ export default function TrackerDashboardPage() {
           </header>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
-            {chain.nodes.map((node, index) => (
+            {chain?.nodes.map((node, index) => (
               <div key={node.id} className="flex items-center gap-4">
                 <button
                   type="button"
@@ -382,50 +423,60 @@ export default function TrackerDashboardPage() {
                   )}
                 >
                   <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                    {node.status === 'strong' ? '✅ Strong' : node.status === 'warning' ? '⚠️ Needs attention' : '❌ Critical'}
+                    {node.status === 'strong'
+                      ? '✅ Strong'
+                      : node.status === 'warning'
+                        ? '⚠️ Needs attention'
+                        : '❌ Critical'}
                   </span>
                   <span className="mt-1 text-sm font-semibold text-slate-800">{node.label}</span>
                   <span className="mt-2 inline-flex items-center rounded-full bg-white/60 px-2 py-1 text-xs font-semibold text-slate-600">
                     Score {node.score}%
                   </span>
                 </button>
-                {index < chain.nodes.length - 1 && (
+                {index < (chain?.nodes.length ?? 0) - 1 && (
                   <ChevronRight className="hidden h-6 w-6 text-slate-400 md:block" />
                 )}
               </div>
             ))}
           </div>
 
-          <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-            <div className="flex items-center gap-3 text-sm font-semibold text-slate-600">
-              <BrainCircuit className="h-5 w-5 text-[#1d4ed8]" />
-              {activeNode.label}
+          {activeNode ? (
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+              <div className="flex items-center gap-3 text-sm font-semibold text-slate-600">
+                <BrainCircuit className="h-5 w-5 text-[#1d4ed8]" />
+                {activeNode.label}
+              </div>
+              <dl className="mt-4 space-y-3 text-sm text-slate-600">
+                <div>
+                  <dt className="font-semibold text-slate-700">Definition</dt>
+                  <dd>{activeNode.definition}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-700">Common mistakes</dt>
+                  <dd>{activeNode.mistakes}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-700">Linked practice set</dt>
+                  <dd className="flex items-center gap-2">
+                    {activeNode.practiceSet}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-full border-[#1d4ed8] bg-white text-xs font-semibold text-[#1d4ed8] hover:bg-[#1d4ed8]/10"
+                    >
+                      View set
+                      <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                    </Button>
+                  </dd>
+                </div>
+              </dl>
             </div>
-            <dl className="mt-4 space-y-3 text-sm text-slate-600">
-              <div>
-                <dt className="font-semibold text-slate-700">Definition</dt>
-                <dd>{activeNode.definition}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-700">Common mistakes</dt>
-                <dd>{activeNode.mistakes}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-700">Linked practice set</dt>
-                <dd className="flex items-center gap-2">
-                  {activeNode.practiceSet}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-full border-[#1d4ed8] bg-white text-xs font-semibold text-[#1d4ed8] hover:bg-[#1d4ed8]/10"
-                  >
-                    View set
-                    <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                  </Button>
-                </dd>
-              </div>
-            </dl>
-          </div>
+          ) : (
+            <div className="mt-6 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
+              Log more papers to see targeted knowledge chain insights.
+            </div>
+          )}
         </article>
 
         <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -437,66 +488,81 @@ export default function TrackerDashboardPage() {
             <Button
               type="button"
               variant="outline"
-              className="rounded-full border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              disabled={loading}
+              className="rounded-full border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => loadData()}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Refresh
+              {loading ? 'Refreshing...' : 'Refresh'}
             </Button>
           </header>
 
           <div className="mt-6 space-y-5">
-            {WEEKLY_RECOMMENDATIONS.map((card) => (
-              <div key={card.id} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      Week of {card.weekStart}
-                    </p>
-                    <h4 className="text-lg font-semibold text-slate-900">{card.title}</h4>
+            {activeRecommendations.length === 0 ? (
+              <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500">
+                {loading
+                  ? 'Looking up your recommendation sets...'
+                  : 'Upload a paper this week to get a fresh Smart Revision Set.'}
+              </p>
+            ) : (
+              activeRecommendations
+                .sort(
+                  (a, b) =>
+                    new Date(b.week_start).getTime() - new Date(a.week_start).getTime()
+                )
+                .map((card) => (
+                  <div key={card.id} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                          Week of {card.week_start}
+                        </p>
+                        <h4 className="text-lg font-semibold text-slate-900">{card.title}</h4>
+                      </div>
+                      <span
+                        className={cn(
+                          'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
+                          card.status === 'active' && card.carries_forward
+                            ? 'border border-amber-200 bg-amber-50 text-amber-600'
+                            : 'border border-emerald-200 bg-emerald-50 text-emerald-600'
+                        )}
+                      >
+                        {card.carries_forward ? 'Carried forward' : 'New this week'}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-sm text-slate-600">{card.description}</p>
+                    <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
+                      <span className="rounded-full bg-white px-3 py-1 text-slate-600">
+                        {card.question_ids.length} questions
+                      </span>
+                      <span className="rounded-full bg-white px-3 py-1 text-slate-600">
+                        ~{card.estimated_time_min} minutes
+                      </span>
+                      {card.subtopics.map((chip) => (
+                        <span key={chip} className="rounded-full bg-white px-3 py-1 text-slate-600">
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Button
+                        type="button"
+                        className="rounded-full bg-[#1d4ed8] px-5 text-sm font-semibold text-white shadow hover:bg-[#1e40af]"
+                      >
+                        <Play className="mr-2 h-4 w-4" />
+                        Start Practice
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="rounded-full border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                      >
+                        View details
+                      </Button>
+                    </div>
                   </div>
-                  <span
-                    className={cn(
-                      'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold',
-                      card.carriesForward
-                        ? 'border border-amber-200 bg-amber-50 text-amber-600'
-                        : 'border border-emerald-200 bg-emerald-50 text-emerald-600'
-                    )}
-                  >
-                    {card.carriesForward ? 'Carried forward' : 'New this week'}
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-slate-600">{card.description}</p>
-                <div className="mt-4 flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
-                  <span className="rounded-full bg-white px-3 py-1 text-slate-600">
-                    {card.questionCount} questions
-                  </span>
-                  <span className="rounded-full bg-white px-3 py-1 text-slate-600">
-                    ~{card.estimatedTime} minutes
-                  </span>
-                  {card.subtopics.map((chip) => (
-                    <span key={chip} className="rounded-full bg-white px-3 py-1 text-slate-600">
-                      {chip}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <Button
-                    type="button"
-                    className="rounded-full bg-[#1d4ed8] px-5 text-sm font-semibold text-white shadow hover:bg-[#1e40af]"
-                  >
-                    <Play className="mr-2 h-4 w-4" />
-                    Start Practice
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-full border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-100"
-                  >
-                    View details
-                  </Button>
-                </div>
-              </div>
-            ))}
+                ))
+            )}
           </div>
         </article>
       </section>
@@ -519,24 +585,88 @@ export default function TrackerDashboardPage() {
   );
 }
 
-function buildChart(mode: ChartMode) {
-  const values = PROGRESS_POINTS.map((point) => (mode === 'percent' ? point.percent : point.total));
+function buildKpis(results: ResultRecord[], recommendations: RecommendationSet[]): KpiCard[] {
+  const sorted = [...results].sort(
+    (a, b) => new Date(b.date_done).getTime() - new Date(a.date_done).getTime()
+  );
+  const lastThree = sorted.slice(0, 3);
+  const previousThree = sorted.slice(3, 6);
+  const avgRecent = averagePercent(lastThree);
+  const avgPrevious = averagePercent(previousThree);
+  const deltaRecent = avgRecent !== null && avgPrevious !== null ? avgRecent - avgPrevious : null;
+
+  const lastSeven = filterByDays(sorted, 7);
+  const priorSeven = filterByDays(sorted, 14, 7);
+  const avgSeven = averagePercent(lastSeven);
+  const avgPriorSeven = averagePercent(priorSeven);
+  const errorRate = avgSeven === null ? null : Math.max(0, 100 - avgSeven);
+  const errorDelta =
+    errorRate !== null && avgPriorSeven !== null
+      ? errorRate - Math.max(0, 100 - avgPriorSeven)
+      : null;
+
+  const papersThisWeek = countWithinDays(sorted, 7);
+  const activeRecommendationCount = recommendations.filter((rec) => rec.status === 'active').length;
+
+  return [
+    {
+      title: 'Avg Score (last 3 attempts)',
+      value: formatPercent(avgRecent),
+      trend:
+        deltaRecent === null ? 'Log 3 attempts to unlock trend' : formatDelta(deltaRecent, 'vs prior 3'),
+      icon: TrendingUp,
+      accent: 'text-emerald-600'
+    },
+    {
+      title: 'Papers Completed (this week)',
+      value: `${papersThisWeek}`,
+      trend: 'Target: 4/week',
+      icon: CalendarRange,
+      accent: 'text-[#1d4ed8]'
+    },
+    {
+      title: 'Error Rate (last 7 days)',
+      value: formatPercent(errorRate),
+      trend:
+        errorDelta === null
+          ? 'Log attempts this week to unlock trend'
+          : formatDelta(-errorDelta, 'vs prior week'),
+      icon: AlertTriangle,
+      accent: 'text-amber-500'
+    },
+    {
+      title: 'Active Recommendations',
+      value: `${activeRecommendationCount}`,
+      trend:
+        activeRecommendationCount > 0
+          ? 'Smart sets ready'
+          : 'Upload a paper to generate sets',
+      icon: Compass,
+      accent: 'text-fuchsia-600'
+    }
+  ];
+}
+
+function buildChart(mode: ChartMode, results: ResultRecord[]) {
+  const grouped = groupResultsByDay(results, 90);
+  if (grouped.length === 0) {
+    return { linePath: '', areaPath: '', points: [] as ChartPoint[] };
+  }
+
+  const values = grouped.map((point) => (mode === 'percent' ? point.percent : point.total));
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
   const range = maxValue - minValue || 1;
 
-  const points = PROGRESS_POINTS.map((point, index) => {
-    const x = (index / (PROGRESS_POINTS.length - 1)) * 100;
+  const points: ChartPoint[] = grouped.map((point, index, array) => {
+    const x = array.length === 1 ? 50 : (index / (array.length - 1)) * 100;
     const value = mode === 'percent' ? point.percent : point.total;
-    const y = 100 - ((value - minValue) / range) * 80 - 10; // keep padding
+    const y = 100 - ((value - minValue) / range) * 80 - 10;
     return {
       x,
       y,
-      label: new Date(point.date).toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric'
-      }),
-      summary: mode === 'percent' ? `${value}%` : `${value} marks`
+      label: formatShortDate(point.date),
+      summary: mode === 'percent' ? `${Math.round(value)}%` : `${Math.round(value)} marks`
     };
   });
 
@@ -548,7 +678,228 @@ function buildChart(mode: ChartMode) {
   return { linePath, areaPath, points };
 }
 
-function TogglePill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function deriveWeakLinks(results: ResultRecord[]): WeakLink[] {
+  const windowStart = subtractDays(new Date(), 7);
+  const aggregates = new Map<
+    string,
+    { scoreSum: number; maxSum: number; attempts: number; label: string }
+  >();
+
+  results.forEach((result) => {
+    const resultDate = new Date(result.date_done);
+    if (resultDate < windowStart) {
+      return;
+    }
+    result.by_question.forEach((question) => {
+      const key = `${result.paper_no}-${question.section}-${question.q_no}`;
+      const label = `Section ${question.section} — Q${question.q_no}`;
+      const entry = aggregates.get(key) ?? { scoreSum: 0, maxSum: 0, attempts: 0, label };
+      const score = typeof question.score === 'number' ? question.score : 0;
+      entry.scoreSum += score;
+      entry.maxSum += question.max_score;
+      entry.attempts += question.score === null ? 0 : 1;
+      aggregates.set(key, entry);
+    });
+  });
+
+  return Array.from(aggregates.values())
+    .filter((entry) => entry.attempts > 0 && entry.maxSum > 0)
+    .map((entry) => ({
+      subtopic: entry.label,
+      score: Math.round((entry.scoreSum / entry.maxSum) * 100),
+      delta: 0,
+      attempts: entry.attempts
+    }))
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+}
+
+function applyKnowledgeChains(results: ResultRecord[]): KnowledgeChain[] {
+  const categoryScores = computeCategoryScores(results);
+  return KNOWLEDGE_CHAIN_TEMPLATE.map((chain) => ({
+    ...chain,
+    nodes: chain.nodes.map((node) => {
+      const categoryKey = NODE_CATEGORY_MAP[node.id];
+      if (!categoryKey) {
+        return node;
+      }
+      const aggregate = categoryScores.get(categoryKey);
+      if (!aggregate || aggregate.maxSum === 0) {
+        return {
+          ...node,
+          score: 0,
+          status: 'warning'
+        };
+      }
+      const score = Math.round((aggregate.scoreSum / aggregate.maxSum) * 100);
+      return {
+        ...node,
+        score,
+        status: deriveStatus(score)
+      };
+    })
+  }));
+}
+
+function computeCategoryScores(results: ResultRecord[]) {
+  const fourteenDaysAgo = subtractDays(new Date(), 14);
+  const map = new Map<string, { scoreSum: number; maxSum: number }>();
+
+  results.forEach((result) => {
+    if (new Date(result.date_done) < fourteenDaysAgo) {
+      return;
+    }
+    result.by_question.forEach((question) => {
+      const category = mapQuestionToCategory(result.paper_no, question.section, question.q_no);
+      if (!category) {
+        return;
+      }
+      const entry = map.get(category) ?? { scoreSum: 0, maxSum: 0 };
+      const score = typeof question.score === 'number' ? question.score : 0;
+      entry.scoreSum += score;
+      entry.maxSum += question.max_score;
+      map.set(category, entry);
+    });
+  });
+
+  return map;
+}
+
+function mapQuestionToCategory(paper: string, section: string, questionNumber: number) {
+  if (paper === 'P1') {
+    if (section === 'A') {
+      if (questionNumber <= 5) {
+        return 'Functions';
+      }
+      if (questionNumber <= 10) {
+        return 'Differentiation';
+      }
+      return 'Applications of Derivative';
+    }
+    return 'Applications of Derivative';
+  }
+
+  if (paper === 'P2') {
+    if (section === 'A') {
+      return questionNumber <= 4 ? 'Integration Basics' : 'Integration by Substitution';
+    }
+    return 'Area Under Curve';
+  }
+
+  return null;
+}
+
+function deriveStatus(score: number): ChainNodeStatus {
+  if (score >= 70) {
+    return 'strong';
+  }
+  if (score >= 50) {
+    return 'warning';
+  }
+  return 'critical';
+}
+
+function averagePercent(records: ResultRecord[]): number | null {
+  if (records.length === 0) {
+    return null;
+  }
+  const totals = records.reduce(
+    (acc, record) => {
+      return {
+        score: acc.score + record.total_score,
+        max: acc.max + record.total_max
+      };
+    },
+    { score: 0, max: 0 }
+  );
+  if (totals.max === 0) {
+    return null;
+  }
+  return Math.round((totals.score / totals.max) * 100);
+}
+
+function filterByDays(records: ResultRecord[], days: number, offset = 0) {
+  const end = subtractDays(new Date(), offset);
+  const start = subtractDays(end, days);
+  return records.filter((record) => {
+    const date = new Date(record.date_done);
+    return date >= start && date < end;
+  });
+}
+
+function countWithinDays(records: ResultRecord[], days: number) {
+  const start = subtractDays(new Date(), days);
+  return records.filter((record) => new Date(record.date_done) >= start).length;
+}
+
+function groupResultsByDay(results: ResultRecord[], daysBack: number) {
+  const cutoff = subtractDays(new Date(), daysBack);
+  const grouped = new Map<
+    string,
+    { scoreSum: number; maxSum: number; totalSum: number; attempts: number }
+  >();
+
+  results.forEach((result) => {
+    const date = new Date(result.date_done);
+    if (date < cutoff) {
+      return;
+    }
+    const key = date.toISOString().slice(0, 10);
+    const entry = grouped.get(key) ?? { scoreSum: 0, maxSum: 0, totalSum: 0, attempts: 0 };
+    entry.scoreSum += result.total_score;
+    entry.maxSum += result.total_max;
+    entry.totalSum += result.total_score;
+    entry.attempts += 1;
+    grouped.set(key, entry);
+  });
+
+  return Array.from(grouped.entries())
+    .map(([date, value]) => ({
+      date,
+      percent: value.maxSum === 0 ? 0 : (value.scoreSum / value.maxSum) * 100,
+      total: value.attempts === 0 ? 0 : value.totalSum / value.attempts
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(-12);
+}
+
+function formatPercent(value: number | null) {
+  if (value === null || Number.isNaN(value)) {
+    return '—';
+  }
+  return `${Math.round(value)}%`;
+}
+
+function formatDelta(value: number, suffix: string) {
+  const rounded = Math.round(value);
+  const sign = rounded > 0 ? '+' : '';
+  return `${sign}${rounded}pp ${suffix}`;
+}
+
+function formatShortDate(value: string) {
+  const date = new Date(value);
+  return date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+function subtractDays(date: Date, days: number) {
+  const next = new Date(date);
+  next.setDate(next.getDate() - days);
+  next.setHours(0, 0, 0, 0);
+  return next;
+}
+
+function TogglePill({
+  active,
+  onClick,
+  children
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"

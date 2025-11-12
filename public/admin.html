@@ -1,0 +1,3094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Admin Console</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-muted: #dbeafe;
+      --border: #e5e7eb;
+      --text: #0f172a;
+      --muted: #475569;
+      --danger: #b91c1c;
+      --warning: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-bottom: 2rem;
+    }
+
+    header {
+      background: #0f172a;
+      color: #fff;
+      padding: 1.5rem clamp(1rem, 3vw, 3rem);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw, 2.5rem);
+    }
+
+    header p {
+      margin: 0.25rem 0 0;
+      color: rgba(255,255,255,0.8);
+      max-width: 780px;
+      line-height: 1.5;
+    }
+
+    main {
+      padding-inline: clamp(1rem, 3vw, 3rem);
+      flex: 1;
+    }
+
+    .toolbar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+      box-shadow: 0 15px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-width: 160px;
+      flex: 1;
+    }
+
+    .toolbar label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .toolbar input,
+    .toolbar select,
+    .toolbar textarea {
+      width: 100%;
+      border-radius: 0.65rem;
+      border: 1px solid var(--border);
+      padding: 0.65rem 0.75rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border 160ms ease, box-shadow 160ms ease;
+      background: #fff;
+    }
+
+    .toolbar input:focus,
+    .toolbar select:focus,
+    .toolbar textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px var(--accent-muted);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 0.65rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.65rem 1.1rem;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 12px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    button.secondary {
+      background: var(--accent-muted);
+      color: var(--accent);
+    }
+
+    button.danger {
+      background: rgba(185, 28, 28, 0.1);
+      color: var(--danger);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .stats-bar {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-inline: clamp(1rem, 3vw, 3rem);
+    }
+
+    .stat-pill {
+      background: var(--card-bg);
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .workspace {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(240px, 320px) 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .question-sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 25px rgba(15, 23, 42, 0.08);
+      max-height: calc(100vh - 260px);
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .sidebar-header {
+      padding: 0.5rem 0.75rem 0.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .sidebar-header p {
+      margin: 0.35rem 0 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .question-sidebar-list {
+      flex: 1;
+      overflow: auto;
+      padding: 0.35rem 0.25rem 0.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .question-list-item {
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      padding: 0.65rem 0.75rem;
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: border 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      position: relative;
+    }
+
+    .question-list-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+    }
+
+    .question-list-item.edited::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--warning);
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2);
+    }
+
+    .question-list-item__title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .question-list-item__meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .question-list-item__tags {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .question-detail {
+      min-height: 480px;
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      border-radius: 1.25rem;
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 18px 25px rgba(15, 23, 42, 0.08);
+      position: relative;
+    }
+
+    .question-card.edited::after {
+      content: 'Edited';
+      position: absolute;
+      top: 1.1rem;
+      right: 1.25rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--warning);
+      font-weight: 700;
+    }
+
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 999px;
+      background: var(--accent-muted);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.65rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.15rem;
+      font-weight: 600;
+    }
+
+    .image-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .image-panel figure {
+      margin: 0;
+      border: 1px dashed var(--border);
+      border-radius: 0.9rem;
+      padding: 0.5rem;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .image-panel figcaption {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .image-panel img {
+      width: 100%;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      object-fit: contain;
+      max-height: 320px;
+      background: #fff;
+    }
+
+    .editor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .editor-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    .editor-wide-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .editor-wide-row .editor-field {
+      flex: 1 1 min(360px, 100%);
+    }
+
+    .editor-field.wide {
+      flex: 1 1 min(360px, 100%);
+    }
+
+    .editor-field label {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .editor-field input,
+    .editor-field select,
+    .editor-field textarea {
+      border-radius: 0.65rem;
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.7rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 42px;
+      background: #fff;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .empty-state {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .error-banner {
+      margin-top: 1rem;
+      background: rgba(185, 28, 28, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(185, 28, 28, 0.3);
+      border-radius: 0.85rem;
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+    }
+
+    .detail-placeholder {
+      background: var(--card-bg);
+      border: 1px dashed var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .multi-select {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.5rem 0.6rem 0.6rem;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-height: 64px;
+    }
+
+    .multi-select__toggle {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0;
+      cursor: pointer;
+    }
+
+    .multi-select__toggle span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .multi-select__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      min-height: 30px;
+    }
+
+    .multi-select__chip {
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: var(--accent-muted);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .multi-select__chip.empty {
+      background: #f1f5f9;
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .multi-select__panel {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      z-index: 10;
+      width: min(420px, 95vw);
+      max-height: 360px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      background: #fff;
+      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.18);
+      padding: 0.75rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease;
+    }
+
+    .multi-select.open .multi-select__panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .multi-select__panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+    }
+
+    .multi-select__search {
+      width: 100%;
+      border-radius: 0.65rem;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.65rem;
+      font-size: 0.9rem;
+      background: #f8fafc;
+    }
+
+    .multi-select__group {
+      margin-bottom: 0.65rem;
+    }
+
+    .multi-select__group-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin: 0.4rem 0;
+    }
+
+    .multi-select__option {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.35rem;
+      border-radius: 0.65rem;
+      transition: background 120ms ease;
+      cursor: pointer;
+    }
+
+    .multi-select__option:hover {
+      background: var(--accent-muted);
+    }
+
+    .multi-select__option input {
+      margin-top: 0.2rem;
+    }
+
+    .multi-select__option-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .multi-select__option-text strong {
+      font-size: 0.85rem;
+      color: var(--text);
+      text-transform: none;
+    }
+
+    .multi-select__option-text small {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .multi-select__chapter-title {
+      margin: 0.6rem 0 0.35rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .multi-select__section-block {
+      margin-bottom: 0.5rem;
+      padding-left: 0.35rem;
+    }
+
+    .multi-select__section-heading {
+      margin: 0.25rem 0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .multi-select__empty {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 0.5rem;
+    }
+
+    .multi-select__hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin: 0.25rem 0 0;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .view-tabs {
+      display: inline-flex;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .tab-button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: #fff;
+      opacity: 0.75;
+      transition: background 120ms ease, opacity 120ms ease;
+    }
+
+    .tab-button.active {
+      background: rgba(255,255,255,0.2);
+      opacity: 1;
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .workspace.view-panel.active {
+      display: grid;
+    }
+
+    .dashboard.view-panel.active {
+      display: block;
+    }
+
+    .dashboard {
+      margin-top: 1.5rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+
+    .dashboard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 12px 24px rgba(15,23,42,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .dashboard-card header h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .dashboard-card header p {
+      margin: 0.15rem 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .dashboard-card table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .dashboard-card th,
+    .dashboard-card td {
+      text-align: left;
+      padding: 0.4rem 0.35rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dashboard-card tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dashboard-card th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .dashboard-card td.muted {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .positive {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .negative {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .chart-area {
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .part-chart {
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .part-chart__legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      justify-content: center;
+    }
+
+    .part-chart__legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .part-chart__legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    .heatmap-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.85rem;
+    }
+
+    .heatmap-table th,
+    .heatmap-table td {
+      padding: 0.35rem 0.4rem;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .heatmap-table th {
+      background: #f8fafc;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .heatmap-table td button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 0.4rem;
+      border-radius: 0.35rem;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .heatmap-table td button:hover {
+      opacity: 0.85;
+    }
+
+    .sidebar-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .toolbar-group {
+        width: 100%;
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .question-sidebar {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <div>
+        <h1>Question Tagging Console</h1>
+        <p>Review every question, inspect both the prompt and solution images, and capture rich tagging metadata (subject, exam details, marks, skills, difficulty, and response stats). All edits stay in-browser until you export the updated JSON.</p>
+      </div>
+      <div class="view-tabs">
+        <button id="tabTagging" class="tab-button active">Tagging</button>
+        <button id="tabDashboard" class="tab-button">Dashboard</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="toolbar">
+      <div class="toolbar-group">
+        <label for="searchInput">Search (state, year, question #, keywords)</label>
+        <input id="searchInput" type="search" placeholder="e.g. Kedah 2025 differentiation">
+      </div>
+      <div class="toolbar-group">
+        <label for="subjectFilter">Subject</label>
+        <select id="subjectFilter">
+          <option value="all">All subjects</option>
+          <option value="Add Math">Add Math</option>
+          <option value="Math">Math</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label for="stateFilter">State</label>
+        <select id="stateFilter">
+          <option value="all">All states</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label for="partFilter">Part</label>
+        <select id="partFilter">
+          <option value="all">All parts</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label for="yearFilter">Year</label>
+        <select id="yearFilter">
+          <option value="all">All years</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label for="chapterFilter">Chapter</label>
+        <select id="chapterFilter">
+          <option value="all">All chapters</option>
+        </select>
+      </div>
+      <div class="toolbar-group">
+        <label for="editedOnly">Filter</label>
+        <select id="editedOnly">
+          <option value="all">Show everything</option>
+          <option value="edited">Edited only</option>
+          <option value="unedited">Without edits</option>
+        </select>
+      </div>
+      <div class="toolbar-actions">
+        <button id="saveBtn" class="primary" disabled>Save Changes</button>
+        <button id="downloadBtn" class="secondary" disabled>Download Updated JSON</button>
+        <button id="clearAllBtn" class="danger" disabled>Clear All Edits</button>
+      </div>
+    </section>
+
+    <div class="stats-bar">
+      <div class="stat-pill">Total questions: <strong id="statTotal">0</strong></div>
+      <div class="stat-pill">Visible now: <strong id="statFiltered">0</strong></div>
+      <div class="stat-pill">Questions edited: <strong id="statEdited">0</strong></div>
+    </div>
+
+    <div id="errorBanner" class="error-banner" style="display:none;"></div>
+
+    <section id="taggingView" class="workspace view-panel active">
+      <aside class="question-sidebar" id="questionSidebar">
+        <div class="sidebar-header">
+          <h2>Questions</h2>
+          <p>Click a question on the left to edit full metadata on the right.</p>
+        </div>
+        <div class="question-sidebar-list" id="questionSidebarList"></div>
+      </aside>
+      <section id="questionDetail" class="question-detail"></section>
+    </section>
+    <p id="emptyState" class="empty-state" style="display:none;">No questions match your current filters.</p>
+
+    <section id="dashboardView" class="dashboard view-panel">
+      <div class="dashboard-grid">
+        <article class="dashboard-card">
+          <header>
+            <h2>Chapter Coverage</h2>
+            <p>Questions and marks by chapter for the current filters.</p>
+          </header>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Chapter</th>
+                  <th>Questions</th>
+                  <th>Total marks</th>
+                  <th>Avg marks</th>
+                </tr>
+              </thead>
+              <tbody id="chapterTableBody">
+                <tr><td colspan="4" class="muted">Adjust filters to see data.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="dashboard-card">
+          <header>
+            <h2>Paper Breakdown</h2>
+            <p>Distribution of questions and marks by paper part.</p>
+          </header>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Paper</th>
+                  <th>Part</th>
+                  <th>Questions</th>
+                  <th>Marks</th>
+                </tr>
+              </thead>
+              <tbody id="partTableBody">
+                <tr><td colspan="4" class="muted">Adjust filters to see data.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="dashboard-card">
+          <header>
+            <h2>Chapter vs State</h2>
+            <p>Heatmap showing how chapters appear across states.</p>
+          </header>
+          <div id="chapterStateHeatmap" class="table-scroll heatmap-table-container">
+            <p class="muted">Adjust filters to see data.</p>
+          </div>
+        </article>
+        <article class="dashboard-card">
+          <header>
+            <h2>Part vs Chapter</h2>
+            <p>Compare which chapters appear in each paper part.</p>
+          </header>
+          <div id="partChapterChart" class="chart-area">
+            <p class="muted">Adjust filters to see data.</p>
+          </div>
+        </article>
+        <article class="dashboard-card">
+          <header>
+            <h2>Trend Highlights</h2>
+            <p>Top chapters in the latest year vs the previous year.</p>
+          </header>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Chapter</th>
+                  <th id="trendYearHeader">Latest</th>
+                  <th>Δ vs prev</th>
+                </tr>
+              </thead>
+              <tbody id="trendTableBody">
+                <tr><td colspan="3" class="muted">Adjust filters to see data.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const STATE_OPTIONS = [
+        'Johor',
+        'Kedah',
+        'Kelantan',
+        'Melaka',
+        'Negeri Sembilan',
+        'Pahang',
+        'Perak',
+        'Perlis',
+        'Penang',
+        'Sabah',
+        'Sarawak',
+        'Selangor',
+        'Terengganu',
+        'Kuala Lumpur',
+        'Labuan',
+        'Putrajaya',
+        'SBP'
+      ];
+      const PART_OPTIONS = ['Part A', 'Part B', 'Part C'];
+      const YEAR_OPTIONS = [2021, 2022, 2023, 2024, 2025];
+      const RAW_CHAPTER_CATALOG = [
+        { stage: 'Form 4', label: 'Form 4 Chapter 1 - Functions' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 2 - Quadratic Functions' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 3 - Systems of Equations', slug: 'System of Equations' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 4 - Indices, Surds and Logarithms' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 5 - Progressions' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 6 - Linear Law' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 7 - Coordinate Geometry' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 8 - Vectors' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 9 - Solution of Triangles' },
+        { stage: 'Form 4', label: 'Form 4 Chapter 10 - Index Numbers' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 1 - Circular Measure' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 2 - Differentiation' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 3 - Integration' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 4 - Permutation and Combination' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 5 - Probability Distribution' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 6 - Trigonometric Functions' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 7 - Linear Programming' },
+        { stage: 'Form 5', label: 'Form 5 Chapter 8 - Kinematics of Linear Motion' }
+      ];
+      const CHAPTER_CATALOG = RAW_CHAPTER_CATALOG.map(entry => {
+        const normalized = slugify(entry.slug || entry.label);
+        const labelSlug = slugify(entry.label);
+        return { ...entry, normalized, labelSlug };
+      });
+      const CHAPTER_CATALOG_MAP = new Map(CHAPTER_CATALOG.map(entry => [entry.normalized, entry]));
+      const CHAPTER_LABEL_MAP = new Map(CHAPTER_CATALOG.map(entry => [entry.labelSlug, entry]));
+
+      const state = {
+        questions: [],
+        filtered: [],
+        edits: {},
+        selectedId: null,
+        learningStandards: [],
+        learningStandardMap: {},
+        chapterLabelOverrides: {},
+        isSaving: false,
+        filters: {
+          search: '',
+          subject: 'all',
+          state: 'all',
+          part: 'all',
+          year: 'all',
+          chapter: 'all',
+          editedOnly: 'all'
+        },
+        activeView: 'tagging'
+      };
+
+      const refs = {
+        searchInput: document.getElementById('searchInput'),
+        subjectFilter: document.getElementById('subjectFilter'),
+        stateFilter: document.getElementById('stateFilter'),
+        partFilter: document.getElementById('partFilter'),
+        yearFilter: document.getElementById('yearFilter'),
+        chapterFilter: document.getElementById('chapterFilter'),
+        editedOnly: document.getElementById('editedOnly'),
+        questionSidebarList: document.getElementById('questionSidebarList'),
+        questionDetail: document.getElementById('questionDetail'),
+        emptyState: document.getElementById('emptyState'),
+        statTotal: document.getElementById('statTotal'),
+        statFiltered: document.getElementById('statFiltered'),
+        statEdited: document.getElementById('statEdited'),
+        saveBtn: document.getElementById('saveBtn'),
+        downloadBtn: document.getElementById('downloadBtn'),
+        clearAllBtn: document.getElementById('clearAllBtn'),
+        errorBanner: document.getElementById('errorBanner'),
+        tabTagging: document.getElementById('tabTagging'),
+        tabDashboard: document.getElementById('tabDashboard'),
+        taggingView: document.getElementById('taggingView'),
+        dashboardView: document.getElementById('dashboardView'),
+        chapterTableBody: document.getElementById('chapterTableBody'),
+        partTableBody: document.getElementById('partTableBody'),
+        partChapterChart: document.getElementById('partChapterChart'),
+        trendTableBody: document.getElementById('trendTableBody'),
+        trendYearHeader: document.getElementById('trendYearHeader')
+      };
+
+      const numericFields = new Set(['year', 'question_number', 'marks']);
+      const editableFields = [
+        { key: 'subject', label: 'Subject', type: 'select', options: ['', 'Add Math', 'Math'] },
+        { key: 'state', label: 'State', type: 'select', options: ['', ...STATE_OPTIONS] },
+        { key: 'exam_type', label: 'Exam', type: 'text', placeholder: 'e.g. SPM' },
+        { key: 'year', label: 'Year', type: 'select', options: ['', ...YEAR_OPTIONS.map(String)] },
+        { key: 'paper_code', label: 'Paper (1/2)', type: 'text', placeholder: 'Paper 1' },
+        { key: 'section', label: 'Part (A/B/C)', type: 'select', options: ['', ...PART_OPTIONS] },
+        { key: 'question_number', label: 'Question #', type: 'number', min: 1 },
+        { key: 'marks', label: 'Marks', type: 'number', min: 0 },
+        { key: 'difficulty', label: 'Difficulty', type: 'select', options: ['', 'Easy', 'Medium', 'Hard'] },
+        { key: 'common_mistakes', label: 'Common Mistakes', type: 'textarea', rows: 3, placeholder: 'Summarize misconceptions' },
+        { key: 'response_data', label: 'Response Data Stats', type: 'textarea', rows: 3, placeholder: 'e.g. Correct 67%, Skipped 15%' },
+        { key: 'chapter_examined', label: 'Chapter(s) Examined', type: 'chapter-multiselect', wide: true },
+        { key: 'skill_examined', label: 'Learning Standards (Skills)', type: 'multiselect', wide: true }
+      ];
+
+      init();
+
+      function init() {
+        attachListeners();
+        document.addEventListener('click', handleGlobalMultiSelectClose);
+        loadBootstrapData();
+      }
+
+      async function loadBootstrapData() {
+        await loadLearningStandards();
+        await loadQuestions();
+      }
+
+      function attachListeners() {
+        refs.searchInput.addEventListener('input', debounce(event => {
+          state.filters.search = event.target.value.trim().toLowerCase();
+          applyFilters();
+        }, 200));
+
+        refs.subjectFilter.addEventListener('change', event => {
+          state.filters.subject = event.target.value;
+          applyFilters();
+        });
+
+        refs.stateFilter.addEventListener('change', event => {
+          state.filters.state = event.target.value;
+          applyFilters();
+        });
+
+        refs.partFilter.addEventListener('change', event => {
+          state.filters.part = event.target.value;
+          applyFilters();
+        });
+
+        refs.yearFilter.addEventListener('change', event => {
+          state.filters.year = event.target.value;
+          applyFilters();
+        });
+
+        refs.chapterFilter.addEventListener('change', event => {
+          state.filters.chapter = event.target.value;
+          applyFilters();
+        });
+
+        refs.editedOnly.addEventListener('change', event => {
+          state.filters.editedOnly = event.target.value;
+          applyFilters();
+        });
+
+        refs.saveBtn.addEventListener('click', handleSave);
+        refs.downloadBtn.addEventListener('click', handleDownload);
+        refs.clearAllBtn.addEventListener('click', handleClearAll);
+
+        refs.tabTagging.addEventListener('click', () => switchView('tagging'));
+        refs.tabDashboard.addEventListener('click', () => switchView('dashboard'));
+        updateViewPanels();
+      }
+
+      async function loadLearningStandards() {
+        const sources = [
+          { url: '/learning-standards.json', cache: 'no-store', label: 'static' },
+          { url: '/api/learning-standards', cache: 'no-store', label: 'api' }
+        ];
+
+        for (const source of sources) {
+          try {
+            const response = await fetch(source.url, { cache: source.cache });
+            if (!response.ok) {
+              throw new Error(`Request failed with status ${response.status}`);
+            }
+            const data = await response.json();
+            const chapters = Array.isArray(data.chapters) ? data.chapters : [];
+            if (!chapters.length) {
+              throw new Error('Empty chapters payload');
+            }
+            applyLearningStandards(chapters);
+            return;
+          } catch (error) {
+            console.warn(`Unable to load learning standards from ${source.label}:`, error);
+          }
+        }
+
+        refs.errorBanner.textContent = 'Unable to load learning standards. Please refresh or check the JSON file.';
+        refs.errorBanner.style.display = 'block';
+      }
+
+      function applyLearningStandards(chapters) {
+        state.learningStandards = chapters;
+        state.learningStandardMap = buildLearningStandardMap(chapters);
+      }
+
+      function buildLearningStandardMap(chapters) {
+        return chapters.reduce((acc, chapter) => {
+          if (chapter?.normalized) {
+            acc[chapter.normalized] = chapter;
+          }
+          return acc;
+        }, {});
+      }
+
+      async function loadQuestions() {
+        try {
+          refs.errorBanner.style.display = 'none';
+          const response = await fetch('/api/questions', {
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache'
+            }
+          });
+          if (!response.ok) {
+            throw new Error('Failed to load questions metadata');
+          }
+          const data = await response.json();
+          state.questions = (Array.isArray(data) ? data : []).slice().sort(compareQuestions);
+          state.chapterLabelOverrides = buildChapterLabelOverrides(state.questions);
+          buildFilterOptions();
+          applyFilters();
+        } catch (error) {
+          refs.errorBanner.textContent = error.message || 'Unable to fetch questions.';
+          refs.errorBanner.style.display = 'block';
+        }
+      }
+
+      function compareQuestions(a, b) {
+        const stateDelta = compareAlpha(getDisplayLabel(a, 'state', ''), getDisplayLabel(b, 'state', ''));
+        if (stateDelta !== 0) {
+          return stateDelta;
+        }
+        const yearDelta = (Number(getDisplayLabel(a, 'year', '')) || 0) - (Number(getDisplayLabel(b, 'year', '')) || 0);
+        if (yearDelta !== 0) {
+          return yearDelta;
+        }
+        const paperOrderDelta = getPaperSortValue(a.paper_code) - getPaperSortValue(b.paper_code);
+        if (paperOrderDelta !== 0) {
+          return paperOrderDelta;
+        }
+        const numberDelta = (Number(a.question_number) || 0) - (Number(b.question_number) || 0);
+        if (numberDelta !== 0) {
+          return numberDelta;
+        }
+        return String(a.id || '').localeCompare(String(b.id || ''));
+      }
+
+      function compareAlpha(a, b) {
+        return String(a || '').toLowerCase().localeCompare(String(b || '').toLowerCase());
+      }
+
+      function getPaperSortValue(paperCode) {
+        if (typeof paperCode !== 'string') {
+          return Number.MAX_SAFE_INTEGER;
+        }
+        const match = paperCode.match(/(\d+)/);
+        if (match) {
+          return Number(match[1]);
+        }
+        return paperCode.toLowerCase() === 'paper 1' ? 1 : Number.MAX_SAFE_INTEGER;
+      }
+
+      function handleGlobalMultiSelectClose(event) {
+        if (event.target.closest('.multi-select')) {
+          return;
+        }
+        document.querySelectorAll('.multi-select.open').forEach(node => node.classList.remove('open'));
+      }
+
+      function buildFilterOptions() {
+        refs.statTotal.textContent = state.questions.length;
+        refs.stateFilter.innerHTML = '<option value="all">All states</option>' +
+          STATE_OPTIONS.map(st => '<option value="' + escapeHtml(st) + '">' + escapeHtml(st) + '</option>').join('');
+
+        refs.partFilter.innerHTML = '<option value="all">All parts</option>' +
+          PART_OPTIONS.map(part => '<option value="' + escapeHtml(part) + '">' + escapeHtml(part) + '</option>').join('');
+
+        refs.yearFilter.innerHTML = '<option value="all">All years</option>' +
+          YEAR_OPTIONS.map(year => '<option value="' + year + '">' + year + '</option>').join('');
+
+        const chapterOptions = collectChapterFilterOptions();
+        refs.chapterFilter.innerHTML = '<option value="all">All chapters</option>' +
+          chapterOptions.map(option => '<option value="' + option.value + '">' + escapeHtml(option.label) + '</option>').join('');
+      }
+
+      function collectChapterFilterOptions() {
+        const map = new Map();
+        state.questions.forEach(question => {
+          getAllChapterLabels(question).forEach(label => {
+            const normalized = chapterKeyFromLabel(label);
+            if (!normalized || map.has(normalized)) {
+              return;
+            }
+            map.set(normalized, label);
+          });
+        });
+        return Array.from(map.entries())
+          .sort((a, b) => a[1].localeCompare(b[1]))
+          .map(([value, label]) => ({ value, label }));
+      }
+
+      function applyFilters() {
+        const { search, subject, state: stateFilter, part, year, chapter, editedOnly } = state.filters;
+        const searchTokens = search ? search.split(/\s+/).filter(Boolean) : [];
+
+        state.filtered = state.questions.filter(question => {
+          if (subject !== 'all') {
+            const questionSubject = getDisplayLabel(question, 'subject', '').toLowerCase();
+            if (questionSubject !== subject.toLowerCase()) {
+              return false;
+            }
+          }
+
+          if (stateFilter !== 'all') {
+            const questionState = getDisplayLabel(question, 'state', '').toLowerCase();
+            if (questionState !== stateFilter.toLowerCase()) {
+              return false;
+            }
+          }
+
+          if (part !== 'all') {
+            const questionPart = getDisplayLabel(question, 'section', '').toLowerCase();
+            if (questionPart !== part.toLowerCase()) {
+              return false;
+            }
+          }
+
+          if (year !== 'all') {
+            const questionYear = getDisplayLabel(question, 'year', '');
+            if (questionYear !== year) {
+              return false;
+            }
+          }
+
+          if (chapter !== 'all') {
+            const normalizedChapter = chapter.toLowerCase();
+            const chapterMatches = getAllChapterLabels(question).some(label => chapterKeyFromLabel(label).toLowerCase() === normalizedChapter);
+            if (!chapterMatches) {
+              return false;
+            }
+          }
+
+          if (editedOnly === 'edited' && !state.edits[question.id]) {
+            return false;
+          }
+
+          if (editedOnly === 'unedited' && state.edits[question.id]) {
+            return false;
+          }
+
+          if (searchTokens.length) {
+            const haystack = [
+              question.id,
+              question.paper_id,
+              getDisplayLabel(question, 'state', ''),
+              getDisplayLabel(question, 'paper_code', ''),
+              getDisplayLabel(question, 'subject', ''),
+              getDisplayLabel(question, 'year', ''),
+              getDisplayLabel(question, 'question_number', ''),
+              question.ocr_text || '',
+              getDisplayLabel(question, 'section', '')
+            ].join(' ').toLowerCase();
+
+            return searchTokens.every(token => haystack.includes(token));
+          }
+
+          return true;
+        });
+
+        if (!state.filtered.length) {
+          refs.emptyState.style.display = 'block';
+        } else {
+          refs.emptyState.style.display = 'none';
+        }
+
+        syncSelection();
+        renderSidebar();
+        renderDetail();
+        updateStatsBar();
+        renderDashboard();
+      }
+
+      function syncSelection() {
+        if (!state.filtered.length) {
+          state.selectedId = null;
+          return;
+        }
+
+        const stillVisible = state.selectedId && state.filtered.some(question => question.id === state.selectedId);
+        if (!stillVisible) {
+          state.selectedId = state.filtered[0].id;
+        }
+      }
+
+      function renderSidebar() {
+        const container = refs.questionSidebarList;
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = '';
+        if (!state.filtered.length) {
+          const empty = document.createElement('p');
+          empty.className = 'sidebar-empty';
+          empty.textContent = 'No questions match the current filters.';
+          container.appendChild(empty);
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        state.filtered.forEach(question => {
+          fragment.appendChild(buildSidebarItem(question));
+        });
+        container.appendChild(fragment);
+      }
+
+      function buildSidebarItem(question) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'question-list-item';
+        if (state.selectedId === question.id) {
+          button.classList.add('active');
+        }
+        if (state.edits[question.id]) {
+          button.classList.add('edited');
+        }
+        button.setAttribute('data-question-item', question.id);
+
+        const title = document.createElement('div');
+        title.className = 'question-list-item__title';
+        title.textContent = question.id;
+
+        const meta = document.createElement('div');
+        meta.className = 'question-list-item__meta';
+        meta.dataset.sidebar = 'state-year';
+        meta.textContent = formatStateYear(question);
+
+        const tags = document.createElement('div');
+        tags.className = 'question-list-item__tags';
+
+        const subjectTag = document.createElement('span');
+        subjectTag.dataset.sidebar = 'subject';
+        subjectTag.textContent = getSubjectLabel(question);
+
+        const questionNumberTag = document.createElement('span');
+        questionNumberTag.dataset.sidebar = 'question_number_tag';
+        questionNumberTag.textContent = formatSidebarQuestionNumber(question);
+
+        const partTag = document.createElement('span');
+        partTag.dataset.sidebar = 'section';
+        partTag.textContent = formatPartLabel(question);
+
+        const paperTag = document.createElement('span');
+        paperTag.dataset.sidebar = 'paper_code';
+        paperTag.textContent = formatPaperLabel(question);
+
+        const marksTag = document.createElement('span');
+        marksTag.dataset.sidebar = 'marks_tag';
+        marksTag.textContent = formatSidebarMarks(question);
+
+        tags.append(subjectTag, questionNumberTag, partTag, paperTag, marksTag);
+        button.append(title, meta, tags);
+
+        button.addEventListener('click', () => handleSelectQuestion(question.id));
+        return button;
+      }
+
+      function handleSelectQuestion(questionId) {
+        if (state.selectedId === questionId) {
+          return;
+        }
+        state.selectedId = questionId;
+
+        const container = refs.questionSidebarList;
+        if (container) {
+          container.querySelectorAll('.question-list-item').forEach(node => {
+            const isActive = node.getAttribute('data-question-item') === questionId;
+            node.classList.toggle('active', isActive);
+          });
+        }
+
+        renderDetail();
+      }
+
+      function renderDetail() {
+        const host = refs.questionDetail;
+        if (!host) {
+          return;
+        }
+
+        if (!state.selectedId) {
+          host.innerHTML = '<div class="detail-placeholder">Select a question on the left to review its images and metadata.</div>';
+          return;
+        }
+
+        const question = getQuestionById(state.selectedId);
+        if (!question) {
+          host.innerHTML = '<div class="detail-placeholder">Unable to load the selected question.</div>';
+          return;
+        }
+
+        const subjectLabel = getSubjectLabel(question);
+        const partLabel = getDisplayLabel(question, 'section', '—');
+        const marksLabel = getDisplayLabel(question, 'marks', '—');
+        const paperLabel = getDisplayLabel(question, 'paper_code', '—');
+        const standardFields = editableFields.filter(field => !field.wide);
+        const wideFields = editableFields.filter(field => field.wide);
+        const editorFieldsHtml = `
+            <section class="editor-grid">
+              ${standardFields.map(field => renderEditorField(question, field)).join('')}
+            </section>
+            ${wideFields.length ? `
+              <section class="editor-wide-row">
+                ${wideFields.map(field => renderEditorField(question, field)).join('')}
+              </section>
+            ` : ''}
+        `;
+        const updatedAt = question.metadata_updated_at ? new Date(question.metadata_updated_at) : null;
+        const humanTimestamp = updatedAt ? updatedAt.toLocaleString() : '—';
+
+        host.innerHTML = `
+          <article class="question-card detail-card${state.edits[question.id] ? ' edited' : ''}" data-question="${question.id}">
+            <div class="card-header">
+              <h2>${escapeHtml(question.id)}</h2>
+              <div>
+                <span class="tag-badge" data-display="subject">${escapeHtml(subjectLabel)}</span>
+                <span class="tag-badge" style="margin-left:0.35rem;" data-display="state-year">${escapeHtml(formatStateYear(question))}</span>
+              </div>
+            </div>
+            <div class="meta-grid">
+              <div class="meta-item">
+                <span>Paper</span>
+                <strong data-display="paper_code">${escapeHtml(paperLabel)}</strong>
+              </div>
+              <div class="meta-item">
+                <span>Part</span>
+                <strong data-display="section">${escapeHtml(partLabel)}</strong>
+              </div>
+              <div class="meta-item">
+                <span>Question #</span>
+                <strong data-display="question_number">${escapeHtml(getDisplayLabel(question, 'question_number', '—'))}</strong>
+              </div>
+              <div class="meta-item">
+                <span>Marks</span>
+                <strong data-display="marks">${escapeHtml(marksLabel)}</strong>
+              </div>
+            </div>
+            <div class="image-panel">
+              <figure>
+                <figcaption>Question</figcaption>
+                ${renderImage(question.question_img, question.id + ' question image')}
+              </figure>
+              <figure>
+                <figcaption>Solution</figcaption>
+                ${renderImage(question.solution_img, question.id + ' solution image')}
+              </figure>
+            </div>
+            ${editorFieldsHtml}
+            <div class="card-footer">
+              <button class="secondary" data-action="reset" type="button">Reset edits</button>
+              <span>Metadata updated: ${humanTimestamp}</span>
+            </div>
+          </article>
+        `;
+
+        host.querySelectorAll('[data-field]').forEach(control => {
+          const fieldKey = control.getAttribute('data-field');
+          const eventName = control.tagName === 'SELECT' ? 'change' : 'input';
+          control.addEventListener(eventName, event => handleFieldChange(question.id, fieldKey, event.target.value));
+        });
+
+        const resetButton = host.querySelector('button[data-action="reset"]');
+        if (resetButton) {
+          resetButton.addEventListener('click', () => resetQuestionEdits(question.id));
+        }
+
+        initializeChapterSelect(question);
+        initializeSkillSelect(question);
+      }
+
+      function refreshDetailSummary(questionId) {
+        if (state.selectedId !== questionId) {
+          return;
+        }
+
+        const host = refs.questionDetail;
+        const question = getQuestionById(questionId);
+        if (!host || !question) {
+          return;
+        }
+
+        const detailCard = host.querySelector('.detail-card');
+        if (!detailCard) {
+          return;
+        }
+
+        detailCard.classList.toggle('edited', Boolean(state.edits[questionId]));
+
+        const bindings = {
+          subject: getSubjectLabel(question),
+          'state-year': formatStateYear(question),
+          paper_code: getDisplayLabel(question, 'paper_code', '—'),
+          section: getDisplayLabel(question, 'section', '—'),
+          question_number: getDisplayLabel(question, 'question_number', '—'),
+          marks: getDisplayLabel(question, 'marks', '—')
+        };
+
+        Object.entries(bindings).forEach(([key, value]) => {
+          detailCard.querySelectorAll('[data-display="' + key + '"]').forEach(node => {
+            node.textContent = value;
+          });
+        });
+      }
+
+      function refreshSidebarItem(questionId) {
+        const container = refs.questionSidebarList;
+        const question = getQuestionById(questionId);
+        if (!container || !question) {
+          return;
+        }
+        const item = container.querySelector('[data-question-item="' + CSS.escape(questionId) + '"]');
+        if (!item) {
+          return;
+        }
+
+        item.classList.toggle('edited', Boolean(state.edits[questionId]));
+
+        const bindingMap = {
+          'state-year': formatStateYear(question),
+          subject: getSubjectLabel(question),
+          section: formatPartLabel(question),
+          paper_code: formatPaperLabel(question),
+          question_number_tag: formatSidebarQuestionNumber(question),
+          marks_tag: formatSidebarMarks(question)
+        };
+
+        Object.entries(bindingMap).forEach(([key, value]) => {
+          const node = item.querySelector('[data-sidebar="' + key + '"]');
+          if (node) {
+            node.textContent = value;
+          }
+        });
+      }
+
+      function renderEditorField(question, field) {
+        if (field.type === 'chapter-multiselect') {
+          const chapterLabels = getQuestionChapterLabels(question);
+          const hint = chapterLabels.length
+            ? `Default chapters: ${chapterLabels.join(', ')}`
+            : 'No chapter metadata detected for this question.';
+          return `
+            <div class="editor-field">
+              <label>${field.label}</label>
+              <div class="multi-select" data-multiselect="${field.key}" data-question="${question.id}"></div>
+              <p class="multi-select__hint">${escapeHtml(hint)}</p>
+            </div>
+          `;
+        }
+
+        if (field.type === 'multiselect') {
+          const chapterLabels = getQuestionChapterLabels(question);
+          const hint = chapterLabels.length
+            ? `Linked chapters: ${chapterLabels.join(', ')}`
+            : 'No chapter metadata available for this question.';
+          return `
+            <div class="editor-field">
+              <label>${field.label}</label>
+              <div class="multi-select" data-multiselect="${field.key}" data-question="${question.id}"></div>
+              <p class="multi-select__hint">${escapeHtml(hint)}</p>
+            </div>
+          `;
+        }
+        const value = getDisplayValue(question, field.key) ?? '';
+        const attrs = [
+          field.min != null ? 'min="' + field.min + '"' : '',
+          field.max != null ? 'max="' + field.max + '"' : '',
+          field.rows ? 'rows="' + field.rows + '"' : '',
+          field.placeholder ? 'placeholder="' + escapeHtml(field.placeholder) + '"' : ''
+        ].filter(Boolean).join(' ');
+
+        let controlHtml = '';
+        if (field.type === 'select') {
+          const optionValues = field.options || [];
+          const needsValue = value && !optionValues.includes(value);
+          const normalizedOptions = needsValue ? [...optionValues, value] : optionValues;
+          const options = normalizedOptions.map(option => {
+            const label = option || '—';
+            const selected = option === value ? ' selected' : '';
+            return '<option value="' + escapeHtml(option) + '"' + selected + '>' + escapeHtml(label) + '</option>';
+          }).join('');
+          controlHtml = '<select data-field="' + field.key + '">' + options + '</select>';
+        } else if (field.type === 'textarea') {
+          controlHtml = '<textarea data-field="' + field.key + '" ' + attrs + '>' + escapeHtml(value) + '</textarea>';
+        } else {
+          controlHtml = '<input data-field="' + field.key + '" type="' + field.type + '" value="' + escapeHtml(value) + '" ' + attrs + ' />';
+        }
+
+        const fieldClass = 'editor-field' + (field.wide ? ' wide' : '');
+
+        return `
+          <div class="${fieldClass}">
+            <label for="${field.key}_${question.id}">${field.label}</label>
+            ${controlHtml.replace('data-field="', 'id="' + field.key + '_' + question.id + '" data-field="')}
+          </div>
+        `;
+      }
+
+      function initializeChapterSelect(question) {
+        const container = refs.questionDetail.querySelector(
+          '.multi-select[data-multiselect="chapter_examined"][data-question="' + CSS.escape(question.id) + '"]'
+        );
+        if (!container) {
+          return;
+        }
+        buildChapterSelect(question, container);
+      }
+
+      function buildChapterSelect(question, container) {
+        container.innerHTML = '';
+        container.classList.remove('open');
+
+        const selected = getChapterSelection(question);
+        const options = deriveChapterOptions(question);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'multi-select__toggle';
+        button.textContent = buildChapterButtonLabel(selected);
+        button.addEventListener('click', event => {
+          event.stopPropagation();
+          if (!container.classList.contains('open')) {
+            document.querySelectorAll('.multi-select.open').forEach(node => {
+              if (node !== container) {
+                node.classList.remove('open');
+              }
+            });
+          }
+          container.classList.toggle('open');
+        });
+        container.appendChild(button);
+
+        const chips = document.createElement('div');
+        chips.className = 'multi-select__chips';
+        renderChapterChips(selected, chips);
+        container.appendChild(chips);
+
+        const panel = document.createElement('div');
+        panel.className = 'multi-select__panel';
+
+        if (!options.length) {
+          const empty = document.createElement('p');
+          empty.className = 'multi-select__empty';
+          empty.textContent = 'No chapters available.';
+          panel.appendChild(empty);
+        } else {
+          options.forEach(option => {
+            const label = document.createElement('label');
+            label.className = 'multi-select__option';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = option.value;
+            checkbox.checked = selected.includes(option.value);
+            const textWrapper = document.createElement('span');
+            textWrapper.className = 'multi-select__option-text';
+            const primary = document.createElement('strong');
+            primary.textContent = option.label;
+            const meta = document.createElement('small');
+            meta.textContent = option.stage ? option.stage : '—';
+            textWrapper.append(primary, meta);
+            checkbox.addEventListener('change', () => {
+              const values = Array.from(panel.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.value);
+              handleChapterSelectionChange(question.id, values);
+              renderChapterChips(values, chips);
+              button.textContent = buildChapterButtonLabel(values);
+              initializeSkillSelect(question);
+            });
+            label.append(checkbox, textWrapper);
+            panel.appendChild(label);
+          });
+        }
+
+        container.appendChild(panel);
+      }
+
+      function renderChapterChips(values, host) {
+        host.innerHTML = '';
+        if (!values.length) {
+          const placeholder = document.createElement('span');
+          placeholder.className = 'multi-select__chip empty';
+          placeholder.textContent = 'No chapters selected yet';
+          host.appendChild(placeholder);
+          return;
+        }
+        values.forEach(value => {
+          const chip = document.createElement('span');
+          chip.className = 'multi-select__chip';
+          chip.textContent = value;
+          host.appendChild(chip);
+        });
+      }
+
+      function initializeSkillSelect(question) {
+        const container = refs.questionDetail.querySelector(
+          '.multi-select[data-multiselect="skill_examined"][data-question="' + CSS.escape(question.id) + '"]'
+        );
+        if (!container) {
+          return;
+        }
+        buildSkillSelect(question, container);
+      }
+
+      function buildSkillSelect(question, container) {
+        container.innerHTML = '';
+        container.classList.remove('open');
+
+        const selected = getSkillSelection(question);
+        const chapterGroups = deriveSkillGroups(question);
+        const totalStandards = chapterGroups.reduce(
+          (sum, group) =>
+            sum +
+            group.sections.reduce((sectionSum, section) => sectionSum + section.standards.length, 0),
+          0
+        );
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'multi-select__toggle';
+        button.textContent = buildSkillButtonLabel(selected);
+        button.addEventListener('click', event => {
+          event.stopPropagation();
+          if (!container.classList.contains('open')) {
+            document.querySelectorAll('.multi-select.open').forEach(node => {
+              if (node !== container) {
+                node.classList.remove('open');
+              }
+            });
+          }
+          container.classList.toggle('open');
+        });
+        container.appendChild(button);
+
+        const chips = document.createElement('div');
+        chips.className = 'multi-select__chips';
+        renderSkillChips(selected, chips);
+        container.appendChild(chips);
+
+        const panel = document.createElement('div');
+        panel.className = 'multi-select__panel';
+
+        if (!totalStandards) {
+          const empty = document.createElement('p');
+          empty.className = 'multi-select__empty';
+          empty.textContent = 'No learning standards found for the selected chapters.';
+          panel.appendChild(empty);
+        } else {
+          const header = document.createElement('div');
+          header.className = 'multi-select__panel-header';
+          const search = document.createElement('input');
+          search.className = 'multi-select__search';
+          search.type = 'search';
+          search.placeholder = 'Search learning standards...';
+          header.appendChild(search);
+          panel.appendChild(header);
+
+          const contentWrapper = document.createElement('div');
+          chapterGroups.forEach(group => {
+            const chapterContainer = document.createElement('div');
+            const chapterHeading = document.createElement('h4');
+            chapterHeading.className = 'multi-select__chapter-title';
+            chapterHeading.textContent = group.label;
+            chapterContainer.appendChild(chapterHeading);
+
+            group.sections.forEach(section => {
+              if (!section.standards.length) {
+                return;
+              }
+              const sectionBlock = document.createElement('div');
+              sectionBlock.className = 'multi-select__section-block';
+              const sectionHeading = document.createElement('p');
+              sectionHeading.className = 'multi-select__section-heading';
+              sectionHeading.textContent = section.title;
+              sectionBlock.appendChild(sectionHeading);
+
+              section.standards.forEach(option => {
+                const label = document.createElement('label');
+                label.className = 'multi-select__option';
+                label.dataset.search = [option.label, group.label, section.title]
+                  .filter(Boolean)
+                  .join(' ')
+                  .toLowerCase();
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = option.label;
+                checkbox.checked = selected.includes(option.label);
+                const textWrapper = document.createElement('span');
+                textWrapper.className = 'multi-select__option-text';
+                const primary = document.createElement('strong');
+                primary.textContent = option.label;
+                const meta = document.createElement('small');
+                meta.textContent = `${group.label} · ${section.title}`;
+                textWrapper.append(primary, meta);
+                checkbox.addEventListener('change', () => {
+                  const values = Array.from(panel.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.value);
+                  handleSkillSelectionChange(question.id, values);
+                  renderSkillChips(values, chips);
+                  button.textContent = buildSkillButtonLabel(values);
+                });
+                label.append(checkbox, textWrapper);
+                sectionBlock.appendChild(label);
+              });
+
+              chapterContainer.appendChild(sectionBlock);
+            });
+
+            contentWrapper.appendChild(chapterContainer);
+          });
+
+          panel.appendChild(contentWrapper);
+
+          search.addEventListener('input', event => {
+            const query = event.target.value.trim().toLowerCase();
+            panel.querySelectorAll('.multi-select__option').forEach(optionElement => {
+              const haystack = optionElement.dataset.search || '';
+              optionElement.style.display = haystack.includes(query) ? 'flex' : 'none';
+            });
+          });
+        }
+
+        container.appendChild(panel);
+      }
+
+      function renderSkillChips(values, host) {
+        host.innerHTML = '';
+        if (!values.length) {
+          const placeholder = document.createElement('span');
+          placeholder.className = 'multi-select__chip empty';
+          placeholder.textContent = 'No skills selected yet';
+          host.appendChild(placeholder);
+          return;
+        }
+        values.forEach(value => {
+          const chip = document.createElement('span');
+          chip.className = 'multi-select__chip';
+          chip.textContent = value;
+          host.appendChild(chip);
+        });
+      }
+
+      function buildSkillButtonLabel(selected) {
+        if (!selected.length) {
+          return 'Select learning standards';
+        }
+        if (selected.length === 1) {
+          return '1 learning standard selected';
+        }
+        return `${selected.length} learning standards selected`;
+      }
+      
+      function buildChapterButtonLabel(selected) {
+        if (!selected.length) {
+          return 'Select chapters';
+        }
+        if (selected.length === 1) {
+          return '1 chapter selected';
+        }
+        return `${selected.length} chapters selected`;
+      }
+
+      function deriveChapterOptions(question) {
+        const options = [];
+        const seen = new Set();
+        const appendOption = (label, stage, slug) => {
+          if (!label) {
+            return;
+          }
+          const normalized = slugify(slug || label);
+          if (seen.has(normalized)) {
+            return;
+          }
+          seen.add(normalized);
+          options.push({
+            label,
+            value: label,
+            stage: stage || '—',
+            normalized
+          });
+        };
+
+        CHAPTER_CATALOG.forEach(entry => {
+          appendOption(entry.label, entry.stage, entry.normalized);
+        });
+
+        getQuestionChapterEntries(question).forEach(entry => {
+          appendOption(entry.label, getStageLabelForChapter(entry.slug), entry.slug);
+        });
+
+        state.learningStandards.forEach(chapter => {
+          appendOption(
+            getPreferredChapterLabel(chapter.normalized, chapter.title),
+            chapter.stage || '—',
+            chapter.normalized
+          );
+        });
+
+        return options;
+      }
+
+      function handleChapterSelectionChange(questionId, selections) {
+        const question = getQuestionById(questionId);
+        if (!question) {
+          return;
+        }
+        const cleaned = Array.isArray(selections)
+          ? selections.map(item => (typeof item === 'string' ? item.trim() : item)).filter(Boolean)
+          : [];
+        const baseValue = getBaseValue(question, 'chapter_examined') ?? [];
+        const normalizedBase = normalizeValue(Array.isArray(baseValue) ? baseValue : [baseValue].filter(Boolean));
+        const normalizedCleaned = normalizeValue(cleaned);
+
+        if (!state.edits[questionId]) {
+          state.edits[questionId] = {};
+        }
+
+        if (valuesEqual(normalizedBase, normalizedCleaned)) {
+          delete state.edits[questionId].chapter_examined;
+        } else {
+          state.edits[questionId].chapter_examined = normalizedCleaned;
+        }
+
+        if (Object.keys(state.edits[questionId]).length === 0) {
+          delete state.edits[questionId];
+        }
+
+        refreshDetailSummary(questionId);
+        refreshSidebarItem(questionId);
+        updateToolbarButtons();
+        updateStatsBar();
+      }
+
+      function getChapterSelection(question) {
+        const value = getDisplayValue(question, 'chapter_examined');
+        if (Array.isArray(value)) {
+          return value.slice();
+        }
+        if (typeof value === 'string' && value.trim()) {
+          return [value.trim()];
+        }
+        return [];
+      }
+
+      function deriveSkillGroups(question) {
+        const manualSelection = getChapterSelection(question);
+        let descriptors;
+        if (manualSelection.length) {
+          descriptors = manualSelection.map(label => ({
+            label,
+            slug: chapterKeyFromLabel(label)
+          }));
+        } else {
+          descriptors = CHAPTER_CATALOG.map(entry => ({
+            label: entry.label,
+            slug: slugify(entry.label)
+          }));
+          const seenCatalog = new Set(descriptors.map(item => item.slug));
+          state.learningStandards.forEach(chapter => {
+            const slug = chapter.normalized;
+            if (seenCatalog.has(slug)) {
+              return;
+            }
+            descriptors.push({
+              label: getPreferredChapterLabel(slug, chapter.title),
+              slug
+            });
+            seenCatalog.add(slug);
+          });
+        }
+        const groups = [];
+        const seen = new Set();
+
+        descriptors.forEach(descriptor => {
+          if (!descriptor.slug) {
+            return;
+          }
+          if (seen.has(descriptor.slug)) {
+            return;
+          }
+          seen.add(descriptor.slug);
+          const chapters = findChaptersByKey(descriptor.slug);
+          if (!chapters.length) {
+            groups.push({
+              label: descriptor.label,
+              slug: descriptor.slug,
+              sections: []
+            });
+            return;
+          }
+          const mergedSections = mergeChapterSections(chapters);
+          groups.push({
+            label: descriptor.label || chapters[0].title,
+            slug: descriptor.slug,
+            sections: mergedSections
+          });
+        });
+
+        if (!groups.length) {
+          state.learningStandards.forEach(chapter => {
+            if (seen.has(chapter.normalized)) {
+              return;
+            }
+            groups.push({
+              label: getPreferredChapterLabel(chapter.normalized, chapter.title),
+              slug: chapter.normalized,
+              sections: chapter.sections || []
+            });
+          });
+        }
+
+        return groups;
+      }
+
+      function mergeChapterSections(chapters) {
+        const sectionMap = new Map();
+        chapters.forEach(chapter => {
+          (chapter.sections || []).forEach(section => {
+            if (!section) {
+              return;
+            }
+            const key = section.title || 'General';
+            if (!sectionMap.has(key)) {
+              sectionMap.set(key, {
+                title: section.title || 'General',
+                standards: []
+              });
+            }
+            const bucket = sectionMap.get(key);
+            section.standards.forEach(standard => {
+              if (!bucket.standards.find(existing => existing.id === standard.id)) {
+                bucket.standards.push(standard);
+              }
+            });
+          });
+        });
+
+        return Array.from(sectionMap.values()).map(section => {
+          section.standards.sort((a, b) => {
+            if (a.code && b.code) {
+              return a.code.localeCompare(b.code, undefined, { numeric: true });
+            }
+            return a.label.localeCompare(b.label);
+          });
+          return section;
+        });
+      }
+
+      function getPreferredChapterLabel(slug, fallback) {
+        if (!slug) {
+          return fallback;
+        }
+        const normalized = slugify(slug);
+        const catalogEntry = findCatalogEntry(normalized);
+        if (catalogEntry) {
+          return catalogEntry.label;
+        }
+        return state.chapterLabelOverrides[normalized] || fallback;
+      }
+
+      function getQuestionChapterEntries(question) {
+        if (!Array.isArray(question.chapters)) {
+          return [];
+        }
+        const seen = new Set();
+        const entries = [];
+        question.chapters.forEach(entry => {
+          if (!entry?.chapter) {
+            return;
+          }
+          const slug = chapterKeyFromLabel(entry.chapter);
+          const preferredLabel = getPreferredChapterLabel(slug, entry.chapter);
+          const normalized = slugify(slug || preferredLabel);
+          if (seen.has(normalized)) {
+            return;
+          }
+          seen.add(normalized);
+          entries.push({
+            label: preferredLabel,
+            slug: normalized
+          });
+        });
+        return entries;
+      }
+
+      function getStageLabelForChapter(slug) {
+        if (!slug) {
+          return '—';
+        }
+        const normalized = slugify(slug);
+        const catalogEntry = findCatalogEntry(normalized);
+        if (catalogEntry?.stage) {
+          return catalogEntry.stage;
+        }
+        const chapter = state.learningStandardMap[normalized];
+        if (chapter?.stage) {
+          return chapter.stage;
+        }
+        const matches = findChaptersByKey(normalized);
+        if (matches.length && matches[0].stage) {
+          return matches[0].stage;
+        }
+        return '—';
+      }
+
+      function buildChapterLabelOverrides(questions) {
+        const overrides = {};
+        questions.forEach(question => {
+          if (!Array.isArray(question.chapters)) {
+            return;
+          }
+          question.chapters.forEach(entry => {
+            if (!entry?.chapter) {
+              return;
+            }
+            const slug = chapterKeyFromLabel(entry.chapter);
+            const normalized = slugify(slug || entry.chapter);
+            if (normalized && !overrides[normalized]) {
+              overrides[normalized] = entry.chapter;
+            }
+          });
+        });
+        return overrides;
+      }
+
+      function findChaptersByKey(key) {
+        if (!key) {
+          return [];
+        }
+        const normalized = slugify(key);
+        const matches = [];
+
+        const addChapter = chapter => {
+          if (!chapter) {
+            return;
+          }
+          if (!matches.includes(chapter)) {
+            matches.push(chapter);
+          }
+        };
+
+        const catalogEntry = findCatalogEntry(normalized);
+        if (catalogEntry && state.learningStandardMap[catalogEntry.normalized]) {
+          addChapter(state.learningStandardMap[catalogEntry.normalized]);
+        }
+
+        if (state.learningStandardMap[normalized]) {
+          addChapter(state.learningStandardMap[normalized]);
+        }
+
+        if (matches.length) {
+          return matches;
+        }
+
+        const canonicalLabel = catalogEntry?.label || key;
+        state.learningStandards.forEach(chapter => {
+          if (!chapter?.normalized) {
+            return;
+          }
+          const chapterSlug = chapter.normalized;
+          const chapterTitle = chapter.title.toLowerCase();
+          if (
+            chapterSlug === normalized ||
+            chapterTitle === canonicalLabel.toLowerCase() ||
+            chapterTitle === key.toLowerCase()
+          ) {
+            addChapter(chapter);
+          }
+        });
+
+        if (matches.length) {
+          return matches;
+        }
+
+        state.learningStandards.forEach(chapter => {
+          if (!chapter?.normalized) {
+            return;
+          }
+          const chapterSlug = chapter.normalized;
+          const chapterTitle = chapter.title.toLowerCase();
+          if (
+            chapterSlug.includes(normalized) ||
+            normalized.includes(chapterSlug) ||
+            chapterTitle.includes(canonicalLabel.toLowerCase()) ||
+            chapterTitle.includes(key.toLowerCase())
+          ) {
+            addChapter(chapter);
+          }
+        });
+
+        return matches;
+      }
+
+      function findCatalogEntry(slug) {
+        if (!slug) {
+          return null;
+        }
+        const normalized = slugify(slug);
+        return CHAPTER_CATALOG_MAP.get(normalized) || CHAPTER_LABEL_MAP.get(normalized) || null;
+      }
+
+      function getSkillSelection(question) {
+        const value = getDisplayValue(question, 'skill_examined');
+        if (Array.isArray(value)) {
+          return value.slice();
+        }
+        if (typeof value === 'string' && value.trim()) {
+          return [value.trim()];
+        }
+        return [];
+      }
+
+      function handleSkillSelectionChange(questionId, selections) {
+        const question = getQuestionById(questionId);
+        if (!question) {
+          return;
+        }
+        const cleaned = Array.isArray(selections)
+          ? selections.map(item => (typeof item === 'string' ? item.trim() : item)).filter(Boolean)
+          : [];
+        const baseValue = getBaseValue(question, 'skill_examined') ?? [];
+        const normalizedBase = normalizeValue(Array.isArray(baseValue) ? baseValue : [baseValue].filter(Boolean));
+        const normalizedCleaned = normalizeValue(cleaned);
+
+        if (!state.edits[questionId]) {
+          state.edits[questionId] = {};
+        }
+
+        if (valuesEqual(normalizedBase, normalizedCleaned)) {
+          delete state.edits[questionId].skill_examined;
+        } else {
+          state.edits[questionId].skill_examined = normalizedCleaned;
+        }
+
+        if (Object.keys(state.edits[questionId]).length === 0) {
+          delete state.edits[questionId];
+        }
+
+        refreshDetailSummary(questionId);
+        refreshSidebarItem(questionId);
+        updateToolbarButtons();
+        updateStatsBar();
+      }
+
+      function getQuestionChapterLabels(question) {
+        return getQuestionChapterEntries(question).map(entry => entry.label);
+      }
+
+      function getAllChapterLabels(question) {
+        const manualSelection = getChapterSelection(question);
+        const aiChapters = getQuestionChapterLabels(question);
+        const combined = [];
+        if (manualSelection.length) {
+          combined.push(...manualSelection);
+        }
+        if (aiChapters.length) {
+          combined.push(...aiChapters);
+        }
+        return combined.filter(Boolean);
+      }
+
+      function chapterKeyFromLabel(label) {
+        if (!label) {
+          return '';
+        }
+        return slugify(label);
+      }
+
+      function slugify(value) {
+        return value
+          .toLowerCase()
+          .replace(/form\s+\d+/g, '')
+          .replace(/chapter\s+\d+/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+
+      function handleFieldChange(questionId, fieldKey, rawValue) {
+        const question = getQuestionById(questionId);
+        if (!question) {
+          return;
+        }
+
+        const cleanedValue = sanitizeValue(fieldKey, rawValue);
+        const baseValue = normalizeValue(getBaseValue(question, fieldKey));
+        const normalizedCleaned = normalizeValue(cleanedValue);
+
+        if (!state.edits[questionId]) {
+          state.edits[questionId] = {};
+        }
+
+        if (valuesEqual(baseValue, normalizedCleaned)) {
+          delete state.edits[questionId][fieldKey];
+        } else {
+          state.edits[questionId][fieldKey] = cleanedValue;
+        }
+
+        if (Object.keys(state.edits[questionId]).length === 0) {
+          delete state.edits[questionId];
+        }
+
+        refreshDetailSummary(questionId);
+        refreshSidebarItem(questionId);
+        updateStatsBar();
+        updateToolbarButtons();
+      }
+
+      function sanitizeValue(fieldKey, rawValue) {
+        if (numericFields.has(fieldKey)) {
+          if (rawValue === '' || rawValue === null || rawValue === undefined) {
+            return null;
+          }
+          const parsed = Number(rawValue);
+          return Number.isFinite(parsed) ? parsed : null;
+        }
+
+        const trimmed = (rawValue ?? '').trim();
+        return trimmed === '' ? null : trimmed;
+      }
+
+      function resetQuestionEdits(questionId) {
+        delete state.edits[questionId];
+        const question = getQuestionById(questionId);
+        if (question && state.selectedId === questionId) {
+          const detailCard = refs.questionDetail.querySelector('.detail-card');
+          if (detailCard) {
+            detailCard.querySelectorAll('[data-field]').forEach(control => {
+              const key = control.getAttribute('data-field');
+              const value = getDisplayValue(question, key) ?? '';
+              if (control.tagName === 'SELECT' || control.tagName === 'INPUT' || control.tagName === 'TEXTAREA') {
+                control.value = value;
+              }
+            });
+            initializeChapterSelect(question);
+            initializeSkillSelect(question);
+          }
+        }
+        refreshDetailSummary(questionId);
+        refreshSidebarItem(questionId);
+        updateStatsBar();
+        updateToolbarButtons();
+      }
+
+      function handleClearAll() {
+        if (!Object.keys(state.edits).length) {
+          return;
+        }
+        if (!confirm('Clear all unsaved edits?')) {
+          return;
+        }
+        state.edits = {};
+        renderSidebar();
+        renderDetail();
+        updateStatsBar();
+        updateToolbarButtons();
+      }
+
+      function updateToolbarButtons() {
+        const hasEdits = Object.keys(state.edits).length > 0;
+        refs.saveBtn.disabled = !hasEdits || state.isSaving;
+        refs.downloadBtn.disabled = !hasEdits;
+        refs.clearAllBtn.disabled = !hasEdits;
+      }
+
+      function updateStatsBar() {
+        refs.statTotal.textContent = state.questions.length;
+        refs.statFiltered.textContent = state.filtered.length;
+        refs.statEdited.textContent = Object.keys(state.edits).length;
+      }
+
+      function switchView(mode) {
+        if (state.activeView === mode) {
+          return;
+        }
+        state.activeView = mode;
+        updateViewPanels();
+        if (mode === 'dashboard') {
+          renderDashboard();
+        }
+      }
+
+      function updateViewPanels() {
+        const isTagging = state.activeView === 'tagging';
+        if (refs.taggingView && refs.dashboardView) {
+          refs.taggingView.classList.toggle('active', isTagging);
+          refs.dashboardView.classList.toggle('active', !isTagging);
+        }
+        if (refs.tabTagging && refs.tabDashboard) {
+          refs.tabTagging.classList.toggle('active', isTagging);
+          refs.tabDashboard.classList.toggle('active', !isTagging);
+        }
+      }
+
+      function renderDashboard() {
+        if (!refs.chapterTableBody || !refs.partTableBody) {
+          return;
+        }
+        renderChapterTable();
+        renderPartTable();
+        renderPartChapterChart();
+        renderTrendTable();
+      }
+
+      function renderChapterTable() {
+        const rows = buildChapterSummary();
+        if (!rows.length) {
+          refs.chapterTableBody.innerHTML = '<tr><td colspan="4" class="muted">No questions match the current filters.</td></tr>';
+          return;
+        }
+        refs.chapterTableBody.innerHTML = rows
+          .map(row => '<tr>' +
+            '<td>' + escapeHtml(row.label) + '</td>' +
+            '<td>' + row.questions + '</td>' +
+            '<td>' + formatNumber(row.marks) + '</td>' +
+            '<td>' + formatNumber(row.marks / row.questions || 0, 1) + '</td>' +
+            '</tr>')
+          .join('');
+      }
+
+      function renderPartTable() {
+        const rows = buildPartSummary();
+        if (!rows.length) {
+          refs.partTableBody.innerHTML = '<tr><td colspan="4" class="muted">No questions match the current filters.</td></tr>';
+          return;
+        }
+        refs.partTableBody.innerHTML = rows
+          .map(row => '<tr>' +
+            '<td>' + escapeHtml(row.paper) + '</td>' +
+            '<td>' + escapeHtml(row.part) + '</td>' +
+            '<td>' + row.questions + '</td>' +
+            '<td>' + formatNumber(row.marks) + '</td>' +
+            '</tr>')
+          .join('');
+      }
+
+      function renderChapterStateHeatmap() {
+        const container = refs.chapterStateHeatmap;
+        if (!container) {
+          return;
+        }
+        const matrix = buildChapterStateMatrix();
+        if (!matrix.chapters.length || !matrix.states.length) {
+          container.innerHTML = '<p class="muted">Adjust filters to see data.</p>';
+          return;
+        }
+        const headerCells = ['<th>Chapter / State</th>'].concat(matrix.states.map(state => '<th>' + escapeHtml(state) + '</th>'));
+        const rows = matrix.chapters.map(chapter => {
+          const cells = matrix.states.map(state => {
+            const key = state + '|' + chapter;
+            const value = matrix.counts.get(key) || 0;
+            const ratio = matrix.max ? value / matrix.max : 0;
+            const color = getHeatmapColor(ratio);
+            const label = value || '-';
+            return '<td><button type="button" data-heatmap-button data-chapter="' + escapeHtml(chapter) + '" data-state="' + escapeHtml(state) + '" style="background:' + color + '">' + label + '</button></td>';
+          });
+          return '<tr><th>' + escapeHtml(chapter) + '</th>' + cells.join('') + '</tr>';
+        });
+        container.innerHTML = '<table class="heatmap-table"><thead><tr>' + headerCells.join('') + '</tr></thead><tbody>' + rows.join('') + '</tbody></table>';
+        container.querySelectorAll('[data-heatmap-button]').forEach(button => {
+          button.addEventListener('click', event => {
+            const chapter = event.currentTarget.getAttribute('data-chapter');
+            const stateLabel = event.currentTarget.getAttribute('data-state');
+            applyChapterStateDrilldown(chapter, stateLabel);
+          });
+        });
+      }
+
+      function renderPartChapterChart() {
+        const container = document.getElementById('partChapterChart');
+        if (!container) {
+          return;
+        }
+        const summary = buildPartChapterSummary();
+        if (!summary.parts.length) {
+          container.innerHTML = '<p class="muted">Adjust filters to see data.</p>';
+          return;
+        }
+        const maxQuestions = Math.max(...summary.parts.map(part => part.total));
+        const barWidth = Math.max(60, 100 / summary.parts.length);
+        const svgHeight = 220;
+        const svgBars = summary.parts
+          .map((part, idx) => {
+            let yOffset = svgHeight;
+            const segments = Array.from(part.chapters.values())
+              .sort((a, b) => b.count - a.count)
+              .map(segment => {
+                const height = (segment.count / maxQuestions) * (svgHeight - 20);
+                yOffset -= height;
+                const rect = '<rect data-chapter="' + escapeHtml(segment.label) + '" x="' + (idx * (barWidth + 20) + 10) + '" y="' + yOffset + '" width="' + barWidth + '" height="' + height + '" fill="' + segment.color + '"><title>' + escapeHtml(part.part + ' – ' + segment.label + ': ' + segment.count + ' question' + (segment.count === 1 ? '' : 's')) + '</title></rect>';
+                return rect;
+              })
+              .join('');
+            const label = '<text x="' + (idx * (barWidth + 20) + 10 + barWidth / 2) + '" y="' + (svgHeight + 15) + '" text-anchor="middle" font-size="12" fill="#475569">' + escapeHtml(part.paper + ' ' + part.part) + '</text>';
+            return segments + label;
+          })
+          .join('');
+
+        const svgWidth = summary.parts.length * (barWidth + 20) + 20;
+        const svg = '<svg class="part-chart" viewBox="0 0 ' + svgWidth + ' ' + (svgHeight + 30) + '" preserveAspectRatio="xMidYMid meet">' + svgBars + '</svg>';
+        const legend = '<div class="part-chart__legend">' +
+          summary.chapters
+            .map(entry => '<span class="part-chart__legend-item"><span class="part-chart__legend-swatch" style="background:' + entry.color + '"></span>' + escapeHtml(entry.label) + '</span>')
+            .join('') +
+          '</div>';
+        container.innerHTML = svg + legend;
+        container.querySelectorAll('[data-chapter]').forEach(node => {
+          node.addEventListener('click', event => {
+            const chapter = event.currentTarget.getAttribute('data-chapter');
+            applyChapterFilter(chapter);
+            switchView('tagging');
+            applyFilters();
+          });
+        });
+      }
+
+      function renderTrendTable() {
+        const container = refs.trendTableBody;
+        if (!container) {
+          return;
+        }
+        const summary = buildChapterTrendSummary();
+        if (refs.trendYearHeader) {
+          refs.trendYearHeader.textContent = summary.latestYear ? summary.latestYear : 'Latest';
+        }
+        if (!summary.rows.length) {
+          container.innerHTML = '<tr><td colspan="3" class="muted">Not enough yearly data with current filters.</td></tr>';
+          return;
+        }
+        container.innerHTML = summary.rows
+          .map(row => '<tr data-trend-chapter="' + escapeHtml(row.label) + '">' +
+            '<td>' + escapeHtml(row.label) + '</td>' +
+            '<td>' + row.latest + '</td>' +
+            '<td>' + (row.delta > 0 ? '+' : '') + row.delta + '</td>' +
+            '</tr>')
+          .join('');
+        container.querySelectorAll('[data-trend-chapter]').forEach(row => {
+          row.addEventListener('click', event => {
+            const label = event.currentTarget.getAttribute('data-trend-chapter');
+            applyChapterFilter(label);
+            switchView('tagging');
+            applyFilters();
+          });
+        });
+      }
+
+      function buildChapterSummary() {
+        const map = new Map();
+        state.filtered.forEach(question => {
+          const labels = getAllChapterLabels(question);
+          const chapters = labels.length ? labels : ['Unassigned chapter'];
+          const marks = parseMarks(question);
+          chapters.forEach(label => {
+            const entry = map.get(label) || { label, questions: 0, marks: 0 };
+            entry.questions += 1;
+            entry.marks += marks;
+            map.set(label, entry);
+          });
+        });
+        return Array.from(map.values()).sort((a, b) => b.questions - a.questions || b.marks - a.marks);
+      }
+
+      function buildPartSummary() {
+        const map = new Map();
+        state.filtered.forEach(question => {
+          const key = getPartKey(question);
+          const entry = map.get(key.id) || { paper: key.paper, part: key.part, questions: 0, marks: 0 };
+          entry.questions += 1;
+          entry.marks += parseMarks(question);
+          map.set(key.id, entry);
+        });
+        return Array.from(map.values()).sort((a, b) => b.questions - a.questions || b.marks - a.marks);
+      }
+
+      function buildChapterStateMatrix() {
+        const stateSet = new Set();
+        const chapterSet = new Set();
+        const counts = new Map();
+        const totals = new Map();
+        state.filtered.forEach(question => {
+          const stateLabel = getDisplayLabel(question, 'state', 'Unknown') || 'Unknown';
+          stateSet.add(stateLabel);
+          const labels = getAllChapterLabels(question);
+          const chapters = labels.length ? labels : ['Unassigned'];
+          chapters.forEach(label => {
+            chapterSet.add(label);
+            const key = stateLabel + '|' + label;
+            counts.set(key, (counts.get(key) || 0) + 1);
+            totals.set(label, (totals.get(label) || 0) + 1);
+          });
+        });
+        const states = Array.from(stateSet).sort((a, b) => a.localeCompare(b));
+        const chapters = Array.from(chapterSet).sort((a, b) => (totals.get(b) || 0) - (totals.get(a) || 0));
+        const max = counts.size ? Math.max(...counts.values()) : 0;
+        return { states, chapters, counts, max };
+      }
+
+      function buildChapterTrendSummary() {
+        const chapterYearMap = new Map();
+        state.filtered.forEach(question => {
+          const yearValue = Number(getDisplayLabel(question, 'year', ''));
+          if (!Number.isFinite(yearValue)) {
+            return;
+          }
+          const labels = getAllChapterLabels(question);
+          const chapters = labels.length ? labels : ['Unassigned'];
+          chapters.forEach(label => {
+            const yearMap = chapterYearMap.get(label) || new Map();
+            yearMap.set(yearValue, (yearMap.get(yearValue) || 0) + 1);
+            chapterYearMap.set(label, yearMap);
+          });
+        });
+        if (!chapterYearMap.size) {
+          return { latestYear: null, previousYear: null, rows: [] };
+        }
+        const years = new Set();
+        chapterYearMap.forEach(map => map.forEach((_, year) => years.add(year)));
+        const sortedYears = Array.from(years).sort((a, b) => b - a);
+        const latestYear = sortedYears[0];
+        const previousYear = sortedYears[1] ?? null;
+        const rows = Array.from(chapterYearMap.entries())
+          .map(([label, yearMap]) => {
+            const latest = (latestYear != null ? yearMap.get(latestYear) : 0) || 0;
+            const previous = (previousYear != null ? yearMap.get(previousYear) : 0) || 0;
+            return { label, latest, delta: latest - previous };
+          })
+          .filter(row => row.latest > 0)
+          .sort((a, b) => b.latest - a.latest)
+          .slice(0, 5);
+        return { latestYear, previousYear, rows };
+      }
+
+      function buildPartChapterSummary() {
+        const partMap = new Map();
+        const chapterColors = new Map();
+        const palette = ['#2563eb', '#16a34a', '#f97316', '#db2777', '#0d9488', '#9333ea', '#b45309', '#0ea5e9'];
+        let colorIndex = 0;
+
+        const getColor = label => {
+          if (!chapterColors.has(label)) {
+            chapterColors.set(label, palette[colorIndex % palette.length]);
+            colorIndex += 1;
+          }
+          return chapterColors.get(label);
+        };
+
+        state.filtered.forEach(question => {
+          const key = getPartKey(question);
+          const partEntry = partMap.get(key.id) || { paper: key.paper, part: key.part, total: 0, chapters: new Map() };
+          partEntry.total += 1;
+          const chapterLabels = getAllChapterLabels(question);
+          const labels = chapterLabels.length ? chapterLabels : ['Unassigned'];
+          labels.forEach(label => {
+            const chapterEntry = partEntry.chapters.get(label) || { label, count: 0, color: getColor(label) };
+            chapterEntry.count += 1;
+            partEntry.chapters.set(label, chapterEntry);
+          });
+          partMap.set(key.id, partEntry);
+        });
+
+        return {
+          parts: Array.from(partMap.values()),
+          chapters: Array.from(chapterColors.entries()).map(([label, color]) => ({ label, color }))
+        };
+      }
+
+      function getPartKey(question) {
+        const paper = getDisplayLabel(question, 'paper_code', '—') || '—';
+        const part = getDisplayLabel(question, 'section', '—') || '—';
+        return { id: paper + '|' + part, paper, part };
+      }
+
+      function applyChapterFilter(label) {
+        if (!label || label === 'Unassigned' || label === 'Unassigned chapter') {
+          state.filters.chapter = 'all';
+          if (refs.chapterFilter) {
+            refs.chapterFilter.value = 'all';
+          }
+          return;
+        }
+        const slug = chapterKeyFromLabel(label);
+        if (!slug) {
+          return;
+        }
+        state.filters.chapter = slug;
+        if (refs.chapterFilter) {
+          refs.chapterFilter.value = slug;
+        }
+      }
+
+      function applyChapterStateDrilldown(chapterLabel, stateLabel) {
+        applyChapterFilter(chapterLabel);
+        if (stateLabel && refs.stateFilter) {
+          state.filters.state = stateLabel;
+          refs.stateFilter.value = stateLabel;
+        }
+        switchView('tagging');
+        applyFilters();
+      }
+
+      function getHeatmapColor(ratio) {
+        const clamped = Math.min(1, Math.max(0, ratio));
+        const alpha = 0.15 + 0.65 * clamped;
+        return 'rgba(37, 99, 235, ' + alpha + ')';
+      }
+
+      function parseMarks(question) {
+        const raw = getDisplayLabel(question, 'marks', '0');
+        const value = Number(raw);
+        return Number.isFinite(value) ? value : 0;
+      }
+
+      function formatNumber(value, decimals = 0) {
+        const num = Number(value);
+        if (!Number.isFinite(num)) {
+          return '0';
+        }
+        return decimals === 0 ? String(Math.round(num)) : num.toFixed(decimals);
+      }
+
+      async function handleSave() {
+        if (!Object.keys(state.edits).length || state.isSaving) {
+          return;
+        }
+        state.isSaving = true;
+        updateToolbarButtons();
+
+        try {
+          const merged = buildMergedQuestions();
+          const response = await fetch('/api/questions/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ questions: merged })
+          });
+          if (!response.ok) {
+            const message = await response.json().catch(() => ({}));
+            throw new Error(message?.message || `Save failed with status ${response.status}`);
+          }
+          state.questions = merged;
+          state.edits = {};
+          alert('Changes saved.');
+        } catch (error) {
+          alert(error.message || 'Failed to save changes.');
+        } finally {
+          state.isSaving = false;
+          updateToolbarButtons();
+          updateStatsBar();
+        }
+      }
+
+      function handleDownload() {
+        const merged = buildMergedQuestions();
+        const blob = new Blob([JSON.stringify(merged, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'questions.updated.json';
+        anchor.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function buildMergedQuestions() {
+        return state.questions.map(question => {
+          const edits = state.edits[question.id];
+          if (!edits) {
+            return question;
+          }
+
+          const payload = { ...question };
+          Object.entries(edits).forEach(([key, value]) => {
+            payload[key] = value === null ? null : value;
+          });
+          return payload;
+        });
+      }
+
+      function getQuestionById(id) {
+        return state.questions.find(q => q.id === id);
+      }
+
+      function getDisplayValue(question, key) {
+        const pending = state.edits[question.id];
+        if (pending && key in pending) {
+          const pendingValue = pending[key];
+          if (Array.isArray(pendingValue)) {
+            return pendingValue.slice();
+          }
+          if (pendingValue === null || pendingValue === undefined) {
+            return '';
+          }
+          return String(pendingValue);
+        }
+
+        const base = getBaseValue(question, key);
+        if (base == null) {
+          return '';
+        }
+        if (Array.isArray(base)) {
+          return base.slice();
+        }
+        if (numericFields.has(key)) {
+          return String(base);
+        }
+        return String(base);
+      }
+
+      function getBaseValue(question, key) {
+        if (key === 'subject') {
+          return question.subject ?? deriveSubject(question);
+        }
+        if (key === 'exam_type') {
+          return question.exam_type ?? 'SPM';
+        }
+        if (key === 'chapter_examined') {
+          if (Array.isArray(question.chapter_examined)) {
+            return question.chapter_examined.slice();
+          }
+          return [];
+        }
+        if (key === 'skill_examined') {
+          if (Array.isArray(question.skill_examined)) {
+            return question.skill_examined.slice();
+          }
+          if (typeof question.skill_examined === 'string' && question.skill_examined.trim()) {
+            return [question.skill_examined.trim()];
+          }
+          return [];
+        }
+        return question[key] ?? null;
+      }
+
+      function deriveSubject(question) {
+        if (question.subject) {
+          return question.subject;
+        }
+        if (question.paper_id?.startsWith('AM')) {
+          return 'Add Math';
+        }
+        if (question.paper_id?.startsWith('M')) {
+          return 'Math';
+        }
+        return '';
+      }
+
+      function normalizeValue(value) {
+        if (value == null) {
+          return null;
+        }
+        if (Array.isArray(value)) {
+          return value
+            .map(item => (typeof item === 'string' ? item.trim() : item))
+            .filter(item => !(typeof item === 'string' && item === ''))
+            .sort((a, b) => {
+              if (typeof a === 'string' && typeof b === 'string') {
+                return a.localeCompare(b);
+              }
+              return 0;
+            });
+        }
+        if (typeof value === 'string') {
+          return value.trim();
+        }
+        return value;
+      }
+
+      function valuesEqual(a, b) {
+        if (Array.isArray(a) && Array.isArray(b)) {
+          if (a.length !== b.length) {
+            return false;
+          }
+          return a.every((item, index) => item === b[index]);
+        }
+        return a === b;
+      }
+
+      function getDisplayLabel(question, key, fallback = '') {
+        const value = getDisplayValue(question, key);
+        if (Array.isArray(value)) {
+          if (!value.length) {
+            return fallback;
+          }
+          return value.join(', ');
+        }
+        if (value === null || value === undefined || value === '') {
+          return fallback;
+        }
+        return String(value);
+      }
+
+      function getSubjectLabel(question) {
+        const label = getDisplayLabel(question, 'subject', '');
+        return label || 'Unassigned';
+      }
+
+      function formatStateYear(question) {
+        const stateValue = getDisplayLabel(question, 'state', 'Unknown');
+        const yearValue = getDisplayLabel(question, 'year', '—');
+        return `${stateValue} · ${yearValue}`;
+      }
+
+      function formatSidebarQuestionNumber(question) {
+        const value = getDisplayLabel(question, 'question_number', '');
+        return value ? `Q${value}` : 'Q —';
+      }
+
+      function formatSidebarMarks(question) {
+        const value = getDisplayLabel(question, 'marks', '');
+        return value ? `${value} marks` : 'Marks —';
+      }
+
+      function formatPartLabel(question) {
+        const value = getDisplayLabel(question, 'section', '');
+        return value || 'Part —';
+      }
+
+      function formatPaperLabel(question) {
+        const value = getDisplayLabel(question, 'paper_code', '');
+        return value || 'Paper —';
+      }
+
+      function renderImage(path, alt) {
+        if (!path) {
+          return '<div class="empty-state" style="padding:0.5rem;">No image</div>';
+        }
+        const escaped = escapeHtml(path);
+        const altText = escapeHtml(alt);
+        return '<a href="' + escaped + '" target="_blank" rel="noopener noreferrer"><img src="' + escaped + '" alt="' + altText + '" loading="lazy"></a>';
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function debounce(fn, wait) {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), wait);
+        };
+      }
+    })();
+  </script>
+</body>
+</html>

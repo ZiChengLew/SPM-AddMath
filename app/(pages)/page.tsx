@@ -37,7 +37,8 @@ const STATE_OPTIONS = [
   'Terengganu',
   'Kuala Lumpur',
   'Labuan',
-  'Putrajaya'
+  'Putrajaya',
+  'SBP'
 ] as const;
 const PAPER_OPTIONS = [
   { value: 'P1', label: 'Paper 1' },
@@ -204,6 +205,7 @@ type Question = {
   solution_img: string;
   ocr_text?: string | null;
   chapters?: ChapterTag[];
+  chapter_examined?: string[] | string | null;
 };
 
 type QuestionList = {
@@ -266,6 +268,42 @@ function normaliseChapterTag(tag: ChapterTag): ChapterTag {
     chapterNumber,
     chapterTitle: fallbackTitle
   };
+}
+
+function mergeChapterTags(...lists: ChapterTag[][]): ChapterTag[] {
+  const merged: ChapterTag[] = [];
+  const seen = new Set<string>();
+  lists.forEach((list) => {
+    list.forEach((tag) => {
+      const key = (tag.chapter ?? '').toLowerCase();
+      if (!key || seen.has(key)) {
+        return;
+      }
+      seen.add(key);
+      merged.push(tag);
+    });
+  });
+  return merged;
+}
+
+function extractManualChapterLabels(question: Question): string[] {
+  if (Array.isArray(question.chapter_examined)) {
+    return question.chapter_examined
+      .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+      .filter((entry) => entry.length > 0);
+  }
+  if (typeof question.chapter_examined === 'string' && question.chapter_examined.trim()) {
+    return [question.chapter_examined.trim()];
+  }
+  return [];
+}
+
+function getNormalizedChapters(question: Question): ChapterTag[] {
+  const aiChapters = Array.isArray(question.chapters) ? question.chapters : [];
+  const manualChapterTags = extractManualChapterLabels(question).map((label) =>
+    normaliseChapterTag({ chapter: label })
+  );
+  return mergeChapterTags(aiChapters, manualChapterTags);
 }
 
 function formatChapterLabel(chapter: string) {
@@ -516,17 +554,11 @@ export default function HomePage() {
           throw new Error(`Failed to load questions (status ${response.status})`);
         }
         const payload: Question[] = await response.json();
-        const normalised = payload.map((question) => {
-          const chapters = Array.isArray(question.chapters)
-            ? question.chapters.map((tag) => normaliseChapterTag(tag))
-            : [];
-
-          return {
-            ...question,
-            chapters,
-            ocr_text: question.ocr_text ?? null
-          };
-        });
+        const normalised = payload.map((question) => ({
+          ...question,
+          chapters: getNormalizedChapters(question),
+          ocr_text: question.ocr_text ?? null
+        }));
         setQuestions(normalised);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -633,7 +665,7 @@ export default function HomePage() {
     >();
 
     relevant.forEach((question) => {
-      question.chapters?.forEach((tag) => {
+      getNormalizedChapters(question).forEach((tag) => {
         const form = tag.form ?? 'Unknown';
         const number = tag.chapterNumber ?? tag.chapter;
         const key = `${form}|${number}`;
@@ -709,11 +741,36 @@ export default function HomePage() {
         if (appliedChapters.length === 0) {
           return true;
         }
-        const chapters = question.chapters ?? [];
+        const chapters = getNormalizedChapters(question);
         const names = new Set(chapters.map((tag) => tag.chapter));
         return appliedChapters.some((chapter) => names.has(chapter));
       })
-      .sort((a, b) => a.question_number - b.question_number);
+      .sort((a, b) => {
+        const stateDelta = String(a.state ?? '').localeCompare(String(b.state ?? ''));
+        if (stateDelta !== 0) {
+          return stateDelta;
+        }
+        const yearDelta = (Number(a.year) || 0) - (Number(b.year) || 0);
+        if (yearDelta !== 0) {
+          return yearDelta;
+        }
+        const order = Array.from(PAPER_LABEL_TO_VALUE.values());
+        const paperA = paperCodeToValue(a.paper_code);
+        const paperB = paperCodeToValue(b.paper_code);
+        const idxA = order.indexOf(paperA);
+        const idxB = order.indexOf(paperB);
+        const paperOrderA = idxA === -1 ? Number.MAX_SAFE_INTEGER : idxA;
+        const paperOrderB = idxB === -1 ? Number.MAX_SAFE_INTEGER : idxB;
+        if (paperOrderA !== paperOrderB) {
+          return paperOrderA - paperOrderB;
+        }
+        const numberA = Number.isFinite(Number(a.question_number)) ? Number(a.question_number) : Number.MAX_SAFE_INTEGER;
+        const numberB = Number.isFinite(Number(b.question_number)) ? Number(b.question_number) : Number.MAX_SAFE_INTEGER;
+        if (numberA !== numberB) {
+          return numberA - numberB;
+        }
+        return String(a.id ?? '').localeCompare(String(b.id ?? ''));
+      });
   }, [appliedChapters, appliedPapers, appliedStates, appliedYears, questions]);
 
   const hasQuestions = filteredQuestions.length > 0;
