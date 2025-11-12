@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SPM Add Math • Tech Tree</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b0b0c; --fg: #e9eef5; --muted:#a3acc3;
+      --panel:#111317; --ring:#2a2f3a;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff; --fg:#101218; --muted:#475069;
+        --panel:#f7f8fb; --ring:#e8ecf3;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px;
+      background: var(--bg); color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    header { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    h1 { font-size: clamp(20px, 2vw, 28px); margin: 0; }
+    .wrap {
+      margin-top: 16px;
+      background: var(--panel);
+      border: 1px solid var(--ring);
+      border-radius: 16px;
+      padding: 20px;
+      overflow: auto;
+    }
+    .hint { color: var(--muted); font-size: 14px; margin-top: 12px; }
+    .mermaid { min-width: 960px; }
+    a.btn {
+      text-decoration: none; color: var(--fg);
+      border: 1px solid var(--ring); padding: 8px 12px; border-radius: 10px;
+      background: transparent;
+    }
+    a.btn:hover { background: color-mix(in oklab, var(--ring) 30%, transparent); }
+  </style>
+
+  <!-- Mermaid (ESM) -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.documentElement.matches(':root') &&
+             matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "default"
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>SPM Add Math • Tech Tree (Form 4 → Form 5)</h1>
+    <a class="btn" href="#" onclick="location.reload()">Refresh</a>
+  </header>
+
+  <div class="wrap">
+    <div class="mermaid">
+%% =================== Civilization-style Tech Tree (Left → Right) ===================
+graph LR
+
+  %% ---------- TIERS ----------
+  subgraph T1[ Tier 1 • 基础（Form 4） ]
+    FNC[Functions]:::core
+    LOG[Indices, Surds & Logarithms]:::core
+    CG[Coordinate Geometry]:::core
+    TRI[Solution of Triangles]:::core
+    PROG[Progressions]:::side
+  end
+
+  subgraph T2[ Tier 2 • 推进（Form 4） ]
+    QF[Quadratic Functions]:::main
+    SYS[Systems of Equations]:::main
+    LL[Linear Law]:::main
+    VEC[Vectors]:::main
+    IDX[Index Number]:::side
+  end
+
+  subgraph T3[ Tier 3 • 高阶（Form 5） ]
+    TRIG[Trigonometric Functions]:::main
+    CM[Circular Measure]:::main
+    PC[Permutation & Combination]:::disc
+    DIFF[Differentiation]:::calc
+    LP[Linear Programming]:::app
+  end
+
+  subgraph T4[ Tier 4 • 整合（Form 5） ]
+    INT[Integration]:::calc
+    PD[Probability Distribution]:::disc
+    KIN[Kinematics of Linear Motion]:::app
+  end
+
+  %% ---------- PREREQUISITES ----------
+  %% Tier1 -> Tier2
+  FNC --> QF
+  FNC --> SYS
+  LOG --> LL
+  CG  --> VEC
+  CG  --> LP
+  TRI --> TRIG
+
+  %% Tier2 -> Tier3
+  QF  --> SYS
+  LL  --> DIFF
+  VEC --> KIN
+  SYS --> LP
+  TRIG --> CM
+
+  %% Key direct links (keep few cross-tier to stay clean)
+  FNC --> DIFF
+  TRI --> CM
+  LOG --> DIFF
+  PC  --> PD
+
+  %% Tier3 -> Tier4
+  DIFF --> INT
+  DIFF --> KIN
+  INT  --> KIN
+  FNC  --> PD
+
+  %% Weak (helpful but not strict)
+  PROG -. weak .-> PC
+  linkStyle 20 stroke:#888,stroke-dasharray:6 3;
+
+  %% ---------- NODE STYLES ----------
+  classDef core fill:#eef7ff,stroke:#99b7ff,color:#1d3e91,stroke-width:1.5px;
+  classDef main fill:#f8fbf0,stroke:#a7c957,color:#2c4b1f,stroke-width:1.5px;
+  classDef calc fill:#fff7e6,stroke:#f0b429,color:#6b3c00,stroke-width:1.5px;
+  classDef disc fill:#fff0f5,stroke:#e188b8,color:#6a2148,stroke-width:1.5px;
+  classDef app  fill:#e8fff3,stroke:#5bc0a2,color:#134e4a,stroke-width:1.5px;
+  classDef side fill:#f4f4f5,stroke:#c9c9cf,color:#444,stroke-width:1.2px;
+
+  %% ---------- CLICK TARGETS (replace with your real routes) ----------
+  click FNC "https://example.com/chapters/functions" _blank "Functions: definitions, domain/range, composition…"
+  click DIFF "https://example.com/chapters/differentiation" _blank "Differentiation: rules, chain rule, applications"
+  click INT "https://example.com/chapters/integration" _blank "Integration: area, substitution, kinematics"
+  click PD  "https://example.com/chapters/probability-distribution" _blank "Discrete/continuous, pmf/pdf, expectation"
+  click KIN "https://example.com/chapters/kinematics" _blank "s-v-a via diff/integration; motion problems"
+    </div>
+  </div>
+
+  <p class="hint">
+    Tips: 想看竖排，把图第一行 <code>graph LR</code> 改成 <code>graph TB</code>。<br/>
+    想更整洁，可拆成两个视图：<b>Calculus 主干</b>（Functions → Differentiation → Integration → Kinematics）与
+    <b>离散/应用支线</b>（P&amp;C → Probability、Coordinate → LP、Vectors → Kinematics）。
+  </p>
+</body>
+</html>

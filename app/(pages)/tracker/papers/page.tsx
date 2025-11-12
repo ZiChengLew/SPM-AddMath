@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -12,6 +12,8 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { BadgeCheck, Calendar, Eye, FileSpreadsheet, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TRACKER_DEFAULT_USER_ID } from '@/lib/tracker/config';
+import type { ResultRecord, ResultUpsertPayload } from '@/lib/tracker/types';
 
 type PaperCode = 'P1' | 'P2';
 
@@ -28,8 +30,8 @@ type PaperResult = {
   year: number;
   paper: PaperCode;
   date: string;
-  timeSpent?: number | null;
-  notes?: string;
+  timeSpent: number | null;
+  notes: string | null;
   byQuestion: QuestionEntry[];
 };
 
@@ -52,7 +54,8 @@ const STATE_OPTIONS = [
   'Terengganu',
   'Kuala Lumpur',
   'Labuan',
-  'Putrajaya'
+  'Putrajaya',
+  'SBP'
 ] as const;
 
 const YEAR_OPTIONS = ['All Years', '2025', '2024', '2023', '2022'] as const;
@@ -97,48 +100,6 @@ const PAPER_BLUEPRINT: Record<PaperCode, { section: string; question: number; ma
   ]
 };
 
-const INITIAL_RESULTS: PaperResult[] = [
-  {
-    id: 'res-001',
-    state: 'Selangor',
-    year: 2024,
-    paper: 'P1',
-    date: '2024-05-12',
-    timeSpent: 95,
-    notes: 'Vectors and differentiation mistakes. Need quicker check on sign errors.',
-    byQuestion: PAPER_BLUEPRINT.P1.map((item, index) => ({
-      ...item,
-      score: [5, 6, 6, 5, 4, 5, 4, 5, 5, 4, 6, 5, 5, 3, 4][index] ?? 0
-    }))
-  },
-  {
-    id: 'res-002',
-    state: 'Penang',
-    year: 2023,
-    paper: 'P2',
-    date: '2024-04-28',
-    timeSpent: 140,
-    notes: 'Lost marks on integration by parts. Revisit formula sheet.',
-    byQuestion: PAPER_BLUEPRINT.P2.map((item, index) => ({
-      ...item,
-      score: [6, 6, 5, 6, 5, 6, 5, 10, 9, 8, 8][index] ?? 0
-    }))
-  },
-  {
-    id: 'res-003',
-    state: 'Johor',
-    year: 2025,
-    paper: 'P1',
-    date: '2025-01-18',
-    timeSpent: 88,
-    notes: 'Speed improving. Attempted all questions this round.',
-    byQuestion: PAPER_BLUEPRINT.P1.map((item, index) => ({
-      ...item,
-      score: [5, 7, 6, 6, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6][index] ?? 0
-    }))
-  }
-];
-
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
 function toIsoDate(value: string) {
@@ -175,7 +136,9 @@ type StatusBanner =
   | null;
 
 export default function TrackerPapersPage() {
-  const [results, setResults] = useState(() => INITIAL_RESULTS);
+  const [results, setResults] = useState<PaperResult[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [stateFilter, setStateFilter] = useState<(typeof STATE_OPTIONS)[number]>('All States');
   const [yearFilter, setYearFilter] = useState<(typeof YEAR_OPTIONS)[number]>('All Years');
   const [paperFilter, setPaperFilter] = useState<PaperCode | 'All'>('All');
@@ -184,6 +147,7 @@ export default function TrackerPapersPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [formMode, setFormMode] = useState<FormMode>('create');
   const [activeResultId, setActiveResultId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const [formState, setFormState] = useState<PaperResult>({
     id: '',
     state: 'Selangor',
@@ -195,6 +159,29 @@ export default function TrackerPapersPage() {
     byQuestion: generateQuestionEntries('P1')
   });
   const [status, setStatus] = useState<StatusBanner>(null);
+  const userId = TRACKER_DEFAULT_USER_ID;
+
+  const loadResults = useCallback(async () => {
+    try {
+      setLoading(true);
+      setLoadError(null);
+      const response = await fetch('/api/tracker/results', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error('Failed to load results');
+      }
+      const json = (await response.json()) as { results?: ResultRecord[] };
+      const mapped = (json.results ?? []).map(mapRecordToPaperResult);
+      setResults(mapped);
+    } catch (error) {
+      setLoadError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadResults();
+  }, [loadResults]);
 
   const filteredResults = useMemo(() => {
     const now = new Date();
@@ -244,10 +231,11 @@ export default function TrackerPapersPage() {
 
   const questionsCompleted = formState.byQuestion.filter((item) => item.score !== null).length;
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalOpen(false);
     setActiveResultId(null);
     setFormMode('create');
+    setSaving(false);
     setFormState({
       id: '',
       state: 'Selangor',
@@ -258,7 +246,7 @@ export default function TrackerPapersPage() {
       notes: '',
       byQuestion: generateQuestionEntries('P1')
     });
-  };
+  }, []);
 
   const handleEdit = (result: PaperResult) => {
     setFormState({
@@ -268,6 +256,7 @@ export default function TrackerPapersPage() {
     setFormMode('edit');
     setActiveResultId(result.id);
     setStatus(null);
+    setSaving(false);
     setModalOpen(true);
   };
 
@@ -279,16 +268,30 @@ export default function TrackerPapersPage() {
     setFormMode('view');
     setActiveResultId(result.id);
     setStatus(null);
+    setSaving(false);
     setModalOpen(true);
   };
 
-  const handleDelete = (resultId: string) => {
-    setResults((prev) => prev.filter((item) => item.id !== resultId));
-    setStatus({ type: 'success', message: 'Result deleted.' });
-    if (activeResultId === resultId) {
-      closeModal();
-    }
-  };
+  const handleDelete = useCallback(
+    async (resultId: string) => {
+      try {
+        const response = await fetch(`/api/tracker/results/${resultId}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) {
+          throw new Error('Failed to delete result');
+        }
+        setResults((prev) => prev.filter((item) => item.id !== resultId));
+        setStatus({ type: 'success', message: 'Result deleted.' });
+        if (activeResultId === resultId) {
+          closeModal();
+        }
+      } catch (error) {
+        setStatus({ type: 'error', message: (error as Error).message });
+      }
+    },
+    [activeResultId, closeModal]
+  );
 
   const handleAdd = () => {
     setFormState({
@@ -304,6 +307,7 @@ export default function TrackerPapersPage() {
     setFormMode('create');
     setActiveResultId(null);
     setStatus(null);
+    setSaving(false);
     setModalOpen(true);
   };
 
@@ -315,7 +319,7 @@ export default function TrackerPapersPage() {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (formMode === 'view') {
       closeModal();
       return;
@@ -326,38 +330,31 @@ export default function TrackerPapersPage() {
       return;
     }
 
-    const payload: PaperResult = {
-      ...formState,
-      date: toIsoDate(formState.date),
-      byQuestion: formState.byQuestion.map((entry) => ({ ...entry }))
-    };
-
-    setResults((prev) => {
-      const existingIdx = prev.findIndex(
-        (item) => item.state === payload.state && item.year === payload.year && item.paper === payload.paper
-      );
-
-      const nextItem: PaperResult = {
-        ...payload,
-        id: existingIdx >= 0 ? prev[existingIdx].id : payload.id || crypto.randomUUID?.() || `res-${Date.now()}`,
-        byQuestion: payload.byQuestion.map((entry) => ({ ...entry })),
-        notes: payload.notes?.trim() ?? '',
-        timeSpent: payload.timeSpent ?? null
-      };
-
-      if (existingIdx >= 0) {
-        const next = [...prev];
-        next[existingIdx] = nextItem;
-        return next;
+    try {
+      setSaving(true);
+      const payload = buildPayload(formState, userId);
+      const response = await fetch('/api/tracker/results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.error ?? 'Failed to save result');
       }
-      return [...prev, nextItem];
-    });
-
-    setStatus({
-      type: 'success',
-      message: formMode === 'edit' ? 'Result updated (latest attempt kept).' : 'Result saved (latest attempt kept).'
-    });
-    closeModal();
+      const json = (await response.json()) as { result: ResultRecord };
+      const saved = mapRecordToPaperResult(json.result);
+      setResults((prev) => upsertResultList(prev, saved));
+      setStatus({
+        type: 'success',
+        message: formMode === 'edit' ? 'Result updated (latest attempt kept).' : 'Result saved (latest attempt kept).'
+      });
+      closeModal();
+    } catch (error) {
+      setStatus({ type: 'error', message: (error as Error).message });
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -382,6 +379,19 @@ export default function TrackerPapersPage() {
           Add Result
         </Button>
       </section>
+
+      {loadError && (
+        <div className="flex items-center justify-between rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <span>Failed to load results. {loadError}</span>
+          <button
+            type="button"
+            className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm transition hover:text-rose-700"
+            onClick={loadResults}
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {status && (
         <div
@@ -460,7 +470,19 @@ export default function TrackerPapersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white">
-              {filteredResults.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={10} className="py-14 text-center text-sm text-slate-500">
+                    Loading results...
+                  </td>
+                </tr>
+              ) : loadError ? (
+                <tr>
+                  <td colSpan={10} className="py-14 text-center text-sm text-rose-600">
+                    Unable to display results. Please retry above.
+                  </td>
+                </tr>
+              ) : filteredResults.length === 0 ? (
                 <tr>
                   <td colSpan={10} className="py-14 text-center text-sm text-slate-500">
                     <div className="flex flex-col items-center gap-2">
@@ -733,14 +755,14 @@ export default function TrackerPapersPage() {
                     type="button"
                     className={cn(
                       'rounded-full px-6 py-2 font-semibold shadow-md transition',
-                      formMode === 'view'
+                      formMode === 'view' || saving
                         ? 'cursor-not-allowed bg-slate-200 text-slate-500'
                         : 'bg-[#1d4ed8] text-white hover:bg-[#1e3a8a]'
                     )}
-                    disabled={formMode === 'view'}
+                    disabled={formMode === 'view' || saving}
                     onClick={handleSave}
                   >
-                    Save Result
+                    {saving ? 'Saving...' : 'Save Result'}
                   </Button>
                 </div>
               </div>
@@ -829,4 +851,57 @@ function Td({ children, className }: { children: React.ReactNode; className?: st
 
 function formTotalDisplay(total: number, max: number) {
   return `${total} / ${max}`;
+}
+
+function mapRecordToPaperResult(record: ResultRecord): PaperResult {
+  return {
+    id: record.result_id,
+    state: record.state,
+    year: record.year,
+    paper: record.paper_no,
+    date: record.date_done,
+    timeSpent: record.time_spent_min,
+    notes: record.notes,
+    byQuestion: record.by_question.map((question) => ({
+      section: question.section,
+      question: question.q_no,
+      max: question.max_score,
+      score: question.score
+    }))
+  };
+}
+
+function buildPayload(form: PaperResult, userId: string): ResultUpsertPayload {
+  return {
+    user_id: userId,
+    state: form.state,
+    year: form.year,
+    paper_no: form.paper,
+    date_done: toIsoDate(form.date),
+    time_spent_min: form.timeSpent ?? null,
+    notes: form.notes?.trim() ? form.notes.trim() : null,
+    by_question: form.byQuestion.map((entry) => ({
+      q_no: entry.question,
+      section: entry.section,
+      max_score: entry.max,
+      score: typeof entry.score === 'number' ? entry.score : null,
+      chapter: null,
+      subtopic: null,
+      cognitive: null
+    }))
+  };
+}
+
+function upsertResultList(list: PaperResult[], item: PaperResult): PaperResult[] {
+  const index = list.findIndex((existing) => existing.id === item.id);
+  const clone: PaperResult = {
+    ...item,
+    byQuestion: item.byQuestion.map((entry) => ({ ...entry }))
+  };
+  if (index >= 0) {
+    const next = [...list];
+    next[index] = clone;
+    return next;
+  }
+  return [...list, clone];
 }
